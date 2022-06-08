@@ -1,7 +1,7 @@
 package org.cancermodels.admin;
 
 import org.cancermodels.DummyService;
-import org.cancermodels.OntologyService;
+import org.cancermodels.ontologies.OntologyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
