@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.cancermodels.OntologyLoadReport;
 import org.cancermodels.OntologyTerm;
 import org.cancermodels.UnprocessedOntologyUrl;
 import org.cancermodels.util.FileManager;
@@ -57,7 +58,7 @@ public class OntologyLoaderService {
     map.put(OntologyTermType.REGIMEN, new HashSet<>());
   }
 
-  public void loadOntologies() {
+  public OntologyLoadReport loadOntologies() {
     unprocessedOntologyUrls.addAll(unprocessedOntologyUrlService.findAll());
     long notProcessedRecordsCount = unprocessedOntologyUrls.size();
 
@@ -74,12 +75,16 @@ public class OntologyLoaderService {
     processUnprocessedUrls();
 
     saveData();
-    ontologyLoadReportService.updateLoadingReport(
-        toBeSavedTermsByType.get(OntologyTermType.DIAGNOSIS).size(),
-        toBeSavedTermsByType.get(OntologyTermType.TREATMENT).size(),
-        toBeSavedTermsByType.get(OntologyTermType.REGIMEN).size(),
-        errors.toString());
     resetAttempts();
+    return createReport(toBeSavedTermsByType);
+  }
+
+  private OntologyLoadReport createReport(Map<OntologyTermType, Set<OntologyTerm>> terms) {
+    return ontologyLoadReportService.createReport(
+        terms.get(OntologyTermType.DIAGNOSIS).size(),
+        terms.get(OntologyTermType.TREATMENT).size(),
+        terms.get(OntologyTermType.REGIMEN).size(),
+        errors.toString());
   }
 
   // Set all attempts to zero so in a next execution the urls can be tried again

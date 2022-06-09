@@ -13,7 +13,7 @@ public class OntologyLoadReportService {
     this.ontologyLoadReportRepository = ontologyLoadReportRepository;
   }
 
-  public void updateLoadingReport(
+  public OntologyLoadReport createReport(
       int newNumberDiagnosisTerms,
       int newNumberTreatmentTerms,
       int newNumberRegimenTerms,
@@ -28,5 +28,7 @@ public class OntologyLoadReportService {
     newReport.setErrorMessage(errorMessage);
 
     ontologyLoadReportRepository.save(newReport);
+
+    return newReport;
   }
 }

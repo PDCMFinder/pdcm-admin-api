@@ -1,8 +1,7 @@
 package org.cancermodels.admin;
 
+import org.cancermodels.OntologyLoadReport;
 import org.cancermodels.ontologies.OntologyLoaderService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/ontology")
 public class OntologyController {
 
-  private OntologyLoaderService ontologyLoaderService;
+  private final OntologyLoaderService ontologyLoaderService;
 
   public OntologyController(OntologyLoaderService ontologyLoaderService) {
     this.ontologyLoaderService = ontologyLoaderService;
@@ -21,10 +20,10 @@ public class OntologyController {
 
   /**
    * Reloads the ontologies tables in the h2 database using OLS as a source
-   * @return
+   * @return {@link OntologyLoadReport} object with a report of the process
    */
   @GetMapping("loadOntologies")
-  public void loadOntologies() {
-    ontologyLoaderService.loadOntologies();
+  public OntologyLoadReport loadOntologies() {
+    return ontologyLoaderService.loadOntologies();
   }
 }

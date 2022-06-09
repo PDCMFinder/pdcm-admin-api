@@ -1,19 +1,15 @@
 package org.cancermodels.admin;
 
 import org.cancermodels.DummyService;
-import org.cancermodels.ontologies.OntologyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
   private DummyService dummyService;
-  private OntologyService ontologyService;
 
-  public Controller(DummyService dummyService,
-      OntologyService ontologyService) {
+  public Controller(DummyService dummyService) {
     this.dummyService = dummyService;
-    this.ontologyService = ontologyService;
   }
 
   @GetMapping("/setup")
@@ -26,13 +22,4 @@ public class Controller {
     dummyService.testLoad();
   }
 
-  @GetMapping("/loadTreatmentTerms")
-  public void loadTreatmentTerms() {
-    ontologyService.reloadTreatmentTerms();
-  }
-
-  @GetMapping("/loadDiagnosisTerms")
-  public void loadDiagnosisTerms() {
-    ontologyService.reloadDiagnosisTerms();
-  }
 }

@@ -26,5 +26,4 @@ public class OntologyLoadReport {
     // Used to inform the user about any error in the last reloading process
     @Lob
     private String errorMessage;
-
 }
