@@ -1,6 +1,6 @@
 package org.cancermodels;
 
-import org.cancermodels.prototype.MappingsLoader;
+import org.cancermodels.migration.MappingsLoader;
 import org.springframework.stereotype.Component;
 
 

@@ -1,4 +1,4 @@
-package org.cancermodels.mappers;
+package org.cancermodels.migration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class JsonRuleToEntityMapper {
   public MappingEntity jsonObjectToMappingEntity(JSONObject jsonObject) {
 
     MappingEntity mappingEntity = new MappingEntity();
-    mappingEntity.setId(jsonObject.getInt("entityId"));
+//    mappingEntity.setId(jsonObject.getInt("entityId"));
     EntityType entityType = getEntityType(jsonObject.getString("entityType"));
     mappingEntity.setEntityType(entityType);
 
@@ -60,7 +60,6 @@ public class JsonRuleToEntityMapper {
   }
 
   private MappingKey getMappingKeyByName(String name, EntityType entityType) {
-    System.out.println("getMappingKeyByName "+ name + " , " + entityType);
     List<MappingKey> mappingKeys = entityType.getMappingKeys();
     for (MappingKey mappingKey : mappingKeys) {
       if (mappingKey.getKey().equalsIgnoreCase(name)) {

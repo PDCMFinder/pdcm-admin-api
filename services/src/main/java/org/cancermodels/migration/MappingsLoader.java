@@ -1,4 +1,4 @@
-package org.cancermodels.prototype;
+package org.cancermodels.migration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,10 @@ import org.cancermodels.EntityTypeService;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.MappingValue;
-import org.cancermodels.mappers.JsonRuleToEntityMapper;
+import org.cancermodels.migration.JsonRuleToEntityMapper;
+import org.cancermodels.prototype.JaroWinklerDistanceSimilarityComparator;
+import org.cancermodels.prototype.SimilarityComparator;
+import org.cancermodels.prototype.TermsWeightedSimilarityCalculator;
 import org.cancermodels.util.FileManager;
 import org.json.JSONArray;
 import org.json.JSONException;
