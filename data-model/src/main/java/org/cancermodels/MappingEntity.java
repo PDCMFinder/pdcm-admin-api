@@ -3,6 +3,7 @@ package org.cancermodels;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class MappingEntity {
 
   // Values associated to this entity (for each key). It corresponds to the values in
   // the providers data
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "mappingEntity")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "mappingEntity")
   private List<MappingValue> mappingValues;
 
   public Map<String, String> getValuesAsMap() {

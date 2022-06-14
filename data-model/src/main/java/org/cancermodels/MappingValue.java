@@ -1,10 +1,12 @@
 package org.cancermodels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -23,6 +25,7 @@ public class MappingValue {
 
   @ManyToOne
   @Exclude
+  @JsonIgnore
   @JoinColumn(name = "mapping_entity_id", nullable = false)
   private MappingEntity mappingEntity;
 
@@ -31,6 +34,7 @@ public class MappingValue {
   private MappingKey mappingKey;
 
   // Value for a particular mapping key in a mapping entity
+  @Lob
   private String value;
 
 }
