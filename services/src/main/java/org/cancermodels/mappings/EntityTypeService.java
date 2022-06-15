@@ -1,5 +1,7 @@
-package org.cancermodels;
+package org.cancermodels.mappings;
 
+import org.cancermodels.EntityType;
+import org.cancermodels.EntityTypeRepository;
 import org.springframework.stereotype.Component;
 
 @Component

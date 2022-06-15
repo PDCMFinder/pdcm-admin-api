@@ -1,12 +1,11 @@
 package org.cancermodels.migration;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.cancermodels.EntityType;
-import org.cancermodels.EntityTypeService;
+import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.MappingValue;
