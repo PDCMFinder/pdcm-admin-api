@@ -33,7 +33,9 @@ CREATE TABLE mapping_entity (
     entity_type_id INTEGER,
     mapped_term_label VARCHAR2,
     mapped_term_url VARCHAR2,
-    status VARCHAR2
+    status VARCHAR2,
+    date_created TIMESTAMP,
+    date_updated TIMESTAMP
 );
 
 ALTER TABLE mapping_entity ADD CONSTRAINT pk_mapping_entity PRIMARY KEY (id);
@@ -46,6 +48,11 @@ CREATE TABLE mapping_value (
 );
 
 ALTER TABLE mapping_value ADD CONSTRAINT pk_mapping_value PRIMARY KEY (id);
+
+ALTER TABLE mapping_value
+    ADD CONSTRAINT fk_mapping_value_mapping_entity
+    FOREIGN KEY (mapping_entity_id)
+    REFERENCES mapping_entity (id) ON DELETE CASCADE;
 
 -- Cannot add index to clob
 -- ALTER TABLE mapping_value

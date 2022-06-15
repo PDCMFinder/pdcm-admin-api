@@ -1,10 +1,11 @@
 package org.cancermodels.migration;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.cancermodels.EntityType;
-import org.cancermodels.EntityTypeService;
+import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.MappingValue;
@@ -24,7 +25,6 @@ public class JsonRuleToEntityMapper {
   public MappingEntity jsonObjectToMappingEntity(JSONObject jsonObject) {
 
     MappingEntity mappingEntity = new MappingEntity();
-//    mappingEntity.setId(jsonObject.getInt("entityId"));
     EntityType entityType = getEntityType(jsonObject.getString("entityType"));
     mappingEntity.setEntityType(entityType);
 
@@ -38,6 +38,16 @@ public class JsonRuleToEntityMapper {
     mappingEntity.setMappedTermLabel(jsonObject.getString("mappedTermLabel"));
     mappingEntity.setMappedTermUrl(jsonObject.getString("mappedTermUrl"));
     mappingEntity.setStatus(jsonObject.getString("status"));
+
+    if (!jsonObject.isNull("dateCreated")) {
+      Timestamp dataCreatedTimeStamp = new Timestamp(jsonObject.getLong("dateCreated"));
+      mappingEntity.setDateCreated(dataCreatedTimeStamp.toLocalDateTime());
+    }
+
+    if (!jsonObject.isNull("dateUpdated")) {
+      Timestamp dataUpdatedTimeStamp = new Timestamp(jsonObject.getLong("dateUpdated"));
+      mappingEntity.setDateUpdated(dataUpdatedTimeStamp.toLocalDateTime());
+    }
 
     return mappingEntity;
   }

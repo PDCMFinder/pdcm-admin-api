@@ -19,6 +19,7 @@ public class RulesMigratorService {
   }
 
   public void loadOldRulesInDb() {
+    mappingEntityRepository.deleteAll();
     List<MappingEntity> diagnosisRules = oldRulesReader.readRules("diagnosis_mappings.json");
     List<MappingEntity> treatmentRules = oldRulesReader.readRules("treatment_mappings.json");
     mappingEntityRepository.saveAll(diagnosisRules);

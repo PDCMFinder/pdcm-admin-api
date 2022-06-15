@@ -1,5 +1,6 @@
 package org.cancermodels;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,13 @@ public class MappingEntity {
   // Status. It can be for example: Created, Unmapped, automatic
   private String status;
 
+  private LocalDateTime dateCreated;
+
+  private LocalDateTime dateUpdated;
+
   // Values associated to this entity (for each key). It corresponds to the values in
   // the providers data
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "mappingEntity")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "mappingEntity")
   private List<MappingValue> mappingValues;
 
   public Map<String, String> getValuesAsMap() {
