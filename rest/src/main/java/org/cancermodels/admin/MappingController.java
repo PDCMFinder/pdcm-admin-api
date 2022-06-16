@@ -68,7 +68,7 @@ public class MappingController {
         .withStatus(status)
         .build();
 
-    Page<MappingEntity> mappingEntities =mappingEntityService.findPaginatedAndFiltered(
+    Page<MappingEntity> mappingEntities = mappingEntityService.findPaginatedAndFiltered(
         pageable, filter);
     Page<MappingEntityDTO> mappingEntityDTOS = mappingEntities.map(
         mappingEntityMapper::convertToDto);

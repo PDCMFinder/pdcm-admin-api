@@ -29,7 +29,9 @@ public class MappingEntityService {
   {
     Specification<MappingEntity> specifications =
         Specification.where(
-            MappingsSpecs.withStatus(mappingsFilter.getStatus()));
+            MappingsSpecs.withStatus(mappingsFilter.getStatus())
+                .and(MappingsSpecs.withMappingQuery(mappingsFilter.getMappingQuery())
+            ));
     return specifications;
   }
 }

@@ -19,11 +19,11 @@ public class PredicateBuilder {
       CriteriaBuilder criteriaBuilder, Path<String> path, List<String> values)
   {
     List<Predicate> predicates = new ArrayList<>();
-    values.forEach(x -> predicates.add(buildLoweLikePredicate(criteriaBuilder, path, x)));
+    values.forEach(x -> predicates.add(buildLowerLikePredicate(criteriaBuilder, path, x)));
     return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
   }
 
-  private static Predicate buildLoweLikePredicate(
+  private static Predicate buildLowerLikePredicate(
       CriteriaBuilder criteriaBuilder, Path<String> path, String value)
   {
     return criteriaBuilder.like(criteriaBuilder.lower(path), value.toLowerCase());
@@ -33,11 +33,11 @@ public class PredicateBuilder {
       CriteriaBuilder criteriaBuilder, Path<Long> path, List<String> values)
   {
     List<Predicate> predicates = new ArrayList<>();
-    values.forEach(x -> predicates.add(buildLoweLikePredicateId(criteriaBuilder, path, x)));
+    values.forEach(x -> predicates.add(buildLowerLikePredicateId(criteriaBuilder, path, x)));
     return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
   }
 
-  private static Predicate buildLoweLikePredicateId(
+  private static Predicate buildLowerLikePredicateId(
       CriteriaBuilder criteriaBuilder, Path<Long> path, String value)
   {
     return criteriaBuilder.equal(path, Long.parseLong(value));
