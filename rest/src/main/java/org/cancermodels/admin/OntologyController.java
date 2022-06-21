@@ -1,7 +1,8 @@
 package org.cancermodels.admin;
 
 import org.cancermodels.OntologyLoadReport;
-import org.cancermodels.ontologies.OntologyLoaderService;
+import org.cancermodels.ontologies.OntologyService;
+import org.cancermodels.ontologies.OntologySummary;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/ontology")
 public class OntologyController {
 
-  private final OntologyLoaderService ontologyLoaderService;
+  private final OntologyService ontologyService;
 
-  public OntologyController(OntologyLoaderService ontologyLoaderService) {
-    this.ontologyLoaderService = ontologyLoaderService;
+  public OntologyController(OntologyService ontologyService) {
+    this.ontologyService = ontologyService;
   }
 
   /**
@@ -24,6 +25,16 @@ public class OntologyController {
    */
   @GetMapping("loadOntologies")
   public OntologyLoadReport loadOntologies() {
-    return ontologyLoaderService.loadOntologies();
+    return ontologyService.loadOntologies();
+  }
+
+  /**
+   * Gets a summary with the status of the ontologies and the latest loading processes
+   * @return {@link OntologySummary} object with the counts of ontology terms and information
+   * about the last 2 loading processes
+   */
+  @GetMapping("getSummary")
+  public OntologySummary getSummary() {
+    return ontologyService.getOntologySummary();
   }
 }

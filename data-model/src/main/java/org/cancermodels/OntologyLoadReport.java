@@ -17,7 +17,6 @@ public class OntologyLoadReport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private LocalDateTime loadingDateTime;
     private int numberDiagnosisTerms;
     private int numberTreatmentTerms;

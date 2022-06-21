@@ -18,17 +18,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class OntologyLoaderService {
+@Component
+class OntologyLoader {
   private final OntologyUrlManager ontologyUrlManager;
   private final UnprocessedOntologyUrlService unprocessedOntologyUrlService;
   private final OntologyTermService ontologyTermService;
-  private final OntologyLoadReportService ontologyLoadReportService;
+  private final OntologyLoadReporter ontologyLoadReportService;
 
-  private static final Logger LOG = LoggerFactory.getLogger(OntologyLoaderService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OntologyLoader.class);
   private final StringBuilder errors = new StringBuilder();
 
   private final Map<OntologyTermType, Set<OntologyTerm>> toBeSavedTermsByType;
@@ -37,11 +37,11 @@ public class OntologyLoaderService {
 
   private static final int MAX_NUMBER_ATTEMPTS = 5;
 
-  public OntologyLoaderService(
+  public OntologyLoader(
       OntologyUrlManager ontologyUrlManager,
       UnprocessedOntologyUrlService unprocessedOntologyUrlService,
       OntologyTermService ontologyTermService,
-      OntologyLoadReportService ontologyLoadReportService) {
+      OntologyLoadReporter ontologyLoadReportService) {
 
     this.ontologyUrlManager = ontologyUrlManager;
     this.unprocessedOntologyUrlService = unprocessedOntologyUrlService;
@@ -195,7 +195,7 @@ public class OntologyLoaderService {
 
       boolean hasChildren = json.getBoolean("has_children");
       if (hasChildren) {
-        JSONObject links =   json.getJSONObject("_links");
+        JSONObject links = json.getJSONObject("_links");
         JSONObject hierarchicalDescendants = links.getJSONObject("hierarchicalDescendants");
 
         String hierarchicalDescendantsUrl = hierarchicalDescendants.get("href") + "?size=200";
@@ -205,9 +205,8 @@ public class OntologyLoaderService {
         processHierarchicalDescendants(descendantsUnprocessedOntologyUrl);
       }
 
-      OntologyTerm newTerm = createOntologyTermFromJson(json, OntologyTermType.TREATMENT);
-
       OntologyTermType type = OntologyTermType.getTypeByString(unprocessedOntologyUrl.getType());
+      OntologyTerm newTerm = createOntologyTermFromJson(json, type);
       toBeSavedTermsByType.get(type).add(newTerm);
 
       deleteUnprocessedUrl(unprocessedOntologyUrl);
