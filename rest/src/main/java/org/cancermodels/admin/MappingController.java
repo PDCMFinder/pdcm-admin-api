@@ -52,8 +52,8 @@ public class MappingController {
    * @param status Status of the mapping entity (created, ...)
    * @return Paginated Mappings that match the search criteria
    */
-  @GetMapping("/findMappings")
-  public ResponseEntity findMappings(
+  @GetMapping("/search")
+  public ResponseEntity search(
       Pageable pageable,
       PagedResourcesAssembler assembler,
 
@@ -77,7 +77,7 @@ public class MappingController {
         assembler.toModel(
             mappingEntityDTOS,
             linkTo(methodOn(MappingController.class)
-                .findMappings(
+                .search(
                     pageable, assembler, mappingQuery, entityTypeName, status)).withSelfRel());
 
     HttpHeaders responseHeaders = new HttpHeaders();

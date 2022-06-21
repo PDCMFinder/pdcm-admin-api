@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OntologyTermService {
+class OntologyTermService {
   private final OntologyTermRepository ontologyTermRepository;
   private static final Logger LOG = LoggerFactory.getLogger(OntologyTermService.class);
 
@@ -60,5 +60,12 @@ public class OntologyTermService {
 
   public void deleteAll() {
     ontologyTermRepository.deleteAll();
+  }
+  public long count() {
+    return ontologyTermRepository.count();
+  }
+
+  public long getCountByType(String type) {
+    return ontologyTermRepository.countByType(type);
   }
 }

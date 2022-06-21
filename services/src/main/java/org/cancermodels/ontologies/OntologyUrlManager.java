@@ -19,7 +19,6 @@ public class OntologyUrlManager {
   private static final String OLS_BASE_URL = "https://www.ebi.ac.uk/ols/api/ontologies/ncit/terms/";
   private static final String OBO_LIBRARY_BASE_URL = "http://purl.obolibrary.org/obo/";
 
-
   private static final String CANCER_TERM = "NCIT_C9305";
   private static final String CANCER_TERM_LABEL = "Cancer";
 
@@ -38,9 +37,6 @@ public class OntologyUrlManager {
   // Regimen branches
   private static final String REGIMEN_BRANCH_TERM = "NCIT_C12218";
   private static final String CUSTOM_REGIMEN_BRANCH_TERM = "NCIT_C11197";
-
-  private static final String PAGE_URL_SECTION = "&page=";
-  private static final int PAGE_URL_SECTION_LENGTH = PAGE_URL_SECTION.length();
 
   public OntologyUrlManager() {
     ncitTerms = new ArrayList<>();

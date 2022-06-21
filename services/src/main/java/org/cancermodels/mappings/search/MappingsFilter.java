@@ -31,7 +31,7 @@ public class MappingsFilter {
         .collect(Collectors.toMap(x -> x.getKey().getName(), Entry::getValue));
   }
 
-  public List<String> getEntityType()
+  public List<String> getEntityTypeNames()
   {
     return filters.getOrDefault(FilterTypes.ENTITY_TYPE, null);
   }
