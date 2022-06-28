@@ -8,6 +8,7 @@ import org.cancermodels.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.mappers.MappingEntityMapper;
+import org.cancermodels.mappings.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
 import org.springframework.data.domain.Page;
@@ -82,5 +83,11 @@ public class MappingController {
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
+  }
+
+  @GetMapping("/getSummary")
+  public MappingSummaryByTypeAndProvider getMappingSummaryByTypeAndProvider(
+      @RequestParam(value = "entityTypeName") String entityTypeName) {
+    return mappingEntityService.getSummaryByTypeAndProvider(entityTypeName);
   }
 }
