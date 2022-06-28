@@ -31,13 +31,31 @@ public class JsonRuleToEntityMapper {
     JSONObject mappingValuesJSONObject = jsonObject.getJSONObject("mappingValues");
     Map<String, String> mappingValuesMap = JSONHelper.JSONObjectToStringMap(mappingValuesJSONObject);
 
+    // Adding customised fix wrong provider name
+    if (mappingValuesMap.containsKey("DataSource") && mappingValuesMap.get("DataSource").equalsIgnoreCase("dfci cpdm") ) {
+      mappingValuesMap.put("DataSource", "dfci-cpdm");
+    }
+
      List<MappingValue> mappingValues =
          getMappingValuesFromMap(mappingValuesMap, mappingEntity, entityType);
     mappingEntity.setMappingValues(mappingValues);
 
-    mappingEntity.setMappedTermLabel(jsonObject.getString("mappedTermLabel"));
-    mappingEntity.setMappedTermUrl(jsonObject.getString("mappedTermUrl"));
-    mappingEntity.setStatus(jsonObject.getString("status"));
+    if (!jsonObject.isNull("mappedTermLabel")) {
+      mappingEntity.setMappedTermLabel(jsonObject.getString("mappedTermLabel"));
+    }
+
+    String originalStatus = jsonObject.getString("status");
+
+    // Making status simpler: mapped or unmapped (from the existing data, might introduce others later)
+    String newStatus = originalStatus;
+    if ("validated".equalsIgnoreCase(originalStatus)) {
+      newStatus = "mapped";
+    }
+    else if("created".equalsIgnoreCase(originalStatus)) {
+      newStatus = "mapped";
+    }
+
+    mappingEntity.setStatus(newStatus);
 
     if (!jsonObject.isNull("dateCreated")) {
       Timestamp dataCreatedTimeStamp = new Timestamp(jsonObject.getLong("dateCreated"));

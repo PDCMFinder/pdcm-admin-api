@@ -25,6 +25,7 @@ public class OldRulesReader {
     List<MappingEntity> mappingEntities = new ArrayList<>();
 
     String json = ResourceReader.readFileToString("old_rules/" + fileName);
+    // TODO: Check spelling
     json = json.replaceAll("TumorType", "TumourType");
     JsonRuleToEntityMapper mappingEntityMapper = new JsonRuleToEntityMapper(entityTypeService);
 
