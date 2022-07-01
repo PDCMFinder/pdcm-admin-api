@@ -16,5 +16,7 @@ public class MappingSummaryByTypeAndProvider {
     private String dataSource;
     private int mapped;
     private int unmapped;
+    private int totalTerms;
+    private double progress;
   }
 }

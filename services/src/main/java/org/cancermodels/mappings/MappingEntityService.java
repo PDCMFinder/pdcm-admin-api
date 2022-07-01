@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
@@ -14,7 +13,6 @@ import org.cancermodels.mappings.search.MappingsSpecs;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -76,6 +74,9 @@ public class MappingEntityService {
       if (countByDataSource.containsKey(unmappedKey)) {
         summaryEntry.setUnmapped(countByDataSource.get(unmappedKey));
       }
+      int totalTerms = summaryEntry.getMapped() + summaryEntry.getUnmapped();
+      summaryEntry.setTotalTerms(totalTerms);
+      summaryEntry.setProgress(summaryEntry.getMapped()*1.0 / totalTerms );
       summaryEntries.add(summaryEntry);
     }
 
