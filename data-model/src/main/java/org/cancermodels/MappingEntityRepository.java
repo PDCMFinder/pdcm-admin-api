@@ -28,4 +28,6 @@ public interface MappingEntityRepository extends
               + "group by lower(mv.value), status order by  lower(mv.value)",
       nativeQuery = true)
   List<Object[]> countEntityTypeStatusByProvider(@Param("entityTypeName") String entityTypeName);
+
+  List<MappingEntity> findAllByEntityTypeNameIgnoreCase(String entityTypeName);
 }
