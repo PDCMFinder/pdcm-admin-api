@@ -58,6 +58,25 @@ ALTER TABLE mapping_value
 -- ALTER TABLE mapping_value
 -- ADD CONSTRAINT uc_mapping_value UNIQUE (key_id, value);
 
+CREATE TABLE mapping_entity_suggestion (
+    id INTEGER NOT NULL,
+    mapping_entity_id INTEGER,
+    suggested_mapping_entity_id INTEGER,
+    score NUMERIC(1,2)
+);
+
+ALTER TABLE mapping_entity_suggestion ADD CONSTRAINT pk_mapping_entity_suggestion PRIMARY KEY (id);
+
+ALTER TABLE mapping_entity_suggestion
+    ADD CONSTRAINT fk_mapping_entity_suggestion_mapping_entity_01
+    FOREIGN KEY (mapping_entity_id)
+    REFERENCES mapping_entity (id) ON DELETE CASCADE;
+
+ALTER TABLE mapping_entity_suggestion
+    ADD CONSTRAINT fk_mapping_entity_suggestion_mapping_entity_02
+    FOREIGN KEY (suggested_mapping_entity_id)
+    REFERENCES mapping_entity (id) ON DELETE CASCADE;
+
 CREATE TABLE ontology_term (
     id INTEGER NOT NULL,
     description CLOB,

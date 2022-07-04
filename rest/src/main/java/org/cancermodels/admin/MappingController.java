@@ -11,6 +11,7 @@ import org.cancermodels.admin.mappers.MappingEntityMapper;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
+import org.cancermodels.mappings.suggestions.SuggestionsManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -31,11 +32,14 @@ public class MappingController {
 
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
+  private final SuggestionsManager suggestionsManager;
 
   public MappingController(MappingEntityService mappingEntityService,
-      MappingEntityMapper mappingEntityMapper) {
+      MappingEntityMapper mappingEntityMapper,
+      SuggestionsManager suggestionsManager) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
+    this.suggestionsManager = suggestionsManager;
   }
 
   /**
@@ -89,5 +93,11 @@ public class MappingController {
   public MappingSummaryByTypeAndProvider getMappingSummaryByTypeAndProvider(
       @RequestParam(value = "entityTypeName") String entityTypeName) {
     return mappingEntityService.getSummaryByTypeAndProvider(entityTypeName);
+  }
+
+  @GetMapping("/getSimilar")
+  public void getSimilar() {
+    mappingEntityService.calculateSuggestedMappings();
+
   }
 }

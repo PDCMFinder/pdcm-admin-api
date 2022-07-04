@@ -4,26 +4,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
+import org.cancermodels.mappings.suggestions.SuggestionsManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MappingEntityService {
 
   private final MappingEntityRepository mappingEntityRepository;
+  private final SuggestionsManager suggestionsManager;
 
-  public MappingEntityService(MappingEntityRepository mappingEntityRepository) {
+  public MappingEntityService(MappingEntityRepository mappingEntityRepository,
+      SuggestionsManager suggestionsManager) {
     this.mappingEntityRepository = mappingEntityRepository;
+    this.suggestionsManager = suggestionsManager;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -76,10 +78,24 @@ public class MappingEntityService {
       if (countByDataSource.containsKey(unmappedKey)) {
         summaryEntry.setUnmapped(countByDataSource.get(unmappedKey));
       }
+      int totalTerms = summaryEntry.getMapped() + summaryEntry.getUnmapped();
+      summaryEntry.setTotalTerms(totalTerms);
+      summaryEntry.setProgress(summaryEntry.getMapped()*1.0 / totalTerms );
       summaryEntries.add(summaryEntry);
     }
 
     mappingSummaryByTypeAndProvider.setSummaryEntries(summaryEntries);
     return mappingSummaryByTypeAndProvider;
+  }
+
+  public List<MappingEntity> getAllByTypeName(String entityTypeName) {
+    return mappingEntityRepository.findAllByEntityTypeNameIgnoreCase(entityTypeName);
+  }
+
+  public void calculateSuggestedMappings() {
+    // Set suggestions for treatment rules
+    List<MappingEntity> allTreatmentMappings = getAllByTypeName("treatment");
+    suggestionsManager.updateSuggestedMappingsByExistingRules(allTreatmentMappings);
+    mappingEntityRepository.saveAll(allTreatmentMappings);
   }
 }

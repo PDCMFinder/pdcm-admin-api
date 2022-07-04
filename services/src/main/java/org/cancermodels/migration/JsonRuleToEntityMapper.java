@@ -43,6 +43,9 @@ public class JsonRuleToEntityMapper {
     if (!jsonObject.isNull("mappedTermLabel")) {
       mappingEntity.setMappedTermLabel(jsonObject.getString("mappedTermLabel"));
     }
+    if (!jsonObject.isNull("mappedTermUrl")) {
+      mappingEntity.setMappedTermUrl(jsonObject.getString("mappedTermUrl"));
+    }
 
     String originalStatus = jsonObject.getString("status");
 
@@ -66,7 +69,7 @@ public class JsonRuleToEntityMapper {
       Timestamp dataUpdatedTimeStamp = new Timestamp(jsonObject.getLong("dateUpdated"));
       mappingEntity.setDateUpdated(dataUpdatedTimeStamp.toLocalDateTime());
     }
-
+    mappingEntity.setMappingKey(mappingEntity.buildMappingKey());
     return mappingEntity;
   }
 

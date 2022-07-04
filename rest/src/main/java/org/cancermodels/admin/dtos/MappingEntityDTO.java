@@ -18,7 +18,7 @@ public class MappingEntityDTO {
   private String mappedTermLabel;
   private String status;
   @JsonInclude(Include.NON_NULL)
-  private List<String> suggestedMappings;
+  private List<MappingEntitySuggestionDTO> suggestedMappings;
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;
 }
