@@ -6,26 +6,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString.Exclude;
 
 @Entity
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MappingEntitySuggestion {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @ManyToOne
+  @OneToOne
   @Exclude
   @JsonIgnore
-  @JoinColumn(name = "mapping_entity_id")
-  private MappingEntity mappingEntity;
-
-  @ManyToOne
-  @Exclude
-  @JsonIgnore
+  @EqualsAndHashCode.Include
   @JoinColumn(name = "suggested_mapping_entity_id")
   private MappingEntity suggestedMappingEntity;
 

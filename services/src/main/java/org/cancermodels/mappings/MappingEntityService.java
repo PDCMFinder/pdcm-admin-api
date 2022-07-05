@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
+import org.cancermodels.MappingEntitySuggestionRepository;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
@@ -97,5 +99,9 @@ public class MappingEntityService {
     List<MappingEntity> allTreatmentMappings = getAllByTypeName("treatment");
     suggestionsManager.updateSuggestedMappingsByExistingRules(allTreatmentMappings);
     mappingEntityRepository.saveAll(allTreatmentMappings);
+  }
+
+  public Optional<MappingEntity> findById(int id) {
+    return mappingEntityRepository.findById(id);
   }
 }

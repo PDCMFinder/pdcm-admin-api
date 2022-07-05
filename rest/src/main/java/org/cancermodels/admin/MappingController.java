@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.Optional;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
@@ -98,6 +99,13 @@ public class MappingController {
   @GetMapping("/getSimilar")
   public void getSimilar() {
     mappingEntityService.calculateSuggestedMappings();
+  }
 
+  // This is a testing endpoint
+  @GetMapping("/testSuggestion")
+  public void testSuggestion() {
+    Optional<MappingEntity> mappingEntity = mappingEntityService.findById(819699);
+    var all = mappingEntityService.getAllByTypeName("treatment");
+    suggestionsManager.testOne(mappingEntity.get(), all);
   }
 }
