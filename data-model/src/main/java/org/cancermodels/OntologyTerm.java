@@ -1,5 +1,6 @@
 package org.cancermodels;
 ;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.ElementCollection;
@@ -57,6 +58,7 @@ public class OntologyTerm {
     @NonNull
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private String description;
 
 }

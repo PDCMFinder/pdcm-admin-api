@@ -69,12 +69,20 @@ public class MappingEntity {
   private List<MappingValue> mappingValues;
 
   /**
-   * Suggested mappings (other mapping entities that are similar).
+   * Suggested mappings by rules (other mapping entities that are similar).
    */
   @OneToMany(
       fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JoinColumn(name = "mapping_entity_id", nullable = false)
   private Set<MappingEntitySuggestion> mappingEntitySuggestions= new HashSet<>();
+
+  /**
+   * Suggested mappings by ontologies (other mapping entities that are similar).
+   */
+  @OneToMany(
+      fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+  @JoinColumn(name = "mapping_entity_id", nullable = false)
+  private Set<OntologySuggestion> ontologySuggestions= new HashSet<>();
 
   public Map<String, String> getValuesAsMap() {
     Map<String, String> map = new HashMap<>();

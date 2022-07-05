@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 class OntologyLoader {
   private final OntologyUrlManager ontologyUrlManager;
   private final UnprocessedOntologyUrlService unprocessedOntologyUrlService;
-  private final OntologyTermService ontologyTermService;
+  private final OntologyTermManager ontologyTermService;
   private final OntologyLoadReporter ontologyLoadReportService;
 
   private static final Logger LOG = LoggerFactory.getLogger(OntologyLoader.class);
@@ -40,7 +40,7 @@ class OntologyLoader {
   public OntologyLoader(
       OntologyUrlManager ontologyUrlManager,
       UnprocessedOntologyUrlService unprocessedOntologyUrlService,
-      OntologyTermService ontologyTermService,
+      OntologyTermManager ontologyTermService,
       OntologyLoadReporter ontologyLoadReportService) {
 
     this.ontologyUrlManager = ontologyUrlManager;

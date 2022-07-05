@@ -2,6 +2,8 @@ package org.cancermodels.admin.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,13 @@ public class MappingEntityDTO {
   private String mappedTermUrl;
   private String mappedTermLabel;
   private String status;
-  @JsonInclude(Include.NON_NULL)
-  private List<MappingEntitySuggestionDTO> suggestedMappings;
+
+  @JsonProperty("suggestionsByMappingEntities")
+  private List<MappingEntitySuggestionDTO> mappingEntitySuggestionDTOS;
+
+  @JsonProperty("suggestionsByOntologies")
+  private List<OntologySuggestionDTO> ontologySuggestionDTOS;
+
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;
 }

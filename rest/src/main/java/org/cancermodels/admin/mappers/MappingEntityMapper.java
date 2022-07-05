@@ -6,18 +6,24 @@ import java.util.List;
 import java.util.Set;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntitySuggestion;
+import org.cancermodels.OntologySuggestion;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.dtos.MappingEntitySuggestionDTO;
+import org.cancermodels.admin.dtos.OntologySuggestionDTO;
+import org.cancermodels.mappings.suggestions.OntologySuggestionManager;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MappingEntityMapper {
 
-  private MappingEntitySuggestionMapper mappingEntitySuggestionMapper;
+  private final MappingEntitySuggestionMapper mappingEntitySuggestionMapper;
+  private final OntologySuggestionMapper ontologySuggestionMapper;
 
   public MappingEntityMapper(
-      MappingEntitySuggestionMapper mappingEntitySuggestionMapper) {
+      MappingEntitySuggestionMapper mappingEntitySuggestionMapper,
+      OntologySuggestionMapper ontologySuggestionMapper) {
     this.mappingEntitySuggestionMapper = mappingEntitySuggestionMapper;
+    this.ontologySuggestionMapper = ontologySuggestionMapper;
   }
 
   public MappingEntityDTO convertToDto(MappingEntity mappingEntity) {
@@ -33,7 +39,12 @@ public class MappingEntityMapper {
 
     List<MappingEntitySuggestionDTO> mappingEntitySuggestionDTOS =
         convertToMappingEntitySuggestionDto(mappingEntity.getMappingEntitySuggestions());
-    mappingEntityDTO.setSuggestedMappings(mappingEntitySuggestionDTOS);
+    mappingEntityDTO.setMappingEntitySuggestionDTOS(mappingEntitySuggestionDTOS);
+
+    List<OntologySuggestionDTO> ontologySuggestionDTOS =
+        convertToOntologySuggestionDTO(mappingEntity.getOntologySuggestions());
+    mappingEntityDTO.setOntologySuggestionDTOS(ontologySuggestionDTOS);
+
     return mappingEntityDTO;
   }
 
@@ -49,6 +60,20 @@ public class MappingEntityMapper {
         Comparator.comparing(MappingEntitySuggestionDTO::getScore).reversed());
 
     return mappingEntitySuggestionDTOS;
+  }
+
+  private List<OntologySuggestionDTO> convertToOntologySuggestionDTO(
+      Set<OntologySuggestion> ontologySuggestions) {
+
+    List<OntologySuggestionDTO>  ontologySuggestionDTOS = new ArrayList<>();
+    for (OntologySuggestion suggestion : ontologySuggestions)
+    {
+      ontologySuggestionDTOS.add(ontologySuggestionMapper.convertToDto(suggestion));
+    }
+    ontologySuggestionDTOS.sort(
+        Comparator.comparing(OntologySuggestionDTO::getScore).reversed());
+
+    return ontologySuggestionDTOS;
   }
 
 }

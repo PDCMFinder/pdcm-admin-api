@@ -4,7 +4,7 @@ import java.util.Map;
 import lombok.Data;
 import org.springframework.hateoas.server.core.Relation;
 
-@Relation(collectionRelation = "suggestedMappings")
+@Relation(collectionRelation = "suggestionsByMappingEntities")
 @Data
 public class MappingEntitySuggestionDTO {
   private Map<String, String> mappingValues;

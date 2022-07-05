@@ -15,17 +15,16 @@ import lombok.ToString.Exclude;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class MappingEntitySuggestion {
+public class OntologySuggestion {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   @OneToOne
   @Exclude
-  @JsonIgnore
   @EqualsAndHashCode.Include
-  @JoinColumn(name = "suggested_mapping_entity_id")
-  private MappingEntity suggestedMappingEntity;
+  @JoinColumn(name = "ontology_term_id")
+  private OntologyTerm ontologyTerm;
 
   @Column(columnDefinition="NUMBER(5,2)")
   private double score;

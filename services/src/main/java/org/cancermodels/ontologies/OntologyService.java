@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.cancermodels.EntityType;
+import org.cancermodels.MappingEntity;
 import org.cancermodels.OntologyLoadReport;
+import org.cancermodels.OntologyTerm;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,15 +17,41 @@ import org.springframework.stereotype.Service;
 @Service
 public class OntologyService {
   private final OntologyLoader ontologyLoader;
-  private final OntologyTermService ontologyTermService;
+  private final OntologyTermManager ontologyTermManager;
   private final OntologyLoadReporter ontologyLoadReporter;
 
   public OntologyService(OntologyLoader ontologyLoader,
-      OntologyTermService ontologyTermService,
+      OntologyTermManager ontologyTermService,
       OntologyLoadReporter ontologyLoadReportService) {
     this.ontologyLoader = ontologyLoader;
-    this.ontologyTermService = ontologyTermService;
+    this.ontologyTermManager = ontologyTermService;
     this.ontologyLoadReporter = ontologyLoadReportService;
+  }
+
+  public List<OntologyTerm> getAllByType(String type) {
+    return ontologyTermManager.getAllByType(type);
+  }
+
+  /**
+   * Gets all ontology terms as a map, where the key is the type (treatment and regimen grouped
+   * as a single one).
+   * @return Map with key=type and value=ontology terms. Keys are in lowercase
+   */
+  public Map<String, List<OntologyTerm>> getOntologyTermsMappedByType() {
+    Map<String, List<OntologyTerm>> map = new HashMap<>();
+
+    String diagnosis = OntologyTermType.DIAGNOSIS.getDescription();
+    List<OntologyTerm> diagnosisOntologyTerms = getAllByType(diagnosis);
+    map.put(diagnosis.toLowerCase(), diagnosisOntologyTerms);
+
+    String treatment = OntologyTermType.TREATMENT.getDescription();
+    List<OntologyTerm> treatmentOntologyTerms = getAllByType(treatment);
+    String regimen = OntologyTermType.REGIMEN.getDescription();
+    List<OntologyTerm> regimenOntologyTerms = getAllByType(regimen);
+    treatmentOntologyTerms.addAll(regimenOntologyTerms);
+    map.put(treatment.toLowerCase(), treatmentOntologyTerms);
+
+    return map;
   }
 
   /**
@@ -83,10 +112,10 @@ public class OntologyService {
     }
 
     for (String type : getOntologyTypes()) {
-      countsByType.put(type, ontologyTermService.getCountByType(type));
+      countsByType.put(type, ontologyTermManager.getCountByType(type));
 
     }
-    ontologySummary.setTotalCount(ontologyTermService.count());
+    ontologySummary.setTotalCount(ontologyTermManager.count());
     ontologySummary.setCountsByType(countsByType);
     ontologySummary.setCountAddedTermsLatestLoadByType(countAddedTermsLatestLoadByType);
     ontologySummary.setCountAddedTermsPreviousLoadByType(countAddedTermsPreviousLoadByType);

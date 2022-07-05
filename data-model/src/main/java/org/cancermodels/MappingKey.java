@@ -23,12 +23,21 @@ public class MappingKey {
   @JoinColumn(name = "entity_type_id", nullable = false)
   private EntityType entityType;
 
-  // Name of the key. A key is an attribute that is relevant in the process of mapping
-  // data provided by the user to an ontology term.
+  /**
+   * Name of the key. A key is an attribute that is relevant in the process of mapping // data
+   * provided by the user to an ontology term.
+   */
   private String key;
 
-  // Numeric value, from 0 to 1, that represents how important this key is when
-  // determining the simmilarity between 2 entities
-  @JsonIgnore
-  private Double weight;
+  /**
+   * Numeric value, from 0 to 1, that represents how important this key is when // determining the
+   * similarity between 2 entities
+   */
+  @JsonIgnore private Double weight;
+
+  /**
+   * Indicates whether or not this key is going to be used in the process of calculating
+   * suggestions based on ontologies.
+   */
+  private Boolean toUseInOntologySuggestionCalculation;
 }

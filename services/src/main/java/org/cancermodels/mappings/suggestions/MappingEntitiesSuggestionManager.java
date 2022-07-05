@@ -2,6 +2,7 @@ package org.cancermodels.mappings.suggestions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,26 +12,52 @@ import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntitySuggestion;
 import org.cancermodels.MappingEntitySuggestionRepository;
+import org.cancermodels.OntologySuggestion;
 import org.cancermodels.prototype.SimilarityComparator;
 import org.cancermodels.prototype.TermsWeightedSimilarityCalculator;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class calculates the mapping suggestions using existing mapping entities and searching on
+ * them for the ones that are similar so can be assigned as suggestions.
+ */
+
 @Service
-public class SuggestionsManager {
+public class MappingEntitiesSuggestionManager {
   private final SimilarityConfigurationReader similarityConfigurationReader;
-  private final SimilarityComparator similarityComparator;
   private final TermsWeightedSimilarityCalculator termsWeightedSimilarityCalculator;
   private final MappingEntitySuggestionRepository mappingEntitySuggestionRepository;
-  private MappingEntityRepository mappingEntityRepository;
+  private final MappingEntityRepository mappingEntityRepository;
 
-  public SuggestionsManager(SimilarityConfigurationReader similarityConfigurationReader,
+  public MappingEntitiesSuggestionManager(SimilarityConfigurationReader similarityConfigurationReader,
       MappingEntitySuggestionRepository mappingEntitySuggestionRepository,
       MappingEntityRepository mappingEntityRepository) {
     this.similarityConfigurationReader = similarityConfigurationReader;
-    similarityComparator = similarityConfigurationReader.getSimilarityAlgorithm();
+    SimilarityComparator similarityComparator = similarityConfigurationReader
+        .getSimilarityAlgorithm();
     this.mappingEntitySuggestionRepository = mappingEntitySuggestionRepository;
     this.mappingEntityRepository = mappingEntityRepository;
     termsWeightedSimilarityCalculator = new TermsWeightedSimilarityCalculator(similarityComparator);
+  }
+
+  /**
+   * Calculate mapping entities based suggestions.
+   *
+   * @param mappingEntities Mapping entities for which the suggestions are going to be calculated.
+   * @return Map with the suggestions for each entity.
+   */
+  public Map<MappingEntity, Set<MappingEntitySuggestion>> calculateSuggestions(
+      List<MappingEntity> mappingEntities) {
+
+    Map<MappingEntity, Set<MappingEntitySuggestion>> suggestionsByEntities = new HashMap<>();
+
+    for (MappingEntity mappingEntity : mappingEntities) {
+      List<MappingEntity> rest = new ArrayList<>(mappingEntities);
+      rest.remove(mappingEntity);
+      Set<MappingEntitySuggestion> suggestions = calculateSuggestionsForEntity(mappingEntity, rest);
+      suggestionsByEntities.put(mappingEntity, suggestions);
+    }
+    return suggestionsByEntities;
   }
 
   public void updateSuggestedMappingsByExistingRules(List<MappingEntity> mappingEntities) {
@@ -41,7 +68,7 @@ public class SuggestionsManager {
       mappingEntity.getMappingEntitySuggestions().clear();
       mappingEntityRepository.save(mappingEntity);
 
-      Set<MappingEntitySuggestion> suggestions = getSuggestions(mappingEntity, rest);
+      Set<MappingEntitySuggestion> suggestions = calculateSuggestionsForEntity(mappingEntity, rest);
       mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
 
       mappingEntitySuggestionRepository.saveAll(suggestions);
@@ -59,9 +86,8 @@ public class SuggestionsManager {
    * @return List of {@link MappingEntity} that represent the most similar entities to the given
    *     mappingEntity.
    */
-  public Set<MappingEntitySuggestion> getSuggestions(
+  public Set<MappingEntitySuggestion> calculateSuggestionsForEntity(
       MappingEntity mappingEntity, List<MappingEntity> mappingEntities) {
-
     Map<String, String> leftValues = mappingEntity.getValuesAsMap();
     Map<String, Double> weights = mappingEntity.getEntityType().getWeightsAsMap();
 
@@ -95,10 +121,17 @@ public class SuggestionsManager {
     }
     orderedSuggestions.putAll(perfectMatches);
     orderedSuggestions.putAll(acceptableMatches);
-    return buildMappingEntitySuggestion(orderedSuggestions);
+    return getBestSuggestions(orderedSuggestions);
   }
 
-  private Set<MappingEntitySuggestion> buildMappingEntitySuggestion(
+  /**
+   * Gets the best suggestions based on the number of suggested mappings per entity
+   * configured in the system.
+   * @param allSuggestions All the calculated suggestions
+   * @return A subset of the suggestions, only taking the first best n, where n is
+   * the number of suggested mappings per entity
+   */
+  private Set<MappingEntitySuggestion> getBestSuggestions(
       Map<Double, List<MappingEntity>> allSuggestions) {
 
     Set<MappingEntitySuggestion> mappingEntitySuggestions = new HashSet<>();
@@ -126,7 +159,7 @@ public class SuggestionsManager {
     System.out.println("Current number of suggestions: " +
         mappingEntity.getMappingEntitySuggestions().size());
 
-    Set<MappingEntitySuggestion> suggestions = getSuggestions(mappingEntity, mappingEntities);
+    Set<MappingEntitySuggestion> suggestions = calculateSuggestionsForEntity(mappingEntity, mappingEntities);
     System.out.println("Calculated: " + suggestions.size() + " suggestions");
 
     mappingEntity.getMappingEntitySuggestions().clear();

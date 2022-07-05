@@ -1,0 +1,164 @@
+package org.cancermodels.mappings.suggestions;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.cancermodels.MappingEntity;
+import org.cancermodels.MappingEntityRepository;
+import org.cancermodels.MappingEntitySuggestion;
+import org.cancermodels.MappingEntitySuggestionRepository;
+import org.cancermodels.OntologySuggestion;
+import org.cancermodels.OntologySuggestionRepository;
+import org.cancermodels.OntologyTerm;
+import org.cancermodels.ontologies.OntologyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * Class in charge of setting the suggestions for mapping entities base on:
+ * 1) Existing mapping entities.
+ * 2) Ontology terms
+ */
+@Component
+public class SuggestionManager {
+
+  private final MappingEntitiesSuggestionManager mappingEntitiesSuggestionManager;
+  private final MappingEntitySuggestionRepository mappingEntitySuggestionRepository;
+  private final OntologySuggestionRepository ontologySuggestionRepository;
+  private final MappingEntityRepository mappingEntityRepository;
+  private final OntologyService ontologyService;
+  private final OntologySuggestionManager ontologySuggestionManager;
+
+  private static final Logger LOG = LoggerFactory.getLogger(SuggestionManager.class);
+
+  public SuggestionManager(
+      MappingEntitiesSuggestionManager mappingEntitiesSuggestionManager,
+      MappingEntitySuggestionRepository mappingEntitySuggestionRepository,
+      OntologySuggestionRepository ontologySuggestionRepository,
+      MappingEntityRepository mappingEntityRepository,
+      OntologyService ontologyService,
+      OntologySuggestionManager ontologySuggestionManager) {
+    this.mappingEntitiesSuggestionManager = mappingEntitiesSuggestionManager;
+    this.mappingEntitySuggestionRepository = mappingEntitySuggestionRepository;
+    this.ontologySuggestionRepository = ontologySuggestionRepository;
+    this.mappingEntityRepository = mappingEntityRepository;
+    this.ontologyService = ontologyService;
+    this.ontologySuggestionManager = ontologySuggestionManager;
+  }
+
+  /**
+   * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
+   */
+  public void setSuggestions(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+    LOG.info("Init suggestion calculation process");
+    resetData(mappingEntitiesMappedByType);
+
+    setSuggestionsByMappingEntities(mappingEntitiesMappedByType);
+    setSuggestionsByOntologies(mappingEntitiesMappedByType);
+
+    saveMappingEntities(mappingEntitiesMappedByType);
+
+  }
+
+  private void resetData(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+
+    LOG.info("Resetting data");
+    mappingEntitySuggestionRepository.deleteAll();
+    ontologySuggestionRepository.deleteAll();
+
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+      List<MappingEntity> entitiesByType = mappingEntitiesMappedByType.get(type);
+      for (MappingEntity mappingEntity : entitiesByType) {
+        mappingEntity.getMappingEntitySuggestions().clear();
+        mappingEntity.getOntologySuggestions().clear();
+      }
+      // Save all entities to execute the deletion on db
+      mappingEntityRepository.saveAll(entitiesByType);
+    }
+    LOG.info(String.format(
+        "After resetting: %d elements in mappingEntitySuggestion",
+        mappingEntitySuggestionRepository.count()));
+    LOG.info(String.format(
+        "After resetting: %d elements in ontologySuggestion",
+        ontologySuggestionRepository.count()));
+  }
+
+  private void saveMappingEntities(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+      List<MappingEntity> entitiesByType = mappingEntitiesMappedByType.get(type);
+      mappingEntityRepository.saveAll(entitiesByType);
+    }
+  }
+
+  /**
+   * Sets the suggestions based on similar mapping entities.
+   */
+  private void setSuggestionsByMappingEntities(
+      Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+
+    LOG.info("Init mapping entity suggestions");
+    Set<MappingEntitySuggestion> allSuggestions = new HashSet<>();
+    int processedEntities = 0;
+
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+      List<MappingEntity> mappingsByType = mappingEntitiesMappedByType.get(type);
+      Map<MappingEntity, Set<MappingEntitySuggestion>> suggestionsByEntity =
+          mappingEntitiesSuggestionManager.calculateSuggestions(mappingsByType);
+
+      for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
+
+        // Children are saved explicitly
+        Set<MappingEntitySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
+        mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
+//        mappingEntitySuggestionRepository.saveAll(suggestions);
+        allSuggestions.addAll(suggestions);
+        System.out.println("Processed entities (mapping entities suggestions)" + ++processedEntities);
+      }
+      // Need to check if this call is really necessary
+//      mappingEntityRepository.saveAll(mappingsByType);
+    }
+    mappingEntitySuggestionRepository.saveAll(allSuggestions);
+    LOG.info("Finish mapping entity suggestions");
+  }
+
+  private void setSuggestionsByOntologies(
+      Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+    LOG.info("Init ontology suggestions");
+
+    Map<String, List<OntologyTerm>> ontologyTermsMappedByType =
+        ontologyService.getOntologyTermsMappedByType();
+
+    Set<OntologySuggestion> allSuggestions = new HashSet<>();
+    int processedEntities = 0;
+
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+
+      List<MappingEntity> mappingsByType = mappingEntitiesMappedByType.get(type);
+      LOG.info(String.format("Found %d %s mappings", mappingsByType.size(), type));
+      List<OntologyTerm> ontologyTermsByType = ontologyTermsMappedByType.get(type);
+      LOG.info(String.format("Found %d ontology %s terms", ontologyTermsByType.size(), type));
+
+      Map<MappingEntity, Set<OntologySuggestion>> suggestionsByEntity =
+          ontologySuggestionManager.calculateSuggestions(mappingsByType, ontologyTermsByType);
+
+      for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
+
+        // Children are saved explicitly as well
+        Set<OntologySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
+        mappingEntity.getOntologySuggestions().addAll(suggestions);
+//        ontologySuggestionRepository.saveAll(suggestions);
+        allSuggestions.addAll(suggestions);
+        System.out.println("Processed entities (ontologies suggestions)" + ++processedEntities);
+      }
+      // Need to check if this call is really necessary
+//      mappingEntityRepository.saveAll(mappingsByType);
+    }
+    ontologySuggestionRepository.saveAll(allSuggestions);
+    LOG.info("Finish ontology suggestions");
+  }
+
+
+
+}
