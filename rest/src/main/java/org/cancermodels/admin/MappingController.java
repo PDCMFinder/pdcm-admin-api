@@ -60,14 +60,10 @@ public class MappingController {
 
   @GetMapping("/{id}")
   MappingEntityDTO getMappingEntity(@PathVariable int id) {
-    MappingEntityDTO mappingEntityDTO = new MappingEntityDTO();
-    Optional<MappingEntity> mappingEntityOptional = mappingEntityService.findById(id);
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
 
-    mappingEntityDTO = mappingEntityMapper.convertToDto(mappingEntity);
-
-    return mappingEntityDTO;
+    return mappingEntityMapper.convertToDto(mappingEntity);
   }
 
   /**
