@@ -21,10 +21,14 @@ import org.springframework.stereotype.Service;
 public class OntologySuggestionManager {
 
   private final SimilarityConfigurationReader similarityConfigurationReader;
+  private final ScoreManager<OntologyTerm> scoreManager;
+
   static SimilarityComparator similarityComparator = null;
 
-  public OntologySuggestionManager(SimilarityConfigurationReader similarityConfigurationReader) {
+  public OntologySuggestionManager(SimilarityConfigurationReader similarityConfigurationReader,
+      ScoreManager<OntologyTerm> scoreManager) {
     this.similarityConfigurationReader = similarityConfigurationReader;
+    this.scoreManager = scoreManager;
   }
 
   private SimilarityComparator getSimilarityComparatorInstance() {
@@ -62,45 +66,68 @@ public class OntologySuggestionManager {
 
     Map<Double, Set<OntologySuggestion>> suggestionsMap = new TreeMap<>(Collections.reverseOrder());
 
+    Map<Double, Set<OntologyTerm>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Double, Set<OntologyTerm>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Double, Set<OntologyTerm>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
+
+    int numberOfPerfectMatches = 0;
+    int c = 0;
+
     for (OntologyTerm ontologyTerm : ontologyTerms) {
       double score = calculateAverageScore(valuesToEvaluate, ontologyTerm);
-      if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
-        OntologySuggestion ontologySuggestion = new OntologySuggestion();
-        ontologySuggestion.setOntologyTerm(ontologyTerm);
-        ontologySuggestion.setScore(score);
 
-        if (!suggestionsMap.containsKey(score)) {
-          suggestionsMap.put(score, new HashSet<>());
-        }
-        suggestionsMap.get(score).add(ontologySuggestion);
+      boolean shouldKeepSearching = scoreManager.processScore(
+          score, numberOfPerfectMatches, perfectMatches, acceptableMatches, ontologyTerm);
+
+      if (!shouldKeepSearching) {
+        break;
       }
+      System.out.println("..."+c++);
+
+//      if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
+//        OntologySuggestion ontologySuggestion = new OntologySuggestion();
+//        ontologySuggestion.setOntologyTerm(ontologyTerm);
+//        ontologySuggestion.setScore(score);
+//
+//        if (!suggestionsMap.containsKey(score)) {
+//          suggestionsMap.put(score, new HashSet<>());
+//        }
+//        suggestionsMap.get(score).add(ontologySuggestion);
+//      }
     }
-    return getBestSuggestions(suggestionsMap);
+    orderedSuggestions.putAll(perfectMatches);
+    orderedSuggestions.putAll(acceptableMatches);
+    return getBestSuggestions(orderedSuggestions);
   }
 
   /**
    * Gets the best suggestions based on the number of suggested mappings per entity
    * configured in the system.
-   * @param suggestionsMap All the calculated suggestions
+   * @param allSuggestions All the calculated suggestions
    * @return A subset of the suggestions, only taking the first best n, where n is
    * the number of suggested mappings per entity
    */
   private Set<OntologySuggestion> getBestSuggestions(
-      Map<Double, Set<OntologySuggestion>> suggestionsMap) {
+      Map<Double, Set<OntologyTerm>> allSuggestions) {
 
-    Set<OntologySuggestion> suggestions = new HashSet<>();
+    Set<OntologySuggestion> mappingEntitySuggestions = new HashSet<>();
+
     outer:
-    for (Double key : suggestionsMap.keySet()) {
-      Set<OntologySuggestion> ontologySuggestions = suggestionsMap.get(key);
-      for (OntologySuggestion ontologySuggestion : ontologySuggestions) {
-        suggestions.add(ontologySuggestion);
-        if (suggestions.size()
+    for (Double key : allSuggestions.keySet()) {
+      Set<OntologyTerm> suggestions = allSuggestions.get(key);
+      for (OntologyTerm suggested : suggestions) {
+        OntologySuggestion ontologySuggestion = new OntologySuggestion();
+        ontologySuggestion.setOntologyTerm(suggested);
+        ontologySuggestion.setScore(key);
+
+        mappingEntitySuggestions.add(ontologySuggestion);
+        if (mappingEntitySuggestions.size()
             >= similarityConfigurationReader.getNumberOfSuggestedMappingsPerEntity()) {
           break outer;
         }
       }
     }
-    return suggestions;
+    return mappingEntitySuggestions;
   }
 
   private double calculateAverageScore(

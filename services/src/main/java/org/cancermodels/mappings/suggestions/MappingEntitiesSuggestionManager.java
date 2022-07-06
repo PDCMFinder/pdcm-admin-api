@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntitySuggestion;
 import org.cancermodels.MappingEntitySuggestionRepository;
-import org.cancermodels.OntologySuggestion;
+import org.cancermodels.mappings.Status;
 import org.cancermodels.prototype.SimilarityComparator;
 import org.cancermodels.prototype.TermsWeightedSimilarityCalculator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,11 +31,18 @@ public class MappingEntitiesSuggestionManager {
   private final TermsWeightedSimilarityCalculator termsWeightedSimilarityCalculator;
   private final MappingEntitySuggestionRepository mappingEntitySuggestionRepository;
   private final MappingEntityRepository mappingEntityRepository;
+  private final ScoreManager<MappingEntity> scoreManager;
 
-  public MappingEntitiesSuggestionManager(SimilarityConfigurationReader similarityConfigurationReader,
+  private static final Logger LOG = LoggerFactory.getLogger(MappingEntitiesSuggestionManager.class);
+
+  public MappingEntitiesSuggestionManager(
+      SimilarityConfigurationReader similarityConfigurationReader,
       MappingEntitySuggestionRepository mappingEntitySuggestionRepository,
-      MappingEntityRepository mappingEntityRepository) {
+      MappingEntityRepository mappingEntityRepository,
+      ScoreManager<MappingEntity> scoreManager) {
+
     this.similarityConfigurationReader = similarityConfigurationReader;
+    this.scoreManager = scoreManager;
     SimilarityComparator similarityComparator = similarityConfigurationReader
         .getSimilarityAlgorithm();
     this.mappingEntitySuggestionRepository = mappingEntitySuggestionRepository;
@@ -51,28 +61,20 @@ public class MappingEntitiesSuggestionManager {
 
     Map<MappingEntity, Set<MappingEntitySuggestion>> suggestionsByEntities = new HashMap<>();
 
+    // Suggestions are only searched on mapped entities
+    List<MappingEntity> mappedEntities = mappingEntities.stream()
+        .filter(x -> x.getStatus().equalsIgnoreCase(Status.MAPPED.getLabel()))
+        .collect(Collectors.toList());
+    LOG.info("Number of mapped entities: " + mappedEntities.size());
+
     for (MappingEntity mappingEntity : mappingEntities) {
-      List<MappingEntity> rest = new ArrayList<>(mappingEntities);
-      rest.remove(mappingEntity);
-      Set<MappingEntitySuggestion> suggestions = calculateSuggestionsForEntity(mappingEntity, rest);
+      List<MappingEntity> mappingsToSearchOn = new ArrayList<>(mappedEntities);
+      mappingsToSearchOn.remove(mappingEntity);
+      Set<MappingEntitySuggestion> suggestions =
+          calculateSuggestionsForEntity(mappingEntity, mappingsToSearchOn);
       suggestionsByEntities.put(mappingEntity, suggestions);
     }
     return suggestionsByEntities;
-  }
-
-  public void updateSuggestedMappingsByExistingRules(List<MappingEntity> mappingEntities) {
-    for (MappingEntity mappingEntity : mappingEntities) {
-      List<MappingEntity> rest = new ArrayList<>(mappingEntities);
-      rest.remove(mappingEntity);
-
-      mappingEntity.getMappingEntitySuggestions().clear();
-      mappingEntityRepository.save(mappingEntity);
-
-      Set<MappingEntitySuggestion> suggestions = calculateSuggestionsForEntity(mappingEntity, rest);
-      mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
-
-      mappingEntitySuggestionRepository.saveAll(suggestions);
-    }
   }
 
   /**
@@ -88,12 +90,13 @@ public class MappingEntitiesSuggestionManager {
    */
   public Set<MappingEntitySuggestion> calculateSuggestionsForEntity(
       MappingEntity mappingEntity, List<MappingEntity> mappingEntities) {
+
     Map<String, String> leftValues = mappingEntity.getValuesAsMap();
     Map<String, Double> weights = mappingEntity.getEntityType().getWeightsAsMap();
 
-    Map<Double, List<MappingEntity>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, List<MappingEntity>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, List<MappingEntity>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
+    Map<Double, Set<MappingEntity>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Double, Set<MappingEntity>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Double, Set<MappingEntity>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
 
     int numberOfPerfectMatches = 0;
 
@@ -102,22 +105,30 @@ public class MappingEntitiesSuggestionManager {
       double score =
           termsWeightedSimilarityCalculator.calculateTermsWeightedSimilarity(
               leftValues, rightValues, weights);
-      if (score >= similarityConfigurationReader.getSimilarityPerfectMatchScore()) {
-        if (!perfectMatches.containsKey(score)) {
-          perfectMatches.put(score, new ArrayList<>());
-        }
-        perfectMatches.get(score).add(element);
-        numberOfPerfectMatches++;
-        if (numberOfPerfectMatches
-            >= similarityConfigurationReader.getNumberOfSuggestedMappingsPerEntity()) {
-          break;
-        }
-      } else if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
-        if (!acceptableMatches.containsKey(score)) {
-          acceptableMatches.put(score, new ArrayList<>());
-        }
-        acceptableMatches.get(score).add(element);
+
+      boolean shouldKeepSearching = scoreManager.processScore(
+          score, numberOfPerfectMatches, perfectMatches, acceptableMatches, element);
+
+      if (!shouldKeepSearching) {
+        break;
       }
+
+//      if (score >= similarityConfigurationReader.getSimilarityPerfectMatchScore()) {
+//        if (!perfectMatches.containsKey(score)) {
+//          perfectMatches.put(score, new HashSet<>());
+//        }
+//        perfectMatches.get(score).add(element);
+//        numberOfPerfectMatches++;
+//        if (numberOfPerfectMatches
+//            >= similarityConfigurationReader.getPerfectMatchesToFinishEarlier()) {
+//          break;
+//        }
+//      } else if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
+//        if (!acceptableMatches.containsKey(score)) {
+//          acceptableMatches.put(score, new HashSet<>());
+//        }
+//        acceptableMatches.get(score).add(element);
+//      }
     }
     orderedSuggestions.putAll(perfectMatches);
     orderedSuggestions.putAll(acceptableMatches);
@@ -132,17 +143,17 @@ public class MappingEntitiesSuggestionManager {
    * the number of suggested mappings per entity
    */
   private Set<MappingEntitySuggestion> getBestSuggestions(
-      Map<Double, List<MappingEntity>> allSuggestions) {
+      Map<Double, Set<MappingEntity>> allSuggestions) {
 
     Set<MappingEntitySuggestion> mappingEntitySuggestions = new HashSet<>();
 
     outer:
-    for (Double keySet : allSuggestions.keySet()) {
-      List<MappingEntity> mappingEntities = allSuggestions.get(keySet);
+    for (Double key : allSuggestions.keySet()) {
+      Set<MappingEntity> mappingEntities = allSuggestions.get(key);
       for (MappingEntity suggested : mappingEntities) {
         MappingEntitySuggestion mappingEntitySuggestion = new MappingEntitySuggestion();
         mappingEntitySuggestion.setSuggestedMappingEntity(suggested);
-        mappingEntitySuggestion.setScore(keySet);
+        mappingEntitySuggestion.setScore(key);
 
         mappingEntitySuggestions.add(mappingEntitySuggestion);
         if (mappingEntitySuggestions.size()

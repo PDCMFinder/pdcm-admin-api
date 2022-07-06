@@ -25,6 +25,9 @@ public class SimilarityConfigurationReader {
   @Value( "${number_of_suggested_mappings}" )
   private int numberOfSuggestedMappingsPerEntity;
 
+  @Value( "${perfect_matches_to_finish_earlier}" )
+  private int perfectMatchesToFinishEarlier;
+
   public double getSimilarityPerfectMatchScore() {
     return similarityPerfectMatchScore;
   }
@@ -48,5 +51,9 @@ public class SimilarityConfigurationReader {
 
   public int getNumberOfSuggestedMappingsPerEntity() {
     return numberOfSuggestedMappingsPerEntity;
+  }
+
+  public int getPerfectMatchesToFinishEarlier() {
+    return perfectMatchesToFinishEarlier;
   }
 }
