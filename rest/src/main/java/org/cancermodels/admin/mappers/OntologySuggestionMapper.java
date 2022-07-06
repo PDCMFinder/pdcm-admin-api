@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OntologySuggestionMapper {
-  private OntologyTermMapper ontologyTermMapper;
+  private final OntologyTermMapper ontologyTermMapper;
 
   public OntologySuggestionMapper(
       OntologyTermMapper ontologyTermMapper) {
