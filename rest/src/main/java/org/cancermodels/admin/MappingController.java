@@ -22,6 +22,7 @@ import org.cancermodels.mappings.suggestions.MappingEntitiesSuggestionManager;
 import org.cancermodels.ontologies.OntologyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +56,18 @@ public class MappingController {
     this.suggestionsManager = suggestionsManager;
     this.ontologyService = ontologyService;
     this.ontologySuggestionManager = ontologySuggestionManager;
+  }
+
+  @GetMapping("/{id}")
+  MappingEntityDTO getMappingEntity(@PathVariable int id) {
+    MappingEntityDTO mappingEntityDTO = new MappingEntityDTO();
+    Optional<MappingEntity> mappingEntityOptional = mappingEntityService.findById(id);
+    MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+        ResourceNotFoundException::new);
+
+    mappingEntityDTO = mappingEntityMapper.convertToDto(mappingEntity);
+
+    return mappingEntityDTO;
   }
 
   /**

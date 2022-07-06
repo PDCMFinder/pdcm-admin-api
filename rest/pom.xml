@@ -22,6 +22,14 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-webmvc -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-rest-webmvc</artifactId>
+      <version>3.7.1</version>
+    </dependency>
+
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-hateoas</artifactId>
