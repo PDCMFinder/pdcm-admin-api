@@ -1,9 +1,6 @@
 package org.cancermodels.admin.dtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

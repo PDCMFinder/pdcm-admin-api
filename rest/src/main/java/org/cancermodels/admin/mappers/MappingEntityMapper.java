@@ -10,7 +10,6 @@ import org.cancermodels.OntologySuggestion;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.dtos.MappingEntitySuggestionDTO;
 import org.cancermodels.admin.dtos.OntologySuggestionDTO;
-import org.cancermodels.mappings.suggestions.OntologySuggestionManager;
 import org.springframework.stereotype.Component;
 
 @Component

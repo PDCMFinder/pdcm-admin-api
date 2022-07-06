@@ -130,6 +130,7 @@ public class MappingController {
     Optional<MappingEntity> mappingEntity = mappingEntityService.findById(819699);
     var all = mappingEntityService.getAllByTypeName("treatment");
     suggestionsManager.testOne(mappingEntity.get(), all);
+    System.out.println("end");
   }
 
   // This is a testing endpoint

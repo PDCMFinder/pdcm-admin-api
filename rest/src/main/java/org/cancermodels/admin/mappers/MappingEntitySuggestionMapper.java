@@ -1,8 +1,6 @@
 package org.cancermodels.admin.mappers;
 
-import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntitySuggestion;
-import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.dtos.MappingEntitySuggestionDTO;
 import org.springframework.stereotype.Component;
 
