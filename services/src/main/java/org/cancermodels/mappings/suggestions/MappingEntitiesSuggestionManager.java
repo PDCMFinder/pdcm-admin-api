@@ -15,7 +15,6 @@ import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntitySuggestion;
 import org.cancermodels.MappingEntitySuggestionRepository;
-import org.cancermodels.OntologySuggestion;
 import org.cancermodels.mappings.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

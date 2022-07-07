@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.EntityType;
-import org.cancermodels.MappingEntity;
 import org.cancermodels.OntologyLoadReport;
 import org.cancermodels.OntologyTerm;
 import org.springframework.stereotype.Service;

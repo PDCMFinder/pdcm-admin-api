@@ -29,18 +29,15 @@ public class TermsWeightedSimilarityCalculator {
     for (String key : leftValues.keySet()) {
 
       String leftTerm = leftValues.get(key);
-//      System.out.println("orig l: " + leftTerm);
 
       leftTerm = transformTerm(leftTerm);
 
       String rightTerm = rightValues.get(key);
-//      System.out.println("orig r: " + rightTerm);
 
       rightTerm = transformTerm(rightTerm);
       double weight = weights.get(key);
 
       score = score + (int)(similarityComparator.calculate(leftTerm, rightTerm) * weight);
-//      System.out.printf("l[%s] r[%s] : [%s]%n", leftTerm, rightTerm, score);
     }
 
     return score;

@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.OntologySuggestion;
 import org.cancermodels.OntologyTerm;
