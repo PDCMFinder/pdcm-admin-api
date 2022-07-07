@@ -48,7 +48,7 @@ public class MappingEntityMapper {
   }
 
   private List<MappingEntitySuggestionDTO> convertToMappingEntitySuggestionDto(
-      Set<MappingEntitySuggestion> mappingEntitySuggestions) {
+      List<MappingEntitySuggestion> mappingEntitySuggestions) {
 
     List<MappingEntitySuggestionDTO>  mappingEntitySuggestionDTOS = new ArrayList<>();
     for (MappingEntitySuggestion suggestion : mappingEntitySuggestions)
@@ -62,7 +62,7 @@ public class MappingEntityMapper {
   }
 
   private List<OntologySuggestionDTO> convertToOntologySuggestionDTO(
-      Set<OntologySuggestion> ontologySuggestions) {
+      List<OntologySuggestion> ontologySuggestions) {
 
     List<OntologySuggestionDTO>  ontologySuggestionDTOS = new ArrayList<>();
     for (OntologySuggestion suggestion : ontologySuggestions)

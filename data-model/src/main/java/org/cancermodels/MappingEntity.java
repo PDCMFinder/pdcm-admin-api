@@ -2,6 +2,7 @@ package org.cancermodels;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +75,7 @@ public class MappingEntity {
   @OneToMany(
       fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JoinColumn(name = "mapping_entity_id", nullable = false)
-  private Set<MappingEntitySuggestion> mappingEntitySuggestions= new HashSet<>();
+  private List<MappingEntitySuggestion> mappingEntitySuggestions = new ArrayList<>();
 
   /**
    * Suggested mappings by ontologies (other mapping entities that are similar).
@@ -82,7 +83,7 @@ public class MappingEntity {
   @OneToMany(
       fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JoinColumn(name = "mapping_entity_id", nullable = false)
-  private Set<OntologySuggestion> ontologySuggestions= new HashSet<>();
+  private List<OntologySuggestion> ontologySuggestions = new ArrayList<>();
 
   public Map<String, String> getValuesAsMap() {
     Map<String, String> map = new HashMap<>();

@@ -2,20 +2,21 @@ package org.cancermodels.mappings.suggestions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntitySuggestion;
 import org.cancermodels.MappingEntitySuggestionRepository;
+import org.cancermodels.OntologySuggestion;
 import org.cancermodels.mappings.Status;
-import org.cancermodels.prototype.SimilarityComparator;
-import org.cancermodels.prototype.TermsWeightedSimilarityCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,12 +55,15 @@ public class MappingEntitiesSuggestionManager {
    * Calculate mapping entities based suggestions.
    *
    * @param mappingEntities Mapping entities for which the suggestions are going to be calculated.
+   * @param type Entity type that is being processed.
    * @return Map with the suggestions for each entity.
    */
-  public Map<MappingEntity, Set<MappingEntitySuggestion>> calculateSuggestions(
-      List<MappingEntity> mappingEntities) {
+  public Map<MappingEntity, List<MappingEntitySuggestion>> calculateSuggestions(
+      List<MappingEntity> mappingEntities, String type) {
 
-    Map<MappingEntity, Set<MappingEntitySuggestion>> suggestionsByEntities = new HashMap<>();
+    Map<MappingEntity, List<MappingEntitySuggestion>> suggestionsByEntities = new HashMap<>();
+    int totalEntitiesToProcess = mappingEntities.size();
+    int processed = 0;
 
     // Suggestions are only searched on mapped entities
     List<MappingEntity> mappedEntities = mappingEntities.stream()
@@ -72,9 +76,30 @@ public class MappingEntitiesSuggestionManager {
       mappingsToSearchOn.remove(mappingEntity);
       Set<MappingEntitySuggestion> suggestions =
           calculateSuggestionsForEntity(mappingEntity, mappingsToSearchOn);
-      suggestionsByEntities.put(mappingEntity, suggestions);
+      suggestionsByEntities.put(mappingEntity, asListOrderedByScoreDesc(suggestions));
+      processed++;
+      reportProgress(processed, totalEntitiesToProcess, type);
+
     }
     return suggestionsByEntities;
+  }
+
+  private List<MappingEntitySuggestion> asListOrderedByScoreDesc(Set<MappingEntitySuggestion> suggestions) {
+    List<MappingEntitySuggestion> suggestionsAsList = new ArrayList<>(suggestions);
+    suggestionsAsList.sort(Comparator.comparing(MappingEntitySuggestion::getScore).reversed());
+    return suggestionsAsList;
+  }
+
+  private void reportProgress(int processed, int total, String type) {
+    if (processed % 100 == 0 || processed == 1 || processed == total) {
+      int percentage = processed * 100 / total;
+      LOG.info(String.format(
+          "Suggestion calculation (rules)  %s. Processed %s of %s (%s%%)",
+          type,
+          processed,
+          total,
+          percentage));
+    }
   }
 
   /**
@@ -94,15 +119,16 @@ public class MappingEntitiesSuggestionManager {
     Map<String, String> leftValues = mappingEntity.getValuesAsMap();
     Map<String, Double> weights = mappingEntity.getEntityType().getWeightsAsMap();
 
-    Map<Double, Set<MappingEntity>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, Set<MappingEntity>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, Set<MappingEntity>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<MappingEntity>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<MappingEntity>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<MappingEntity>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
 
-    int numberOfPerfectMatches = 0;
+    // Needs to be wrapped so it can be passed as reference and updated inside scoreManager.processScore
+    AtomicInteger numberOfPerfectMatches = new AtomicInteger(0);
 
     for (MappingEntity element : mappingEntities) {
       Map<String, String> rightValues = element.getValuesAsMap();
-      double score =
+      int score =
           termsWeightedSimilarityCalculator.calculateTermsWeightedSimilarity(
               leftValues, rightValues, weights);
 
@@ -112,23 +138,6 @@ public class MappingEntitiesSuggestionManager {
       if (!shouldKeepSearching) {
         break;
       }
-
-//      if (score >= similarityConfigurationReader.getSimilarityPerfectMatchScore()) {
-//        if (!perfectMatches.containsKey(score)) {
-//          perfectMatches.put(score, new HashSet<>());
-//        }
-//        perfectMatches.get(score).add(element);
-//        numberOfPerfectMatches++;
-//        if (numberOfPerfectMatches
-//            >= similarityConfigurationReader.getPerfectMatchesToFinishEarlier()) {
-//          break;
-//        }
-//      } else if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
-//        if (!acceptableMatches.containsKey(score)) {
-//          acceptableMatches.put(score, new HashSet<>());
-//        }
-//        acceptableMatches.get(score).add(element);
-//      }
     }
     orderedSuggestions.putAll(perfectMatches);
     orderedSuggestions.putAll(acceptableMatches);
@@ -143,12 +152,12 @@ public class MappingEntitiesSuggestionManager {
    * the number of suggested mappings per entity
    */
   private Set<MappingEntitySuggestion> getBestSuggestions(
-      Map<Double, Set<MappingEntity>> allSuggestions) {
+      Map<Integer, Set<MappingEntity>> allSuggestions) {
 
     Set<MappingEntitySuggestion> mappingEntitySuggestions = new HashSet<>();
 
     outer:
-    for (Double key : allSuggestions.keySet()) {
+    for (Integer key : allSuggestions.keySet()) {
       Set<MappingEntity> mappingEntities = allSuggestions.get(key);
       for (MappingEntity suggested : mappingEntities) {
         MappingEntitySuggestion mappingEntitySuggestion = new MappingEntitySuggestion();

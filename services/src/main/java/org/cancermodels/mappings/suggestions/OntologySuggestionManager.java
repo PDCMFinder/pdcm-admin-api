@@ -1,19 +1,23 @@
 package org.cancermodels.mappings.suggestions;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.OntologySuggestion;
 import org.cancermodels.OntologyTerm;
-import org.cancermodels.prototype.SimilarityComparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /** A class that suggests ontology terms for mapping entities. */
@@ -22,6 +26,8 @@ public class OntologySuggestionManager {
 
   private final SimilarityConfigurationReader similarityConfigurationReader;
   private final ScoreManager<OntologyTerm> scoreManager;
+
+  private static final Logger LOG = LoggerFactory.getLogger(OntologySuggestionManager.class);
 
   static SimilarityComparator similarityComparator = null;
 
@@ -44,17 +50,39 @@ public class OntologySuggestionManager {
    * @param mappingEntities Mapping entities for which the suggestions are going to be calculated.
    * @return Map with the suggestions for each entity.
    */
-  public Map<MappingEntity, Set<OntologySuggestion>> calculateSuggestions(
-      List<MappingEntity> mappingEntities, List<OntologyTerm> ontologyTerms) {
+  public Map<MappingEntity, List<OntologySuggestion>> calculateSuggestions(
+      List<MappingEntity> mappingEntities, List<OntologyTerm> ontologyTerms, String type) {
 
-    Map<MappingEntity, Set<OntologySuggestion>> suggestionsByEntities = new HashMap<>();
+    Map<MappingEntity, List<OntologySuggestion>> suggestionsByEntities = new HashMap<>();
+
+    int totalEntitiesToProcess = mappingEntities.size();
+    int processed = 0;
     for (MappingEntity mappingEntity : mappingEntities) {
       Set<OntologySuggestion> suggestions =
           calculateSuggestionsForEntity(mappingEntity, ontologyTerms);
-      suggestionsByEntities.put(mappingEntity, suggestions);
+      suggestionsByEntities.put(mappingEntity, asListOrderedByScoreDesc(suggestions));
+      processed++;
+      reportProgress(processed, totalEntitiesToProcess, type);
     }
-
     return suggestionsByEntities;
+  }
+
+  private List<OntologySuggestion> asListOrderedByScoreDesc(Set<OntologySuggestion> suggestions) {
+    List<OntologySuggestion> suggestionsAsList = new ArrayList<>(suggestions);
+    suggestionsAsList.sort(Comparator.comparing(OntologySuggestion::getScore).reversed());
+    return suggestionsAsList;
+  }
+
+  private void reportProgress(int processed, int total, String type) {
+    if (processed % 100 == 0 || processed == 1 || processed == total) {
+      int percentage = processed * 100 / total;
+      LOG.info(String.format(
+          "Suggestion calculation (ontologies) %s. Processed %s of %s (%s%%)",
+          type,
+          processed,
+          total,
+          percentage));
+    }
   }
 
   private Set<OntologySuggestion> calculateSuggestionsForEntity(
@@ -64,17 +92,15 @@ public class OntologySuggestionManager {
     Map<String, String> entityValues = mappingEntity.getValuesAsMap();
     Map<String, String> valuesToEvaluate = getValuesToEvaluate(keys, entityValues);
 
-    Map<Double, Set<OntologySuggestion>> suggestionsMap = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<OntologyTerm>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<OntologyTerm>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
+    Map<Integer, Set<OntologyTerm>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
 
-    Map<Double, Set<OntologyTerm>> perfectMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, Set<OntologyTerm>> acceptableMatches = new TreeMap<>(Collections.reverseOrder());
-    Map<Double, Set<OntologyTerm>> orderedSuggestions = new TreeMap<>(Collections.reverseOrder());
-
-    int numberOfPerfectMatches = 0;
-    int c = 0;
+    // Needs to be wrapped so it can be passed as reference and updated inside scoreManager.processScore
+    AtomicInteger numberOfPerfectMatches = new AtomicInteger(0);
 
     for (OntologyTerm ontologyTerm : ontologyTerms) {
-      double score = calculateAverageScore(valuesToEvaluate, ontologyTerm);
+      int score = calculateAverageScore(valuesToEvaluate, ontologyTerm);
 
       boolean shouldKeepSearching = scoreManager.processScore(
           score, numberOfPerfectMatches, perfectMatches, acceptableMatches, ontologyTerm);
@@ -82,18 +108,6 @@ public class OntologySuggestionManager {
       if (!shouldKeepSearching) {
         break;
       }
-      System.out.println("..."+c++);
-
-//      if (score >= similarityConfigurationReader.getSimilarityAcceptableMatchScore()) {
-//        OntologySuggestion ontologySuggestion = new OntologySuggestion();
-//        ontologySuggestion.setOntologyTerm(ontologyTerm);
-//        ontologySuggestion.setScore(score);
-//
-//        if (!suggestionsMap.containsKey(score)) {
-//          suggestionsMap.put(score, new HashSet<>());
-//        }
-//        suggestionsMap.get(score).add(ontologySuggestion);
-//      }
     }
     orderedSuggestions.putAll(perfectMatches);
     orderedSuggestions.putAll(acceptableMatches);
@@ -108,12 +122,12 @@ public class OntologySuggestionManager {
    * the number of suggested mappings per entity
    */
   private Set<OntologySuggestion> getBestSuggestions(
-      Map<Double, Set<OntologyTerm>> allSuggestions) {
+      Map<Integer, Set<OntologyTerm>> allSuggestions) {
 
     Set<OntologySuggestion> mappingEntitySuggestions = new HashSet<>();
 
     outer:
-    for (Double key : allSuggestions.keySet()) {
+    for (Integer key : allSuggestions.keySet()) {
       Set<OntologyTerm> suggestions = allSuggestions.get(key);
       for (OntologyTerm suggested : suggestions) {
         OntologySuggestion ontologySuggestion = new OntologySuggestion();
@@ -130,10 +144,10 @@ public class OntologySuggestionManager {
     return mappingEntitySuggestions;
   }
 
-  private double calculateAverageScore(
+  private int calculateAverageScore(
       Map<String, String> valuesToEvaluate, OntologyTerm ontologyTerm) {
 
-    double score = 0;
+    int score = 0;
     for (String k : valuesToEvaluate.keySet()) {
       String value = valuesToEvaluate.get(k);
       score += calculateTermScore(value, ontologyTerm);
@@ -150,7 +164,7 @@ public class OntologySuggestionManager {
    * @param ontologyTerm Ontology term
    */
   private double calculateTermScore(String value, OntologyTerm ontologyTerm) {
-    double highestScore = 0;
+    int highestScore = 0;
 
     // First start calculating similarity with the ontology label
     highestScore = getSimilarityComparatorInstance().calculate(value, ontologyTerm.getLabel());
@@ -160,7 +174,7 @@ public class OntologySuggestionManager {
       return highestScore;
     }
     for (String synonym : ontologyTerm.getSynonyms()) {
-      double synonymScore = getSimilarityComparatorInstance().calculate(value, synonym);
+      int synonymScore = getSimilarityComparatorInstance().calculate(value, synonym);
       if (synonymScore > highestScore) {
         highestScore = synonymScore;
       }

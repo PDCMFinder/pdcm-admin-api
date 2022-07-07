@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 /**
  * Class in charge of setting the suggestions for mapping entities base on:
  * 1) Existing mapping entities.
- * 2) Ontology terms
+ * 2) Ontology terms.
  */
 @Component
 public class SuggestionManager {
@@ -40,6 +40,7 @@ public class SuggestionManager {
       MappingEntityRepository mappingEntityRepository,
       OntologyService ontologyService,
       OntologySuggestionManager ontologySuggestionManager) {
+
     this.mappingEntitiesSuggestionManager = mappingEntitiesSuggestionManager;
     this.mappingEntitySuggestionRepository = mappingEntitySuggestionRepository;
     this.ontologySuggestionRepository = ontologySuggestionRepository;
@@ -100,24 +101,20 @@ public class SuggestionManager {
 
     LOG.info("Init mapping entity suggestions");
     Set<MappingEntitySuggestion> allSuggestions = new HashSet<>();
-    int processedEntities = 0;
 
     for (String type : mappingEntitiesMappedByType.keySet()) {
+
       List<MappingEntity> mappingsByType = mappingEntitiesMappedByType.get(type);
-      Map<MappingEntity, Set<MappingEntitySuggestion>> suggestionsByEntity =
-          mappingEntitiesSuggestionManager.calculateSuggestions(mappingsByType);
+      Map<MappingEntity, List<MappingEntitySuggestion>> suggestionsByEntity =
+          mappingEntitiesSuggestionManager.calculateSuggestions(mappingsByType, type);
 
       for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
 
         // Children are saved explicitly
-        Set<MappingEntitySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
+        List<MappingEntitySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
         mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
-//        mappingEntitySuggestionRepository.saveAll(suggestions);
         allSuggestions.addAll(suggestions);
-        System.out.println("Processed entities (mapping entities suggestions)" + ++processedEntities);
       }
-      // Need to check if this call is really necessary
-//      mappingEntityRepository.saveAll(mappingsByType);
     }
     mappingEntitySuggestionRepository.saveAll(allSuggestions);
     LOG.info("Finish mapping entity suggestions");
@@ -131,7 +128,6 @@ public class SuggestionManager {
         ontologyService.getOntologyTermsMappedByType();
 
     Set<OntologySuggestion> allSuggestions = new HashSet<>();
-    int processedEntities = 0;
 
     for (String type : mappingEntitiesMappedByType.keySet()) {
 
@@ -140,25 +136,18 @@ public class SuggestionManager {
       List<OntologyTerm> ontologyTermsByType = ontologyTermsMappedByType.get(type);
       LOG.info(String.format("Found %d ontology %s terms", ontologyTermsByType.size(), type));
 
-      Map<MappingEntity, Set<OntologySuggestion>> suggestionsByEntity =
-          ontologySuggestionManager.calculateSuggestions(mappingsByType, ontologyTermsByType);
+      Map<MappingEntity, List<OntologySuggestion>> suggestionsByEntity =
+          ontologySuggestionManager.calculateSuggestions(mappingsByType, ontologyTermsByType, type);
 
       for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
 
         // Children are saved explicitly as well
-        Set<OntologySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
+        List<OntologySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
         mappingEntity.getOntologySuggestions().addAll(suggestions);
-//        ontologySuggestionRepository.saveAll(suggestions);
         allSuggestions.addAll(suggestions);
-        System.out.println("Processed entities (ontologies suggestions)" + ++processedEntities);
       }
-      // Need to check if this call is really necessary
-//      mappingEntityRepository.saveAll(mappingsByType);
     }
     ontologySuggestionRepository.saveAll(allSuggestions);
     LOG.info("Finish ontology suggestions");
   }
-
-
-
 }

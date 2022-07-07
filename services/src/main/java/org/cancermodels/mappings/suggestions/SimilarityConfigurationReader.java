@@ -2,8 +2,6 @@ package org.cancermodels.mappings.suggestions;
 
 import static org.cancermodels.mappings.suggestions.SuggestionsConstants.JARO_WINKLER;
 
-import org.cancermodels.prototype.JaroWinklerDistanceSimilarityComparator;
-import org.cancermodels.prototype.SimilarityComparator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

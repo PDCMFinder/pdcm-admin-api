@@ -135,13 +135,13 @@ public class MappingController {
 
   // This is a testing endpoint
   @GetMapping("/testOntoSuggestion")
-  public Map<MappingEntity, Set<OntologySuggestion>> testOntoSuggestion() {
-    Optional<MappingEntity> mappingEntity = mappingEntityService.findById(819699);
+  public Map<MappingEntity, List<OntologySuggestion>> testOntoSuggestion() {
+    Optional<MappingEntity> mappingEntity = mappingEntityService.findById(820905);
     List<MappingEntity> list = Arrays.asList(mappingEntity.get());
     List<OntologyTerm> ontologyTerms = ontologyService.getAllByType("treatment");
 //    var all = mappingEntityService.getAllByTypeName("treatment");
 //    suggestionsManager.testOne(mappingEntity.get(), all);
-    var rest = ontologySuggestionManager.calculateSuggestions(list, ontologyTerms);
+    var rest = ontologySuggestionManager.calculateSuggestions(list, ontologyTerms, "treatment");
     System.out.println(rest);
     return rest;
   }

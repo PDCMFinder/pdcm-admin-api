@@ -3,6 +3,7 @@ package org.cancermodels.mappings.suggestions;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,21 +29,21 @@ public class ScoreManager<T> {
    *                                      for "element".
    */
   public boolean processScore(
-      double score,
-      int currentNumberOfPerfectMatches,
-      Map<Double, Set<T>> perfectMatches,
-      Map<Double, Set<T>> acceptableMatches,
+      int score,
+      AtomicInteger currentNumberOfPerfectMatches,
+      Map<Integer, Set<T>> perfectMatches,
+      Map<Integer, Set<T>> acceptableMatches,
       T element) {
 
     boolean shouldKeepSearching = true;
 
     if (score >= similarityConfigurationReader.getSimilarityPerfectMatchScore()) {
       addElementToMap(perfectMatches, element, score);
-      currentNumberOfPerfectMatches++;
+      currentNumberOfPerfectMatches.incrementAndGet();
 
       // If the number of perfect matches required to finish the process earlier is reached then
       // return false indicating no more searching for the entity is required
-      if (currentNumberOfPerfectMatches >=
+      if (currentNumberOfPerfectMatches.get() >=
           similarityConfigurationReader.getPerfectMatchesToFinishEarlier()) {
         shouldKeepSearching = false;
       }
@@ -53,7 +54,7 @@ public class ScoreManager<T> {
     return shouldKeepSearching;
   }
 
-  private void addElementToMap(Map<Double, Set<T>> map, T element, double key) {
+  private void addElementToMap(Map<Integer, Set<T>> map, T element, int key) {
     if (!map.containsKey(key)) {
       map.put(key, new HashSet<>());
     }
