@@ -15,7 +15,8 @@ CREATE TABLE mapping_key (
     id INTEGER NOT NULL,
     entity_type_id INTEGER,
     key VARCHAR2,
-    weight DECIMAL
+    weight DECIMAL,
+    to_use_in_ontology_suggestion_calculation BOOLEAN
 );
 
 ALTER TABLE mapping_key ADD CONSTRAINT pk_mapping_key PRIMARY KEY (id);
@@ -62,7 +63,7 @@ CREATE TABLE mapping_entity_suggestion (
     id INTEGER NOT NULL,
     mapping_entity_id INTEGER,
     suggested_mapping_entity_id INTEGER,
-    score NUMERIC(1,2)
+    score NUMERIC(4,2)
 );
 
 ALTER TABLE mapping_entity_suggestion ADD CONSTRAINT pk_mapping_entity_suggestion PRIMARY KEY (id);

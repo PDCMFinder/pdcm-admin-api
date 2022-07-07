@@ -1,7 +1,7 @@
 package org.cancermodels.mappings.suggestions;
 
-import org.cancermodels.prototype.JaroWinklerDistanceSimilarityComparator;
-import org.cancermodels.prototype.SimilarityComparator;
+import static org.cancermodels.mappings.suggestions.SuggestionsConstants.JARO_WINKLER;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +23,9 @@ public class SimilarityConfigurationReader {
   @Value( "${number_of_suggested_mappings}" )
   private int numberOfSuggestedMappingsPerEntity;
 
+  @Value( "${perfect_matches_to_finish_earlier}" )
+  private int perfectMatchesToFinishEarlier;
+
   public double getSimilarityPerfectMatchScore() {
     return similarityPerfectMatchScore;
   }
@@ -36,7 +39,7 @@ public class SimilarityConfigurationReader {
   }
 
   public SimilarityComparator getSimilarityAlgorithm() {
-    if ("jaroWinkler".equalsIgnoreCase(similarityAlgorithm)) {
+    if (JARO_WINKLER.equalsIgnoreCase(similarityAlgorithm)) {
       return new JaroWinklerDistanceSimilarityComparator();
     } else {
       throw new IllegalArgumentException(
@@ -46,5 +49,9 @@ public class SimilarityConfigurationReader {
 
   public int getNumberOfSuggestedMappingsPerEntity() {
     return numberOfSuggestedMappingsPerEntity;
+  }
+
+  public int getPerfectMatchesToFinishEarlier() {
+    return perfectMatchesToFinishEarlier;
   }
 }

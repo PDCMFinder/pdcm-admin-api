@@ -1,4 +1,7 @@
-package org.cancermodels.prototype;
+package org.cancermodels.mappings.suggestions;
+
+import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN_ELEMENT;
+import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN_VALUES;
 
 import java.util.Map;
 import org.slf4j.Logger;
@@ -14,23 +17,30 @@ public class TermsWeightedSimilarityCalculator {
     this.similarityComparator = similarityComparator;
   }
 
-  public double calculateTermsWeightedSimilarity(
+  public int calculateTermsWeightedSimilarity(
       Map<String, String> leftValues,
       Map<String, String> rightValues,
       Map<String, Double> weights) {
 
     validate(leftValues, rightValues, weights);
 
-    double score = 0;
+    int score = 0;
 
     for (String key : leftValues.keySet()) {
-      System.out.println(key + ":" + leftValues.get(key));
 
       String leftTerm = leftValues.get(key);
+//      System.out.println("orig l: " + leftTerm);
+
+      leftTerm = transformTerm(leftTerm);
+
       String rightTerm = rightValues.get(key);
+//      System.out.println("orig r: " + rightTerm);
+
+      rightTerm = transformTerm(rightTerm);
       double weight = weights.get(key);
 
-      score = score + similarityComparator.calculate(leftTerm, rightTerm) * weight;
+      score = score + (int)(similarityComparator.calculate(leftTerm, rightTerm) * weight);
+//      System.out.printf("l[%s] r[%s] : [%s]%n", leftTerm, rightTerm, score);
     }
 
     return score;
@@ -64,5 +74,17 @@ public class TermsWeightedSimilarityCalculator {
       throw new IllegalArgumentException("Wrong weights");
     }
 
+  }
+
+  /**
+   * Apply whatever transformation is needed to help the similarity calculation process
+   * @param term Original term
+   * @return Transformed term
+   */
+  private String transformTerm(String term) {
+    if (UNKNOWN_VALUES.contains(term.toLowerCase())) {
+      term = UNKNOWN_ELEMENT;
+    }
+    return term;
   }
 }

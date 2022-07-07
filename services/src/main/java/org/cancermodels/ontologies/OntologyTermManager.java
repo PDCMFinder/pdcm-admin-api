@@ -7,14 +7,15 @@ import org.cancermodels.OntologyTerm;
 import org.cancermodels.OntologyTermRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
-class OntologyTermService {
+@Component
+class OntologyTermManager {
   private final OntologyTermRepository ontologyTermRepository;
-  private static final Logger LOG = LoggerFactory.getLogger(OntologyTermService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OntologyTermManager.class);
 
-  public OntologyTermService(OntologyTermRepository ontologyTermRepository) {
+  public OntologyTermManager(OntologyTermRepository ontologyTermRepository) {
     this.ontologyTermRepository = ontologyTermRepository;
   }
 
@@ -51,6 +52,10 @@ class OntologyTermService {
 
   public List<OntologyTerm> getAll() {
     return ontologyTermRepository.findAll();
+  }
+
+  public List<OntologyTerm> getAllByType(String type) {
+    return ontologyTermRepository.findAllByTypeIgnoreCase(type);
   }
 
   public void saveOntologyTerms(Set<OntologyTerm> ontologyTerms) {

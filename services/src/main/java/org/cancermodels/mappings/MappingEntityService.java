@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
-import org.cancermodels.mappings.suggestions.SuggestionsManager;
+import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,12 +22,16 @@ import org.springframework.stereotype.Service;
 public class MappingEntityService {
 
   private final MappingEntityRepository mappingEntityRepository;
-  private final SuggestionsManager suggestionsManager;
+  private final EntityTypeService entityTypeService;
+
+  private final SuggestionManager suggestionManager;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
-      SuggestionsManager suggestionsManager) {
+      EntityTypeService entityTypeService,
+      SuggestionManager suggestionManager) {
     this.mappingEntityRepository = mappingEntityRepository;
-    this.suggestionsManager = suggestionsManager;
+    this.entityTypeService = entityTypeService;
+    this.suggestionManager = suggestionManager;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -92,10 +98,26 @@ public class MappingEntityService {
     return mappingEntityRepository.findAllByEntityTypeNameIgnoreCase(entityTypeName);
   }
 
-  public void calculateSuggestedMappings() {
-    // Set suggestions for treatment rules
-    List<MappingEntity> allTreatmentMappings = getAllByTypeName("treatment");
-    suggestionsManager.updateSuggestedMappingsByExistingRules(allTreatmentMappings);
-    mappingEntityRepository.saveAll(allTreatmentMappings);
+  public Optional<MappingEntity> findById(int id) {
+    return mappingEntityRepository.findById(id);
   }
+
+  /**
+   * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
+   */
+  public void setMappingSuggestions() {
+    Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
+    suggestionManager.setSuggestions(mappingEntitiesMappedByType);
+  }
+
+  private Map<String, List<MappingEntity>> getMappingEntitiesMappedByType() {
+    Map<String, List<MappingEntity>> map = new HashMap<>();
+    for (EntityType entityType : entityTypeService.getAll()) {
+      String entityTypeName = entityType.getName();
+      List<MappingEntity> mappingEntitiesByType = getAllByTypeName(entityTypeName);
+      map.put(entityTypeName.toLowerCase(), mappingEntitiesByType);
+    }
+    return map;
+  }
+
 }
