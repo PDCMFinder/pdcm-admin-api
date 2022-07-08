@@ -52,7 +52,7 @@ public class SuggestionManager {
   /**
    * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
    */
-  public void setSuggestions(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
+  public void calculateSuggestions(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
     LOG.info("Init suggestion calculation process");
     resetData(mappingEntitiesMappedByType);
 
@@ -63,11 +63,30 @@ public class SuggestionManager {
 
   }
 
+  /**
+   * Sets the suggestions by rules and by ontologies for a the mapping entity.
+   */
+  public void setSuggestionsForOneEntity(MappingEntity mappingEntity) {
+    // Reset data only for this entity
+    List<MappingEntitySuggestion> mappingEntitySuggestions =
+        mappingEntity.getMappingEntitySuggestions();
+    mappingEntitySuggestionRepository.deleteAll(mappingEntitySuggestions);
+    List<OntologySuggestion> ontologySuggestions =
+        mappingEntity.getOntologySuggestions();
+    ontologySuggestionRepository.deleteAll(ontologySuggestions);
+    mappingEntity.getMappingEntitySuggestions().clear();
+    mappingEntity.getOntologySuggestions().clear();
+    mappingEntityRepository.save(mappingEntity);
+
+
+
+  }
+
   private void resetData(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
 
     LOG.info("Resetting data");
-    mappingEntitySuggestionRepository.deleteAll();
-    ontologySuggestionRepository.deleteAll();
+//    mappingEntitySuggestionRepository.deleteAll();
+//    ontologySuggestionRepository.deleteAll();
 
     for (String type : mappingEntitiesMappedByType.keySet()) {
       List<MappingEntity> entitiesByType = mappingEntitiesMappedByType.get(type);
@@ -78,12 +97,6 @@ public class SuggestionManager {
       // Save all entities to execute the deletion on db
       mappingEntityRepository.saveAll(entitiesByType);
     }
-    LOG.info(String.format(
-        "After resetting: %d elements in mappingEntitySuggestion",
-        mappingEntitySuggestionRepository.count()));
-    LOG.info(String.format(
-        "After resetting: %d elements in ontologySuggestion",
-        ontologySuggestionRepository.count()));
   }
 
   private void saveMappingEntities(Map<String, List<MappingEntity>> mappingEntitiesMappedByType) {
@@ -150,4 +163,6 @@ public class SuggestionManager {
     ontologySuggestionRepository.saveAll(allSuggestions);
     LOG.info("Finish ontology suggestions");
   }
+
+
 }

@@ -16,6 +16,7 @@ import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.OntologySuggestion;
 import org.cancermodels.OntologyTerm;
+import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

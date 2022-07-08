@@ -16,6 +16,7 @@ import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntitySuggestion;
 import org.cancermodels.MappingEntitySuggestionRepository;
 import org.cancermodels.mappings.Status;
+import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -185,7 +186,6 @@ public class MappingEntitiesSuggestionManager {
     mappingEntityRepository.save(mappingEntity);
     System.out.println("After deleting number of suggestions: " +
         mappingEntity.getMappingEntitySuggestions().size());
-//    mappingEntity.setMappingEntitySuggestions(suggestions);
     mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
     System.out.println("After manual assignation number of suggestions: " +
         mappingEntity.getMappingEntitySuggestions().size());

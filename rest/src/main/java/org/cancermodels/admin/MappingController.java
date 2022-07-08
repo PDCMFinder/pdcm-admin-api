@@ -123,6 +123,16 @@ public class MappingController {
     mappingEntityService.setMappingSuggestions();
   }
 
+  @GetMapping("/calculateSuggestions/{id}")
+  public void calculateSuggestionsOneEntity(@PathVariable int id) {
+    mappingEntityService.setMappingSuggestionsForOneEntity(id);
+  }
+
+  @GetMapping("/calculateAutomaticMappings")
+  public void calculateAutomaticMappings() {
+    mappingEntityService.setAutomaticMappings();
+  }
+
   // This is a testing endpoint
   @GetMapping("/testSuggestion")
   public void testSuggestion() {

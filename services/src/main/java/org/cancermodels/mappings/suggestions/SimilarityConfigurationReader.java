@@ -2,6 +2,8 @@ package org.cancermodels.mappings.suggestions;
 
 import static org.cancermodels.mappings.suggestions.SuggestionsConstants.JARO_WINKLER;
 
+import org.cancermodels.mappings.suggestions.comparators.JaroWinklerDistanceSimilarityComparator;
+import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +14,10 @@ public class SimilarityConfigurationReader {
   }
 
   @Value( "${similarity_perfect_match_score}" )
-  private double similarityPerfectMatchScore;
+  private int similarityPerfectMatchScore;
 
   @Value( "${similarity_acceptable_match_score}" )
-  private double similarityAcceptableMatchScore;
+  private int similarityAcceptableMatchScore;
 
   @Value( "${similarity_algorithm}" )
   private String similarityAlgorithm;
@@ -26,7 +28,7 @@ public class SimilarityConfigurationReader {
   @Value( "${perfect_matches_to_finish_earlier}" )
   private int perfectMatchesToFinishEarlier;
 
-  public double getSimilarityPerfectMatchScore() {
+  public int getSimilarityPerfectMatchScore() {
     return similarityPerfectMatchScore;
   }
 

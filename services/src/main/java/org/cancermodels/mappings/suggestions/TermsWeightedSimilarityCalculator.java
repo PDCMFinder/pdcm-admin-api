@@ -4,6 +4,7 @@ import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN
 import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN_VALUES;
 
 import java.util.Map;
+import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
