@@ -1,5 +1,5 @@
 package org.cancermodels;
-;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Basic;

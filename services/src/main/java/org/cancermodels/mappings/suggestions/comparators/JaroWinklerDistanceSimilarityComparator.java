@@ -1,4 +1,4 @@
-package org.cancermodels.mappings.suggestions;
+package org.cancermodels.mappings.suggestions.comparators;
 
 import org.apache.commons.text.similarity.JaroWinklerDistance;
 

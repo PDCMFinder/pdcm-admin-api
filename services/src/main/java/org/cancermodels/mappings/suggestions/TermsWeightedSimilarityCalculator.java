@@ -4,6 +4,7 @@ import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN
 import static org.cancermodels.mappings.suggestions.SuggestionsConstants.UNKNOWN_VALUES;
 
 import java.util.Map;
+import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,18 +30,15 @@ public class TermsWeightedSimilarityCalculator {
     for (String key : leftValues.keySet()) {
 
       String leftTerm = leftValues.get(key);
-//      System.out.println("orig l: " + leftTerm);
 
       leftTerm = transformTerm(leftTerm);
 
       String rightTerm = rightValues.get(key);
-//      System.out.println("orig r: " + rightTerm);
 
       rightTerm = transformTerm(rightTerm);
       double weight = weights.get(key);
 
       score = score + (int)(similarityComparator.calculate(leftTerm, rightTerm) * weight);
-//      System.out.printf("l[%s] r[%s] : [%s]%n", leftTerm, rightTerm, score);
     }
 
     return score;

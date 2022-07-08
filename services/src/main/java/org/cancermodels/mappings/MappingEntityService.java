@@ -1,15 +1,19 @@
 package org.cancermodels.mappings;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
+import org.cancermodels.mappings.automatic.AutomaticMappingManager;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -25,13 +29,16 @@ public class MappingEntityService {
   private final EntityTypeService entityTypeService;
 
   private final SuggestionManager suggestionManager;
+  private final AutomaticMappingManager automaticMappingManager;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager) {
+      SuggestionManager suggestionManager,
+      AutomaticMappingManager automaticMappingManager) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
+    this.automaticMappingManager = automaticMappingManager;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -107,7 +114,31 @@ public class MappingEntityService {
    */
   public void setMappingSuggestions() {
     Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
-    suggestionManager.setSuggestions(mappingEntitiesMappedByType);
+    suggestionManager.calculateSuggestions(mappingEntitiesMappedByType);
+  }
+
+  public void setMappingSuggestionsForOneEntity(int entityId) {
+    Optional<MappingEntity> mappingEntityOptional = findById(entityId);
+    if (mappingEntityOptional.isPresent())
+    {
+      MappingEntity mappingEntity = mappingEntityOptional.get();
+      // Put entity into a map to be able to use existing method that processes a map of entities
+      Map<String, List<MappingEntity>> map = new HashMap<>();
+      map.put(mappingEntity.getEntityType().getName(), Arrays.asList(mappingEntity));
+      suggestionManager.calculateSuggestions(map);
+    }
+  }
+
+  public void setAutomaticMappings() {
+    Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+      List<MappingEntity> unmappedMappingEntities = mappingEntitiesMappedByType.get(type).stream()
+          .filter(x -> x.getStatus().equals(Status.UNMAPPED.getLabel())).collect(
+          Collectors.toList());
+      List<MappingEntity> all = mappingEntitiesMappedByType.get(type);
+      automaticMappingManager.calculateAutomaticMappings(all, type);
+    }
+
   }
 
   private Map<String, List<MappingEntity>> getMappingEntitiesMappedByType() {
