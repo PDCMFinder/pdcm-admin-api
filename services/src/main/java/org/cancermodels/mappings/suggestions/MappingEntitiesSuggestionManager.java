@@ -52,27 +52,29 @@ public class MappingEntitiesSuggestionManager {
   }
 
   /**
-   * Calculate mapping entities based suggestions.
-   *
-   * @param mappingEntities Mapping entities for which the suggestions are going to be calculated.
-   * @param type Entity type that is being processed.
+   * Calculates suggestions for a list of mapping entities. Suggestions are based on other mapping
+   * entities already mapped.
+   * Both toProcess and reference should contain entities of the same entity type.
+   * @param toProcess List of entities for which the suggestions should be calculated.
    * @return Map with the suggestions for each entity.
    */
   public Map<MappingEntity, List<MappingEntitySuggestion>> calculateSuggestions(
-      List<MappingEntity> mappingEntities, String type) {
+      List<MappingEntity> toProcess,  String type) {
 
     Map<MappingEntity, List<MappingEntitySuggestion>> suggestionsByEntities = new HashMap<>();
-    int totalEntitiesToProcess = mappingEntities.size();
+    int totalEntitiesToProcess = toProcess.size();
     int processed = 0;
+    // List of entities where the suggestions are going to be looked for.
+    List<MappingEntity> reference = mappingEntityRepository.findAllByEntityTypeNameIgnoreCase(type);
 
     // Suggestions are only searched on mapped entities
-    List<MappingEntity> mappedEntities = mappingEntities.stream()
+    List<MappingEntity> mappedEntities = reference.stream()
         .filter(x -> x.getStatus().equalsIgnoreCase(Status.MAPPED.getLabel()))
         .collect(Collectors.toList());
     LOG.info("Number of mapped entities: " + mappedEntities.size());
 
-    for (MappingEntity mappingEntity : mappingEntities) {
-      List<MappingEntity> mappingsToSearchOn = new ArrayList<>(mappedEntities);
+    for (MappingEntity mappingEntity : toProcess) {
+      List<MappingEntity> mappingsToSearchOn = new ArrayList<>(reference);
       mappingsToSearchOn.remove(mappingEntity);
       Set<MappingEntitySuggestion> suggestions =
           calculateSuggestionsForEntity(mappingEntity, mappingsToSearchOn);
@@ -94,7 +96,7 @@ public class MappingEntitiesSuggestionManager {
     if (processed % 100 == 0 || processed == 1 || processed == total) {
       int percentage = processed * 100 / total;
       LOG.info(String.format(
-          "Suggestion calculation (rules)  %s. Processed %s of %s (%s%%)",
+          "Calculating %s (rules). Processed %s of %s (%s%%)",
           type,
           processed,
           total,
