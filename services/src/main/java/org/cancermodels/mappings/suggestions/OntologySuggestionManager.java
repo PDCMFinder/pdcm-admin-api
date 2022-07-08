@@ -17,6 +17,7 @@ import org.cancermodels.MappingKey;
 import org.cancermodels.OntologySuggestion;
 import org.cancermodels.OntologyTerm;
 import org.cancermodels.mappings.suggestions.comparators.SimilarityComparator;
+import org.cancermodels.ontologies.OntologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,18 @@ public class OntologySuggestionManager {
 
   private final SimilarityConfigurationReader similarityConfigurationReader;
   private final ScoreManager<OntologyTerm> scoreManager;
+  private final OntologyService ontologyService;
 
   private static final Logger LOG = LoggerFactory.getLogger(OntologySuggestionManager.class);
 
   static SimilarityComparator similarityComparator = null;
 
   public OntologySuggestionManager(SimilarityConfigurationReader similarityConfigurationReader,
-      ScoreManager<OntologyTerm> scoreManager) {
+      ScoreManager<OntologyTerm> scoreManager,
+      OntologyService ontologyService) {
     this.similarityConfigurationReader = similarityConfigurationReader;
     this.scoreManager = scoreManager;
+    this.ontologyService = ontologyService;
   }
 
   private SimilarityComparator getSimilarityComparatorInstance() {
@@ -52,7 +56,12 @@ public class OntologySuggestionManager {
    * @return Map with the suggestions for each entity.
    */
   public Map<MappingEntity, List<OntologySuggestion>> calculateSuggestions(
-      List<MappingEntity> mappingEntities, List<OntologyTerm> ontologyTerms, String type) {
+      List<MappingEntity> mappingEntities, String type) {
+
+    // This is needed because it has the aggregation of treatment and regimen
+    Map<String, List<OntologyTerm>> ontologyTermsMappedByType =
+        ontologyService.getOntologyTermsMappedByType();
+    List<OntologyTerm> ontologyTerms = ontologyTermsMappedByType.get(type);
 
     Map<MappingEntity, List<OntologySuggestion>> suggestionsByEntities = new HashMap<>();
 
@@ -78,7 +87,7 @@ public class OntologySuggestionManager {
     if (processed % 100 == 0 || processed == 1 || processed == total) {
       int percentage = processed * 100 / total;
       LOG.info(String.format(
-          "Suggestion calculation (ontologies) %s. Processed %s of %s (%s%%)",
+          "Calculating %s suggestions (ontologies). Processed %s of %s (%s%%)",
           type,
           processed,
           total,

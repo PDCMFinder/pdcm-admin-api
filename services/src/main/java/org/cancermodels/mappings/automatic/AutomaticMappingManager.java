@@ -75,6 +75,10 @@ public class AutomaticMappingManager {
 //    if (!mappingEntity.getStatus().equals(Status.UNMAPPED.getLabel())) {
 //      return;
 //    }
+    System.out.println();
+    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+    System.out.println("unmappedEntity values:" + mappingEntity.getValuesAsMap());
+
     int threshold = similarityConfigurationReader.getSimilarityPerfectMatchScore();
     Map<Integer, List<Suggestion<?>>> candidateAutomaticSuggestionsMappedByScore =
         getCandidatesForAutomaticSuggestionsMappedByScore(mappingEntity, threshold);
@@ -89,9 +93,7 @@ public class AutomaticMappingManager {
       hits.put(typeName, hits.get(typeName) + 1);
     }
 
-    System.out.println();
-    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-    System.out.println("unmappedEntity values:" + mappingEntity.getValuesAsMap());
+
     System.out.println("getBestScore: " + bestSuggestion);
     System.out.println(candidateAutomaticSuggestionsMappedByScore);
 //    analyseSuggestions(candidateAutomaticSuggestionsMappedByScore);

@@ -133,6 +133,11 @@ public class MappingController {
     mappingEntityService.setAutomaticMappings();
   }
 
+  @GetMapping("/calculateAutomaticMappings/{id}")
+  public void calculateAutomaticMappingsOneEntity(@PathVariable int id) {
+    mappingEntityService.calculateAutomaticMappingsForOneEntity(id);
+  }
+
   // This is a testing endpoint
   @GetMapping("/testSuggestion")
   public void testSuggestion() {
@@ -150,7 +155,7 @@ public class MappingController {
     List<OntologyTerm> ontologyTerms = ontologyService.getAllByType("treatment");
 //    var all = mappingEntityService.getAllByTypeName("treatment");
 //    suggestionsManager.testOne(mappingEntity.get(), all);
-    var rest = ontologySuggestionManager.calculateSuggestions(list, ontologyTerms, "treatment");
+    var rest = ontologySuggestionManager.calculateSuggestions(list, "treatment");
     System.out.println(rest);
     return rest;
   }

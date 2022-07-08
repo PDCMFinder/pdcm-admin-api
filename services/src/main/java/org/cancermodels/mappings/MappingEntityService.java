@@ -3,6 +3,7 @@ package org.cancermodels.mappings;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,12 @@ public class MappingEntityService {
    */
   public void setMappingSuggestions() {
     Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
-    suggestionManager.calculateSuggestions(mappingEntitiesMappedByType);
+    for (String type : mappingEntitiesMappedByType.keySet()) {
+      // Process all mappings
+      List<MappingEntity> toProcess = mappingEntitiesMappedByType.get(type);
+      suggestionManager.calculateSuggestions(toProcess, type);
+    }
+
   }
 
   public void setMappingSuggestionsForOneEntity(int entityId) {
@@ -122,10 +128,8 @@ public class MappingEntityService {
     if (mappingEntityOptional.isPresent())
     {
       MappingEntity mappingEntity = mappingEntityOptional.get();
-      // Put entity into a map to be able to use existing method that processes a map of entities
-      Map<String, List<MappingEntity>> map = new HashMap<>();
-      map.put(mappingEntity.getEntityType().getName(), Arrays.asList(mappingEntity));
-      suggestionManager.calculateSuggestions(map);
+      suggestionManager.calculateSuggestions(
+          Collections.singletonList(mappingEntity), mappingEntity.getEntityType().getName());
     }
   }
 
@@ -136,9 +140,18 @@ public class MappingEntityService {
           .filter(x -> x.getStatus().equals(Status.UNMAPPED.getLabel())).collect(
           Collectors.toList());
       List<MappingEntity> all = mappingEntitiesMappedByType.get(type);
-      automaticMappingManager.calculateAutomaticMappings(all, type);
+      automaticMappingManager.calculateAutomaticMappings(unmappedMappingEntities, type);
     }
+  }
 
+  public void calculateAutomaticMappingsForOneEntity(int entityId) {
+    Optional<MappingEntity> mappingEntityOptional = findById(entityId);
+    if (mappingEntityOptional.isPresent())
+    {
+      MappingEntity mappingEntity = mappingEntityOptional.get();
+      automaticMappingManager.calculateAutomaticMappings(
+          Collections.singletonList(mappingEntity), mappingEntity.getEntityType().getName());
+    }
   }
 
   private Map<String, List<MappingEntity>> getMappingEntitiesMappedByType() {
