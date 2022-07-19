@@ -37,6 +37,22 @@
       <version>9.2.0</version>
     </dependency>
 
+<!--    Trying to fix error: An SPI class of type org.apache.lucene.codecs.Codec with name 'Lucene87' does not exist.
+        You need to add the corresponding JAR file supporting this SPI to your classpath.  The current classpath supports
+        the following names: [Lucene92]-->
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-backward-codecs</artifactId>
+      <version>9.2.0</version>
+    </dependency>
+
+    <!--    To parse search queries-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.lucene</groupId>-->
+<!--      <artifactId>lucene-queryparser</artifactId>-->
+<!--      <version>9.2.0</version>-->
+<!--    </dependency>-->
+
   </dependencies>
 
 
