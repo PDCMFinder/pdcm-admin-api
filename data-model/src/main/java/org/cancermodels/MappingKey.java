@@ -39,5 +39,7 @@ public class MappingKey {
    * Indicates whether or not this key is going to be used in the process of calculating
    * suggestions based on ontologies.
    */
-  private Boolean toUseInOntologySuggestionCalculation;
+  private Boolean searchOnOntology;
+
+  private Integer searchOnOntologyPosition;
 }

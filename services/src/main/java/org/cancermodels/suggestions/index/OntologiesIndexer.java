@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class OntologiesIndexer {
   private final OboParser oboParser;
   private final IndexableSuggestionMapper mapper;
-  private final IndexableSuggestionQueryManager queryManager;
+  private final QueryHelper queryManager;
   private final LuceneIndexWriter luceneIndexWriter;
 
   @Value( "${obo_file_path}" )
@@ -22,7 +22,7 @@ public class OntologiesIndexer {
 
   public OntologiesIndexer(OboParser oboParser,
       IndexableSuggestionMapper mapper,
-      IndexableSuggestionQueryManager queryManager,
+      QueryHelper queryManager,
       LuceneIndexWriter luceneIndexWriter) {
     this.oboParser = oboParser;
     this.mapper = mapper;

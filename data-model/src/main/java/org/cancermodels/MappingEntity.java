@@ -103,7 +103,7 @@ public class MappingEntity {
   @Override
   public String toString() {
     String values = getValuesAsMapString();
-    String entityTypeName = entityType.getName();
+    String entityTypeName = entityType == null ? "" : entityType.getName();
     StringBuilder sb = new StringBuilder();
     sb.append("id:").append(id);
     sb.append(" type:").append(entityTypeName);
