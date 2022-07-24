@@ -1,12 +1,15 @@
 package org.cancermodels;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
@@ -41,5 +44,11 @@ public class MappingKey {
    */
   private Boolean searchOnOntology;
 
-  private Integer searchOnOntologyPosition;
+  private Boolean useInAdditionalQuery;
+
+  private Boolean additionalQueryDriver;
+
+  @OneToOne(mappedBy = "mappingKey", cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY, optional = false)
+  private KeySearchConfiguration keySearchConfiguration;
 }

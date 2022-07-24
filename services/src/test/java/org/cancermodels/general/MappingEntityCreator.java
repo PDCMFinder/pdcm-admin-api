@@ -29,14 +29,12 @@ public class MappingEntityCreator {
     mappingKey2.setKey("SampleDiagnosis");
     mappingKey2.setWeight(0.9);
     mappingKey2.setSearchOnOntology(true);
-    mappingKey2.setSearchOnOntologyPosition(1);
 
     MappingKey mappingKey3 = new MappingKey();
     mappingKey3.setEntityType(entityType);
     mappingKey3.setKey("OriginTissue");
     mappingKey3.setWeight(0.08);
     mappingKey3.setSearchOnOntology(true);
-    mappingKey3.setSearchOnOntologyPosition(0);
 
     MappingKey mappingKey4 = new MappingKey();
     mappingKey4.setEntityType(entityType);

@@ -46,18 +46,11 @@ public class SuggestionsSearcher {
   public List<IndexableSuggestionResult> searchTopSuggestions(MappingEntity mappingEntity)
       throws IOException {
     Objects.requireNonNull(mappingEntity);
-    List<IndexableSuggestionResult> topSuggestions = new ArrayList<>();
     log.info("Entity values: " + mappingEntity.getValuesAsMap());
 
     Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
     TopDocs topDocs = luceneIndexReader.search(suggestionQuery);
-    topSuggestions = processTopDocs(topDocs);
-
-    for (IndexableSuggestionResult result : topSuggestions) {
-      System.out.println("****");
-      System.out.println(result);
-      System.out.println();
-    }
+    List<IndexableSuggestionResult> topSuggestions = processTopDocs(topDocs);
 
     return topSuggestions;
   }

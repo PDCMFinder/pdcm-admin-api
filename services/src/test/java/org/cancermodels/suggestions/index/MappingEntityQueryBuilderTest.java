@@ -50,7 +50,7 @@ class MappingEntityQueryBuilderTest {
 
     Query rulesQuery = instance.buildRulesQuery(mappingEntity.getMappingValues());
 
-    verify(queryHelper, never()).buildBoostedQueryForText(eq("rule.dataSource"), anyString(), anyFloat());
+    verify(queryHelper, never()).buildBoostFuzzyQueryByTerm(eq("rule.dataSource"), anyString(), anyFloat());
     assertEquals(expectedQuery, rulesQuery.toString());
   }
 
@@ -72,10 +72,10 @@ class MappingEntityQueryBuilderTest {
     Query ontologiesQuery = instance.buildOntologyQuery(mappingEntity.getMappingValues());
 
     // Queries should only be built for Sample Diagnosis value
-    verify(queryHelper, never()).buildBoostedQueryForText(anyString(), eq("crl"), anyFloat());
+    verify(queryHelper, never()).buildBoostFuzzyQueryByTerm(anyString(), eq("crl"), anyFloat());
     verify(
-        queryHelper, never()).buildBoostedQueryForText(anyString(), eq("central nervous system"), anyFloat());
-    verify(queryHelper, never()).buildBoostedQueryForText(anyString(), eq("primary"), anyFloat());
+        queryHelper, never()).buildBoostFuzzyQueryByTerm(anyString(), eq("central nervous system"), anyFloat());
+    verify(queryHelper, never()).buildBoostFuzzyQueryByTerm(anyString(), eq("primary"), anyFloat());
     assertEquals(expectedQuery, ontologiesQuery.toString());
   }
 }

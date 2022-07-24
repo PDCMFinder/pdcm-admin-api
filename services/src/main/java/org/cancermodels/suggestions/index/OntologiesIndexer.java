@@ -1,7 +1,9 @@
 package org.cancermodels.suggestions.index;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
@@ -60,9 +62,24 @@ public class OntologiesIndexer {
     ontology.setOntologyTermId(ncitTerm.getId());
     ontology.setDefinition(ncitTerm.getDefinition());
     ontology.setOntologyTermLabel(ncitTerm.getName());
-    ontology.setSynonyms(ncitTerm.getSynonyms());
+    ontology.setSynonyms(getFormattedSynonyms(ncitTerm.getSynonyms()));
     indexableSuggestion.setOntology(ontology);
 
     return indexableSuggestion;
+  }
+
+  private Set<String> getFormattedSynonyms(Set<String> synonyms) {
+    Set<String> formattedSynonyms = new HashSet<>();
+    for (String element : synonyms) {
+      try {
+        List<String> tokens = TokenizerHelper.tokenize("", element.toLowerCase());
+        String formatted = String.join(" ", tokens);
+        formattedSynonyms.add(formatted);
+      } catch (IOException e) {
+        log.error("Cannot tokenize synonym " + element);
+        formattedSynonyms.add(element);
+      }
+    }
+    return formattedSynonyms;
   }
 }

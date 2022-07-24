@@ -3,7 +3,8 @@ package org.cancermodels.suggestions.index;
 import java.io.IOException;
 import java.nio.file.Paths;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -49,14 +50,14 @@ public class LuceneIndexReader {
   }
 
   public Query createQueryByLabel(String label) throws ParseException {
-    QueryParser qp = new QueryParser("ontologyTermLabel", new StandardAnalyzer());
+    QueryParser qp = new QueryParser("ontologyTermLabel", new EnglishAnalyzer());
     Query firstNameQuery = qp.parse(label);
     return firstNameQuery;
   }
 
   private static TopDocs searchByFirstName(String firstName, IndexSearcher searcher) throws Exception
   {
-    QueryParser qp = new QueryParser("firstName", new StandardAnalyzer());
+    QueryParser qp = new QueryParser("firstName", new EnglishAnalyzer());
     Query firstNameQuery = qp.parse(firstName);
     TopDocs hits = searcher.search(firstNameQuery, 10);
     return hits;
@@ -66,7 +67,7 @@ public class LuceneIndexReader {
       throws IOException, ParseException {
     log.info("Search with field [using QueryParser]: {} and queryString {}" , field, queryString);
 
-    Query query = new QueryParser(field, new StandardAnalyzer())
+    Query query = new QueryParser(field, new EnglishAnalyzer())
         .parse(queryString);
     log.info("Compiled query {}", query.toString());
     return getIndexSearcher().search(query, 10);
