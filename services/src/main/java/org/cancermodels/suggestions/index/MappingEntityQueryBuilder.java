@@ -32,7 +32,7 @@ public class MappingEntityQueryBuilder {
   /**
    * Defines how much "important" a match in a rule is (with respect of an ontology)
    */
-  private static final double RULE_WEIGHT_GENERAL_MULTIPLIER = 5;
+  private static final double RULE_WEIGHT_GENERAL_MULTIPLIER = 8;
   private static final double EXTRA_RULE_WEIGHT_MULTIPLIER = 1.5;
 
   private static final float ONTOLOGY_SEARCH_LABEL_WEIGHT = 2f;
@@ -344,23 +344,68 @@ public class MappingEntityQueryBuilder {
 
     List<MappingValue> valuesToUse =
         mappingValues.stream()
-            .filter(x ->
-                x.getMappingKey().getWeight() > 0 && x.getMappingKey().getSearchOnOntology())
+            .filter(x -> x.getMappingKey().getSearchOnOntology())
             .collect(Collectors.toList());
 
-    queries.addAll(buildOntologyTermsQuery(valuesToUse));
-    queries.addAll(buildOntologyPhraseQuery(valuesToUse));
-    queries.addAll(buildOntologyMultiTermPhraseQuery(valuesToUse));
+//    MappingValue mainValue = valuesToUse.stream()
+//        .filter(x -> x.getMappingKey().getKeySearchConfiguration().getIsMultiTermPhraseMainField())
+//        .findFirst().orElse(null);
+
+    MappingValue mainValue = null;
+    List<MappingValue> secondaryValues = new ArrayList<>();
+
+    for (MappingValue mappingValue : mappingValues) {
+      MappingKey mappingKey = mappingValue.getMappingKey();
+      var conf = mappingValue.getMappingKey().getKeySearchConfiguration();
+      // Check if the key is configured to be used in a phrase query
+      if (conf.getUseAlsoAsMultiTermPhrase()) {
+        if (conf.getIsMultiTermPhraseMainField()) {
+          mainValue = mappingValue;
+        }
+        else {
+          secondaryValues.add(mappingValue);
+        }
+      }
+    }
+
+
+    queries.addAll(buildOntologyTermsQuery(mainValue));
+    queries.addAll(buildOntologyMultiKeyTermQuery(mainValue, secondaryValues));
+    queries.addAll(buildOntologyPhraseQuery(mainValue));
+    queries.addAll(buildOntologyMultiKeyPhraseQuery(mainValue, secondaryValues));
     return joinQueriesShouldMode(queries);
   }
 
 
 
-
-  private List<Query> buildOntologyTermsQuery(List<MappingValue> mappingValues) throws IOException {
+  private List<Query> buildOntologyTermsQuery(MappingValue mainValue) throws IOException {
     List<Query> queries = new ArrayList<>();
-    for (MappingValue mappingValue : mappingValues) {
-      String queryText = mappingValue.getValue();
+
+    String queryText = mainValue.getValue();
+    Query queryLabel = queryHelper.buildBoostFuzzyQueryByTerm(
+        FieldsNames.ONTOLOGY_LABEL.getName(), queryText, ONTOLOGY_SEARCH_LABEL_WEIGHT);
+    Query queryDefinition = queryHelper.buildBoostFuzzyQueryByTerm(
+        FieldsNames.ONTOLOGY_DEFINITION.getName(), queryText, ONTOLOGY_SEARCH_DEFINITION_WEIGHT);
+    Query querySynonym = queryHelper.buildBoostFuzzyQueryByTerm(
+        FieldsNames.ONTOLOGY_SYNONYM.getName(), queryText, ONTOLOGY_SEARCH_SYNONYM_WEIGHT);
+    queries.add(queryLabel);
+    queries.add(queryDefinition);
+    queries.add(querySynonym);
+
+    return queries;
+  }
+
+  private List<Query> buildOntologyMultiKeyTermQuery(MappingValue mainValue, List<MappingValue> secondaryValues)
+      throws IOException {
+    List<Query> queries = new ArrayList<>();
+    if (mainValue != null && !secondaryValues.isEmpty()) {
+      String prefix =
+          secondaryValues.stream().map(
+              MappingValue::getValue).collect(Collectors.joining(" "));
+
+      String queryText = prefix + " " + mainValue.getValue();
+      System.out.println("query text multiterm phrase onto ["+queryText+"]");
+
       Query queryLabel = queryHelper.buildBoostFuzzyQueryByTerm(
           FieldsNames.ONTOLOGY_LABEL.getName(), queryText, ONTOLOGY_SEARCH_LABEL_WEIGHT);
       Query queryDefinition = queryHelper.buildBoostFuzzyQueryByTerm(
@@ -371,58 +416,44 @@ public class MappingEntityQueryBuilder {
       queries.add(queryDefinition);
       queries.add(querySynonym);
     }
+
     return queries;
   }
 
-  private List<Query> buildOntologyPhraseQuery(List<MappingValue> mappingValues)
+
+  private List<Query> buildOntologyPhraseQuery(MappingValue mainValue)
       throws IOException {
     List<Query> queries = new ArrayList<>();
-    for (MappingValue mappingValue : mappingValues) {
-      MappingKey mappingKey = mappingValue.getMappingKey();
-      if (mappingKey.getKeySearchConfiguration().getUseAlsoAsPhrase()) {
 
-        String queryText = mappingValue.getValue();
-        Query queryLabel = queryHelper.buildBoostPhraseQuery(
-            FieldsNames.ONTOLOGY_LABEL.getName(), queryText, ONTOLOGY_SEARCH_LABEL_WEIGHT);
-        Query queryDefinition = queryHelper.buildBoostPhraseQuery(
-            FieldsNames.ONTOLOGY_DEFINITION.getName(), queryText, ONTOLOGY_SEARCH_DEFINITION_WEIGHT);
-        Query querySynonym = queryHelper.buildBoostPhraseQuery(
-            FieldsNames.ONTOLOGY_SYNONYM.getName(), queryText, ONTOLOGY_SEARCH_SYNONYM_WEIGHT);
-        queries.add(queryLabel);
-        queries.add(queryDefinition);
-        queries.add(querySynonym);
-      }
-    }
+    String queryText = mainValue.getValue();
+    Query queryLabel = queryHelper.buildBoostPhraseQuery(
+        FieldsNames.ONTOLOGY_LABEL.getName(), queryText, ONTOLOGY_SEARCH_LABEL_WEIGHT);
+    Query queryDefinition = queryHelper.buildBoostPhraseQuery(
+        FieldsNames.ONTOLOGY_DEFINITION.getName(), queryText, ONTOLOGY_SEARCH_DEFINITION_WEIGHT);
+    Query querySynonym = queryHelper.buildBoostPhraseQuery(
+        FieldsNames.ONTOLOGY_SYNONYM.getName(), queryText, ONTOLOGY_SEARCH_SYNONYM_WEIGHT);
+    queries.add(queryLabel);
+    queries.add(queryDefinition);
+    queries.add(querySynonym);
+
+
     return queries;
   }
 
-  private List<Query> buildOntologyMultiTermPhraseQuery(List<MappingValue> mappingValues)
+  //idea: also term query with others + main
+
+  private List<Query> buildOntologyMultiKeyPhraseQuery(
+      MappingValue mainValue, List<MappingValue> secondaryFields)
       throws IOException {
 
     List<Query> queries = new ArrayList<>();
 
-    MappingValue mainFieldInMultiTermPhrase = null;
-    List<MappingValue> otherFieldsToBeUsedInMultiTermPhrase = new ArrayList<>();
-
-    for (MappingValue mappingValue : mappingValues) {
-      MappingKey mappingKey = mappingValue.getMappingKey();
-      // Check if the key is configured to be used in a phrase query
-      if (mappingKey.getKeySearchConfiguration().getUseAlsoAsMultiTermPhrase()) {
-        if (mappingKey.getKeySearchConfiguration().getIsMultiTermPhraseMainField()) {
-          mainFieldInMultiTermPhrase = mappingValue;
-        }
-        else {
-          otherFieldsToBeUsedInMultiTermPhrase.add(mappingValue);
-        }
-      }
-    }
-
-    if (mainFieldInMultiTermPhrase != null && !otherFieldsToBeUsedInMultiTermPhrase.isEmpty()) {
+    if (mainValue != null && !secondaryFields.isEmpty()) {
       String prefix =
-          otherFieldsToBeUsedInMultiTermPhrase.stream().map(
+          secondaryFields.stream().map(
               MappingValue::getValue).collect(Collectors.joining(" "));
 
-      String queryText = prefix + " " + mainFieldInMultiTermPhrase.getValue();
+      String queryText = prefix + " " + mainValue.getValue();
       System.out.println("query text multiterm phrase onto ["+queryText+"]");
 
         Query queryLabel = queryHelper.buildBoostPhraseQuery(
