@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -28,6 +27,12 @@ public class LuceneIndexReader {
 
   private static IndexSearcher indexSearcher;
 
+  private final AnalyzerProvider analyzerProvider;
+
+  public LuceneIndexReader(AnalyzerProvider analyzerProvider) {
+    this.analyzerProvider = analyzerProvider;
+  }
+
   public IndexSearcher getIndexSearcher() throws IOException {
     if (indexSearcher == null) {
       indexSearcher = createSearcher();
@@ -50,24 +55,16 @@ public class LuceneIndexReader {
   }
 
   public Query createQueryByLabel(String label) throws ParseException {
-    QueryParser qp = new QueryParser("ontologyTermLabel", new EnglishAnalyzer());
+    QueryParser qp = new QueryParser("ontologyTermLabel", analyzerProvider.getAnalyzer());
     Query firstNameQuery = qp.parse(label);
     return firstNameQuery;
   }
 
-  private static TopDocs searchByFirstName(String firstName, IndexSearcher searcher) throws Exception
-  {
-    QueryParser qp = new QueryParser("firstName", new EnglishAnalyzer());
-    Query firstNameQuery = qp.parse(firstName);
-    TopDocs hits = searcher.search(firstNameQuery, 10);
-    return hits;
-  }
-
   public TopDocs search(String field, String queryString)
       throws IOException, ParseException {
-    log.info("Search with field [using QueryParser]: {} and queryString {}" , field, queryString);
+//    log.info("Search with field [using QueryParser]: {} and queryString {}" , field, queryString);
 
-    Query query = new QueryParser(field, new EnglishAnalyzer())
+    Query query = new QueryParser(field, analyzerProvider.getAnalyzer())
         .parse(queryString);
     log.info("Compiled query {}", query.toString());
     return getIndexSearcher().search(query, 10);

@@ -194,7 +194,7 @@ public class OntologySuggestionManager {
 
   private List<MappingKey> getKeysToEvaluate(EntityType entityType) {
     return entityType.getMappingKeys().stream()
-        .filter(MappingKey::getSearchOnOntology)
+        .filter(x -> x.getKeySearchConfiguration().getSearchOnOntology())
         .collect(Collectors.toList());
   }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +61,8 @@ public class OntologiesIndexer {
     indexableSuggestion.setSourceType("Ontology");
     IndexableOntologySuggestion ontology = new IndexableOntologySuggestion();
     ontology.setOntologyTermId(ncitTerm.getId());
-    ontology.setDefinition(ncitTerm.getDefinition());
+    String definition = StringUtils.abbreviate(ncitTerm.getDefinition(), Constants.MAX_TEXT_LENGTH);
+    ontology.setDefinition(definition);
     ontology.setOntologyTermLabel(ncitTerm.getName());
     ontology.setSynonyms(getFormattedSynonyms(ncitTerm.getSynonyms()));
     indexableSuggestion.setOntology(ontology);
@@ -71,13 +73,11 @@ public class OntologiesIndexer {
   private Set<String> getFormattedSynonyms(Set<String> synonyms) {
     Set<String> formattedSynonyms = new HashSet<>();
     for (String element : synonyms) {
-      try {
-        List<String> tokens = TokenizerHelper.tokenize("", element.toLowerCase());
-        String formatted = String.join(" ", tokens);
+
+      if (element.length() < Constants.MAX_WORD_LENGTH) {
+        String formatted = element.toLowerCase();
+        formatted = formatted.trim();
         formattedSynonyms.add(formatted);
-      } catch (IOException e) {
-        log.error("Cannot tokenize synonym " + element);
-        formattedSynonyms.add(element);
       }
     }
     return formattedSynonyms;

@@ -37,4 +37,9 @@ public class MappingValue {
   @Lob
   private String value;
 
+  public String toString() {
+    String keyName = mappingKey == null ? "null" : mappingKey.getKey();
+    return "id: " + id + " key: " + keyName + " value: " + value;
+  }
+
 }

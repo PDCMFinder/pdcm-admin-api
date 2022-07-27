@@ -35,13 +35,14 @@ public class OboParser {
             NcitTerm term = new NcitTerm();
             term.setId(id);
             term.setName(name);
-            term.setDefinition(definition);
+            term.setDefinition(definition == null ? "": definition);
             term.setSynonyms(synonyms);
             terms.add(term);
 
           }
           id = null;
           name = null;
+          definition = null;
           isObsolete = false;
           synonyms = new HashSet<>();
         }

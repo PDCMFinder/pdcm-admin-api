@@ -2,11 +2,18 @@ package org.cancermodels.general;
 
 import java.util.Arrays;
 import org.cancermodels.EntityType;
+import org.cancermodels.KeySearchConfiguration;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingKey;
 import org.cancermodels.MappingValue;
 
 public class MappingEntityCreator {
+
+  public static double WEIGHT_1 = 0.0;
+  public static double WEIGHT_2 = 1.0;
+  public static double WEIGHT_3 = 0.5;
+  public static double WEIGHT_4 = 0.1;
+
   public static MappingEntity createMappingEntityTestInstance() {
 
     MappingEntity mappingEntity = new MappingEntity();
@@ -21,26 +28,46 @@ public class MappingEntityCreator {
     MappingKey mappingKey1 = new MappingKey();
     mappingKey1.setEntityType(entityType);
     mappingKey1.setKey("DataSource");
-    mappingKey1.setWeight(0.0);
-    mappingKey1.setSearchOnOntology(false);
+    KeySearchConfiguration conf1 = new KeySearchConfiguration();
+    conf1.setId(1);
+    conf1.setWeight(WEIGHT_1);
+    conf1.setSearchOnOntology(false);
+    conf1.setMainField(false);
+    conf1.setMultiFieldQuery(false);
+    mappingKey1.setKeySearchConfiguration(conf1);
 
     MappingKey mappingKey2 = new MappingKey();
     mappingKey2.setEntityType(entityType);
     mappingKey2.setKey("SampleDiagnosis");
-    mappingKey2.setWeight(0.9);
-    mappingKey2.setSearchOnOntology(true);
+    KeySearchConfiguration conf2 = new KeySearchConfiguration();
+    conf2.setId(2);
+    conf2.setWeight(WEIGHT_2);
+    conf2.setSearchOnOntology(true);
+    conf2.setMainField(true);
+    conf2.setMultiFieldQuery(true);
+    mappingKey2.setKeySearchConfiguration(conf2);
 
     MappingKey mappingKey3 = new MappingKey();
     mappingKey3.setEntityType(entityType);
     mappingKey3.setKey("OriginTissue");
-    mappingKey3.setWeight(0.08);
-    mappingKey3.setSearchOnOntology(true);
+    KeySearchConfiguration conf3 = new KeySearchConfiguration();
+    conf3.setId(3);
+    conf3.setWeight(WEIGHT_3);
+    conf3.setSearchOnOntology(true);
+    conf3.setMainField(false);
+    conf3.setMultiFieldQuery(true);
+    mappingKey3.setKeySearchConfiguration(conf3);
 
     MappingKey mappingKey4 = new MappingKey();
     mappingKey4.setEntityType(entityType);
     mappingKey4.setKey("TumourType");
-    mappingKey4.setWeight(0.02);
-    mappingKey4.setSearchOnOntology(false);
+    KeySearchConfiguration conf4 = new KeySearchConfiguration();
+    conf4.setId(4);
+    conf4.setWeight(WEIGHT_4);
+    conf4.setSearchOnOntology(false);
+    conf4.setMainField(false);
+    conf4.setMultiFieldQuery(false);
+    mappingKey4.setKeySearchConfiguration(conf4);
 
     entityType.setMappingKeys(Arrays.asList(mappingKey1, mappingKey2, mappingKey3, mappingKey4));
 

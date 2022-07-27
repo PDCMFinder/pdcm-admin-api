@@ -39,7 +39,7 @@ public class EntityType {
   public Map<String, Double> getWeightsAsMap() {
     Map<String, Double> map = new HashMap<>();
     for (MappingKey mappingKey : mappingKeys) {
-      map.put(mappingKey.getKey(), mappingKey.getWeight());
+      map.put(mappingKey.getKey(), mappingKey.getKeySearchConfiguration().getWeight());
     }
     return map;
   }

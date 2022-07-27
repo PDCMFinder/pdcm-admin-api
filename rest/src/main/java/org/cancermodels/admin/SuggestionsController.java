@@ -63,4 +63,10 @@ public class SuggestionsController {
     List<IndexableSuggestionResult> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
     return results;
   }
+
+  @GetMapping("executeSuggestionsReport")
+  void getMappingEntity() throws IOException {
+    suggestionsSearcher.executeSuggestionsReport();
+  }
+
 }

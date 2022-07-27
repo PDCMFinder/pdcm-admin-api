@@ -34,9 +34,7 @@ public class KeySearchConfiguration {
    */
   private Boolean searchOnOntology;
 
-  private Boolean useAlsoAsPhrase;
+  private Boolean multiFieldQuery;
 
-  private Boolean useAlsoAsMultiTermPhrase;
-
-  private Boolean isMultiTermPhraseMainField;
+  private Boolean mainField;
 }

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -22,7 +20,10 @@ public class LuceneIndexWriter {
 
   private static IndexWriter indexWriter;
 
-  public LuceneIndexWriter() {
+  private AnalyzerProvider analyzerProvider;
+
+  public LuceneIndexWriter(AnalyzerProvider analyzerProvider) {
+    this.analyzerProvider = analyzerProvider;
   }
 
   private IndexWriter getIndexWriter() throws IOException {
@@ -35,7 +36,7 @@ public class LuceneIndexWriter {
   private IndexWriter createWriter() throws IOException {
     log.info("Creating index at {}", luceneIndexDir);
     FSDirectory dir = FSDirectory.open(Paths.get(luceneIndexDir));
-    IndexWriterConfig config = new IndexWriterConfig(new EnglishAnalyzer());
+    IndexWriterConfig config = new IndexWriterConfig(analyzerProvider.getAnalyzer());
     return new IndexWriter(dir, config);
   }
 

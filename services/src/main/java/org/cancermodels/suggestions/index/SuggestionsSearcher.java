@@ -10,6 +10,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.cancermodels.MappingEntity;
+import org.cancermodels.mappings.MappingEntityService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,13 +24,17 @@ public class SuggestionsSearcher {
   private final LuceneIndexReader luceneIndexReader;
   private final IndexableSuggestionMapper indexableSuggestionMapper;
 
+  private MappingEntityService temp;
+
   public SuggestionsSearcher(
       MappingEntityQueryBuilder mappingEntityQueryBuilder,
       LuceneIndexReader luceneIndexReader,
-      IndexableSuggestionMapper indexableSuggestionMapper) {
+      IndexableSuggestionMapper indexableSuggestionMapper,
+      MappingEntityService temp) {
     this.mappingEntityQueryBuilder = mappingEntityQueryBuilder;
     this.luceneIndexReader = luceneIndexReader;
     this.indexableSuggestionMapper = indexableSuggestionMapper;
+    this.temp = temp;
   }
 
   /**
@@ -69,5 +74,28 @@ public class SuggestionsSearcher {
       indexableSuggestionResults.add(result);
     }
     return indexableSuggestionResults;
+  }
+
+  public void executeSuggestionsReport() throws IOException {
+    List<MappingEntity> allTreatment = temp.getAllByTypeName("treatment");
+    for (MappingEntity mappingEntity : allTreatment) {
+      List<IndexableSuggestionResult> suggestions = searchTopSuggestions(mappingEntity);
+      System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+      System.out.println("Entity: [" + mappingEntity.getId()  +"]" + mappingEntity.getValuesAsMap());
+      for (IndexableSuggestionResult suggestion : suggestions) {
+        IndexableSuggestion indexableSuggestion = suggestion.getIndexableSuggestion();
+        System.out.print("\n" + indexableSuggestion.getSourceType() + "| ");
+        if (indexableSuggestion.getRule() != null) {
+          System.out.print(indexableSuggestion.getRule().getMappedTermUrl() + "| ");
+          System.out.print(indexableSuggestion.getRule().getMappedTermLabel() + "| ");
+        }
+        else if (indexableSuggestion.getOntology() != null) {
+          System.out.print(indexableSuggestion.getOntology().getOntologyTermId() + "| ");
+          System.out.print(indexableSuggestion.getOntology().getOntologyTermLabel() + "| ");
+        }
+        System.out.println();
+      }
+
+    }
   }
 }

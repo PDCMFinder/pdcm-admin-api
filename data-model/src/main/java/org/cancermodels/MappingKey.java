@@ -32,22 +32,6 @@ public class MappingKey {
    */
   private String key;
 
-  /**
-   * Numeric value, from 0 to 1, that represents how important this key is when // determining the
-   * similarity between 2 entities
-   */
-  @JsonIgnore private Double weight;
-
-  /**
-   * Indicates whether or not this key is going to be used in the process of calculating
-   * suggestions based on ontologies.
-   */
-  private Boolean searchOnOntology;
-
-  private Boolean useInAdditionalQuery;
-
-  private Boolean additionalQueryDriver;
-
   @OneToOne(mappedBy = "mappingKey", cascade = CascadeType.ALL,
       fetch = FetchType.LAZY, optional = false)
   private KeySearchConfiguration keySearchConfiguration;
