@@ -36,6 +36,8 @@ public class RulesQueryBuilder {
         mappingValueConfHelper.getValuesWeightGreaterZero(mappingValues);
     MappingValue mainValue = mappingValueConfHelper.getMainValue(mappingValues);
     List<MappingValue> secondaryValues = mappingValueConfHelper.getSecondaryValues(mappingValues);
+    System.out.println("mainValue: " + mainValue);
+    System.out.println("secondaryValues: " + secondaryValues);
 
     // Build boost fuzzy term query for each value to process
     for (MappingValue mappingValue : toProcess) {
@@ -51,15 +53,19 @@ public class RulesQueryBuilder {
 
     String combinedText = mappingValueConfHelper.getTextForMultiFieldQuery(mainValue, secondaryValues);
 
-    // Build boost fuzzy term query with [extra field values] + [main value] text
-    // (to represent things like combination of origin tissue + diagnosis)
-    queries.add(buildRulesTermsQuery(
-        mainValue, combinedText, QueryConstants.MULTI_TERM_RELEVANCE_MULTIPLIER));
+    if (combinedText != null) {
+      // Build boost fuzzy term query with [extra field values] + [main value] text
+      // (to represent things like combination of origin tissue + diagnosis)
+      queries.add(
+          buildRulesTermsQuery(
+              mainValue, combinedText, QueryConstants.MULTI_TERM_RELEVANCE_MULTIPLIER));
 
-    // Build boost phrase query with [extra field values] + [main value] text
-    // (to represent things like combination of origin tissue + diagnosis)
-    queries.add(buildBoostPhraseQuery(
-        mainValue, combinedText, QueryConstants.MULTI_TERM_PHRASE_RELEVANCE_MULTIPLIER));
+      // Build boost phrase query with [extra field values] + [main value] text
+      // (to represent things like combination of origin tissue + diagnosis)
+      queries.add(
+          buildBoostPhraseQuery(
+              mainValue, combinedText, QueryConstants.MULTI_TERM_PHRASE_RELEVANCE_MULTIPLIER));
+    }
 
     return queryHelper.joinQueriesShouldMode(queries);
   }

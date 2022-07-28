@@ -51,7 +51,7 @@ public class MappingValueConfHelper {
   }
 
   public String getTextForMultiFieldQuery(MappingValue mainValue, List<MappingValue> extraValues) {
-    String queryText = "";
+    String queryText = null;
     if (mainValue != null && !extraValues.isEmpty()) {
       String prefix = extraValues.stream()
           .map(MappingValue::getValue).collect(Collectors.joining(" "));

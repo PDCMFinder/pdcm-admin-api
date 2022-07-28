@@ -44,17 +44,19 @@ public class OntologyQueryBuilder {
 
     String combinedText = mappingValueConfHelper.getTextForMultiFieldQuery(mainValue, secondaryValues);
 
-    // Build a boost fuzzy term query with [extra field values] + [main value] text
-    // (to represent things like combination of origin tissue + diagnosis)
-    queries.addAll(
-        buildOntologyBoostFuzzyQueryByTerm(
-            combinedText, QueryConstants.MULTI_TERM_RELEVANCE_MULTIPLIER));
+    if (combinedText != null) {
+      // Build a boost fuzzy term query with [extra field values] + [main value] text
+      // (to represent things like combination of origin tissue + diagnosis)
+      queries.addAll(
+          buildOntologyBoostFuzzyQueryByTerm(
+              combinedText, QueryConstants.MULTI_TERM_RELEVANCE_MULTIPLIER));
 
-    // Build a boost phrase query with [extra field values] + [main value] text
-    // (to represent things like combination of origin tissue + diagnosis)
-    queries.addAll(
-        buildOntologyBuildBoostPhraseQuery(
-            combinedText, QueryConstants.MULTI_TERM_PHRASE_RELEVANCE_MULTIPLIER));
+      // Build a boost phrase query with [extra field values] + [main value] text
+      // (to represent things like combination of origin tissue + diagnosis)
+      queries.addAll(
+          buildOntologyBuildBoostPhraseQuery(
+              combinedText, QueryConstants.MULTI_TERM_PHRASE_RELEVANCE_MULTIPLIER));
+    }
 
     return queryHelper.joinQueriesShouldMode(queries);
   }
