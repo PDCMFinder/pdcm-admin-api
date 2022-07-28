@@ -3,6 +3,7 @@ package org.cancermodels.suggestions.index;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -42,7 +43,7 @@ public class QueryHelper {
    */
   public Query buildBoostFuzzyQueryByTerm(String field, String text, double boost) throws IOException {
     BooleanQuery.Builder builder = new Builder();
-    String[] words = text.split(" ");
+    String[] words = getLimitedNumberOfWords(tokenize(text));
     for (String word : words) {
       FuzzyQuery fuzzyQuery = new FuzzyQuery(new Term(field, word));
       builder.add(fuzzyQuery, Occur.SHOULD);
@@ -59,7 +60,7 @@ public class QueryHelper {
    * @throws IOException if the query cannot be created.
    */
   public Query buildBoostPhraseQuery(String field, String text, double boost) throws IOException {
-    String[] words = text.split(" ");
+    String[] words = getLimitedNumberOfWords(tokenize(text));
     PhraseQuery phraseQuery = new PhraseQuery(1, field, words);
     return new BoostQuery (phraseQuery, (float)boost);
   }
@@ -73,5 +74,29 @@ public class QueryHelper {
     }
     return builder.build();
   }
+
+  private String[] tokenize(String text) throws IOException {
+    List<String> tokens = new ArrayList<>();
+    // New analyzer needs to be created because if the same as the on for the indexer is used
+    // this will fail (it cannot be reused).
+    Analyzer analyzer = analyzerProvider.generateNewAnalyzer();
+    TokenStream tokenStream = analyzer.tokenStream("content", new StringReader(text));
+    CharTermAttribute term = tokenStream.addAttribute(CharTermAttribute.class);
+    tokenStream.reset();
+
+    while(tokenStream.incrementToken()) {
+      tokens.add(term.toString());
+    }
+
+    return tokens.toArray(String[]::new);
+  }
+
+  private String[] getLimitedNumberOfWords(String[] words) {
+    if (words.length > Constants.MAX_NUMBER_TERMS_BY_QUERY) {
+      return Arrays.copyOfRange(words, 0, Constants.MAX_NUMBER_TERMS_BY_QUERY);
+    }
+    return words;
+  }
+
 
 }

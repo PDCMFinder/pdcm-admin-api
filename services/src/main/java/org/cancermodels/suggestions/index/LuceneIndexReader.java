@@ -9,6 +9,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -67,12 +68,34 @@ public class LuceneIndexReader {
     Query query = new QueryParser(field, analyzerProvider.getAnalyzer())
         .parse(queryString);
     log.info("Compiled query {}", query.toString());
-    return getIndexSearcher().search(query, 10);
+    return trySearch(query, 10);
   }
 
   public TopDocs search(Query query) throws IOException {
     log.info("Search with query: " + query.toString());
-    return getIndexSearcher().search(query, 10);
+    return trySearch(query, 10);
+  }
+
+  private TopDocs trySearch(Query query, int maxHits) {
+    boolean retry = true;
+    while (retry)
+    {
+      try
+      {
+        retry = false;
+        return getIndexSearcher().search(query, maxHits);
+      }
+      catch (IndexSearcher.TooManyClauses | IOException e)
+      {
+        // The default is 1024.
+        int maxCount = IndexSearcher.getMaxClauseCount();
+        int newCount = maxCount + 500;
+        log.error("Too many hits for query: " + maxCount + ".  Increasing to " + newCount);
+        IndexSearcher.setMaxClauseCount(newCount);
+        retry = true;
+      }
+    }
+    return null;
   }
 
   public Document getDocument(ScoreDoc scoreDoc) throws IOException {

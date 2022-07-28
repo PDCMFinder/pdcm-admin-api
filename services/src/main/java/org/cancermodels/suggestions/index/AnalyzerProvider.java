@@ -21,9 +21,13 @@ public class AnalyzerProvider {
    */
   public Analyzer getAnalyzer() {
     if (analyzer == null) {
-      CharArraySet enStopSet = EnglishAnalyzer.ENGLISH_STOP_WORDS_SET;
-      analyzer = new StandardAnalyzer(enStopSet);
+      analyzer = generateNewAnalyzer();
     }
     return analyzer;
+  }
+
+  public Analyzer generateNewAnalyzer() {
+    CharArraySet enStopSet = EnglishAnalyzer.ENGLISH_STOP_WORDS_SET;
+    return new StandardAnalyzer(enStopSet);
   }
 }

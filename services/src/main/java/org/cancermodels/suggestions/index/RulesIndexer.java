@@ -1,9 +1,12 @@
 package org.cancermodels.suggestions.index;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.cancermodels.MappingEntity;
@@ -60,11 +63,24 @@ public class RulesIndexer {
     indexableSuggestion.setId(mappingEntity.getId().toString());
     indexableSuggestion.setSourceType("Rule");
     IndexableRuleSuggestion rule = new IndexableRuleSuggestion();
-    rule.setData(mappingEntity.getValuesAsMap());
+    rule.setData(formatRuleValues(mappingEntity.getValuesAsMap()));
     rule.setMappedTermLabel(mappingEntity.getMappedTermLabel());
     rule.setMappedTermUrl(mappingEntity.getMappedTermUrl());
     indexableSuggestion.setRule(rule);
 
     return indexableSuggestion;
+  }
+
+
+  private Map<String, String> formatRuleValues(Map<String, String> values) {
+    Map<String, String> formattedValues = new HashMap<>();
+    for (String key : values.keySet()) {
+      formattedValues.put(key, formatText(values.get(key)));
+    }
+    return formattedValues;
+  }
+
+  private String formatText(String text) {
+    return StringUtils.abbreviate(text, Constants.MAX_TEXT_LENGTH);
   }
 }
