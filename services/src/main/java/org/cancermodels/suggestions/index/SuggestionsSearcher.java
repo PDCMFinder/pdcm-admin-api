@@ -80,7 +80,8 @@ public class SuggestionsSearcher {
     System.out.println("----------------------------------------------------------");
     System.out.println("Entity id: " + mappingEntity.getId());
     System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
- 
+    System.out.println("Current mapping: " + mappingEntity.getMappedTermUrl());
+
     List<IndexableSuggestionResult> suggestionsResults = searchTopSuggestions(mappingEntity);
     for (IndexableSuggestionResult suggestion : suggestionsResults) {
       IndexableSuggestion indexableSuggestion = suggestion.getIndexableSuggestion();
