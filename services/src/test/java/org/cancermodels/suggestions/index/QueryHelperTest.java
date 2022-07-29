@@ -6,20 +6,15 @@ import java.io.IOException;
 import org.apache.lucene.search.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
 class QueryHelperTest {
 
+  private AnalyzerProvider analyzerProvider = new AnalyzerProvider();
 
-  @Mock
-  private AnalyzerProvider analyzerProvider;
-
-  @InjectMocks
-  private QueryHelper queryHelper;
+  private QueryHelper queryHelper = new QueryHelper(analyzerProvider);
 
   @Test
   void buildBoostedQueryForTextSingleWord() throws IOException {
