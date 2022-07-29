@@ -76,26 +76,25 @@ public class SuggestionsSearcher {
     return indexableSuggestionResults;
   }
 
-  public void executeSuggestionsReport() throws IOException {
-    List<MappingEntity> allTreatment = temp.getAllByTypeName("treatment");
-    for (MappingEntity mappingEntity : allTreatment) {
-      List<IndexableSuggestionResult> suggestions = searchTopSuggestions(mappingEntity);
-      System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-      System.out.println("Entity: [" + mappingEntity.getId()  +"]" + mappingEntity.getValuesAsMap());
-      for (IndexableSuggestionResult suggestion : suggestions) {
-        IndexableSuggestion indexableSuggestion = suggestion.getIndexableSuggestion();
-        System.out.print("\n" + indexableSuggestion.getSourceType() + "| ");
-        if (indexableSuggestion.getRule() != null) {
-          System.out.print(indexableSuggestion.getRule().getMappedTermUrl() + "| ");
-          System.out.print(indexableSuggestion.getRule().getMappedTermLabel() + "| ");
-        }
-        else if (indexableSuggestion.getOntology() != null) {
-          System.out.print(indexableSuggestion.getOntology().getOntologyTermId() + "| ");
-          System.out.print(indexableSuggestion.getOntology().getOntologyTermLabel() + "| ");
-        }
-        System.out.println();
+  public void runSuggestionReportForEntity(MappingEntity mappingEntity) throws IOException {
+    System.out.println("----------------------------------------------------------");
+    System.out.println("Entity id: " + mappingEntity.getId());
+    System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
+ 
+    List<IndexableSuggestionResult> suggestionsResults = searchTopSuggestions(mappingEntity);
+    for (IndexableSuggestionResult suggestion : suggestionsResults) {
+      IndexableSuggestion indexableSuggestion = suggestion.getIndexableSuggestion();
+      System.out.print("\n" + indexableSuggestion.getSourceType() + "| ");
+      if (indexableSuggestion.getRule() != null) {
+        System.out.print(indexableSuggestion.getRule().getMappedTermUrl() + "| ");
+        System.out.print(indexableSuggestion.getRule().getMappedTermLabel() + "| ");
       }
-
+      else if (indexableSuggestion.getOntology() != null) {
+        System.out.print(indexableSuggestion.getOntology().getOntologyTermId() + "| ");
+        System.out.print(indexableSuggestion.getOntology().getOntologyTermLabel() + "| ");
+      }
+      System.out.println("\n");
     }
   }
+
 }

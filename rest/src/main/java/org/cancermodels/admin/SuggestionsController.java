@@ -66,7 +66,18 @@ public class SuggestionsController {
 
   @GetMapping("executeSuggestionsReport")
   void getMappingEntity() throws IOException {
-    suggestionsSearcher.executeSuggestionsReport();
+    List<MappingEntity> treatments = mappingEntityService.getAllByTypeName("treatment");
+    List<MappingEntity> diagnosis = mappingEntityService.getAllByTypeName("diagnosis");
+
+    System.out.println("Report for treatments");
+    for (MappingEntity mappingEntity : treatments) {
+      suggestionsSearcher.runSuggestionReportForEntity(mappingEntity);
+    }
+
+    System.out.println("Report for diagnosis");
+    for (MappingEntity mappingEntity : treatments) {
+      suggestionsSearcher.runSuggestionReportForEntity(mappingEntity);
+    }
   }
 
 }
