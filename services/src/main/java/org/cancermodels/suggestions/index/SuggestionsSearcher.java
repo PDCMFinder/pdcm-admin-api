@@ -10,7 +10,10 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.cancermodels.MappingEntity;
-import org.cancermodels.mappings.MappingEntityService;
+import org.cancermodels.Suggestion;
+import org.cancermodels.Suggestion.OntologySuggestion;
+import org.cancermodels.Suggestion.RuleSuggestion;
+import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,17 +27,13 @@ public class SuggestionsSearcher {
   private final LuceneIndexReader luceneIndexReader;
   private final IndexableSuggestionMapper indexableSuggestionMapper;
 
-  private MappingEntityService temp;
-
   public SuggestionsSearcher(
       MappingEntityQueryBuilder mappingEntityQueryBuilder,
       LuceneIndexReader luceneIndexReader,
-      IndexableSuggestionMapper indexableSuggestionMapper,
-      MappingEntityService temp) {
+      IndexableSuggestionMapper indexableSuggestionMapper) {
     this.mappingEntityQueryBuilder = mappingEntityQueryBuilder;
     this.luceneIndexReader = luceneIndexReader;
     this.indexableSuggestionMapper = indexableSuggestionMapper;
-    this.temp = temp;
   }
 
   /**
@@ -48,20 +47,25 @@ public class SuggestionsSearcher {
    *  example, sampleDiagnosis for a diagnosis or treatmentName for a treatment) is similar enough
    *  to the label, definition or synonym in the ontology.
    */
-  public List<IndexableSuggestionResult> searchTopSuggestions(MappingEntity mappingEntity)
-      throws IOException {
+  public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity) {
     Objects.requireNonNull(mappingEntity);
+    List<Suggestion> topSuggestions = new ArrayList<>();
     log.info("Entity values: " + mappingEntity.getValuesAsMap());
 
-    Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
-    TopDocs topDocs = luceneIndexReader.search(suggestionQuery);
-    List<IndexableSuggestionResult> topSuggestions = processTopDocs(topDocs);
+    try {
+
+      Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
+      TopDocs topDocs = luceneIndexReader.search(suggestionQuery);
+      topSuggestions = processTopDocs(topDocs);
+    } catch (Exception exception) {
+      throw new SuggestionCalculationException(exception);
+    }
 
     return topSuggestions;
   }
 
-  private List<IndexableSuggestionResult> processTopDocs(TopDocs topDocs) throws IOException {
-    List<IndexableSuggestionResult> indexableSuggestionResults = new ArrayList<>();
+  private List<Suggestion> processTopDocs(TopDocs topDocs) throws IOException {
+    List<Suggestion> suggestions = new ArrayList<>();
 
     for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
       Document document = luceneIndexReader.getDocument(scoreDoc);
@@ -71,31 +75,47 @@ public class SuggestionsSearcher {
       IndexableSuggestionResult result = new IndexableSuggestionResult();
       result.setIndexableSuggestion(indexableSuggestion);
       result.setScore(scoreDoc.score);
-      indexableSuggestionResults.add(result);
+
+      Suggestion suggestion = resultToSuggestion(indexableSuggestion);
+      suggestion.setScore(scoreDoc.score);
+      suggestions.add(suggestion);
     }
-    return indexableSuggestionResults;
+    return suggestions;
   }
 
-  public void runSuggestionReportForEntity(MappingEntity mappingEntity) throws IOException {
-    System.out.println("----------------------------------------------------------");
-    System.out.println("Entity id: " + mappingEntity.getId());
-    System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
-    System.out.println("Current mapping: " + mappingEntity.getMappedTermUrl());
+  private Suggestion resultToSuggestion(IndexableSuggestion indexableSuggestion) {
+    Suggestion suggestion = new Suggestion();
+    suggestion.setSourceType(indexableSuggestion.getSourceType());
 
-    List<IndexableSuggestionResult> suggestionsResults = searchTopSuggestions(mappingEntity);
-    for (IndexableSuggestionResult suggestion : suggestionsResults) {
-      IndexableSuggestion indexableSuggestion = suggestion.getIndexableSuggestion();
-      System.out.print("\n" + indexableSuggestion.getSourceType() + "| ");
-      if (indexableSuggestion.getRule() != null) {
-        System.out.print(indexableSuggestion.getRule().getMappedTermUrl() + "| ");
-        System.out.print(indexableSuggestion.getRule().getMappedTermLabel() + "| ");
-      }
-      else if (indexableSuggestion.getOntology() != null) {
-        System.out.print(indexableSuggestion.getOntology().getOntologyTermId() + "| ");
-        System.out.print(indexableSuggestion.getOntology().getOntologyTermLabel() + "| ");
-      }
-      System.out.println("\n");
+    if (indexableSuggestion.getSourceType().equalsIgnoreCase("rule"))
+    {
+      IndexableRuleSuggestion indexableRuleSuggestion = indexableSuggestion.getRule();
+      Suggestion.RuleSuggestion ruleSuggestion = new RuleSuggestion();
+
+      suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
+      suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
+      ruleSuggestion.setMappingEntityId(Integer.parseInt(indexableSuggestion.getId()));
+      ruleSuggestion.setData(indexableRuleSuggestion.getData());
+      suggestion.setRuleSuggestion(ruleSuggestion);
     }
+    if (indexableSuggestion.getSourceType().equalsIgnoreCase("ontology"))
+    {
+      IndexableOntologySuggestion indexableOntologySuggestion
+          = indexableSuggestion.getOntology();
+      Suggestion.OntologySuggestion ontologySuggestion = new OntologySuggestion();
+
+      suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +
+          indexableOntologySuggestion.getOntologyTermId().replace(":", "_"));
+      suggestion.setSuggestedTermLabel(indexableOntologySuggestion.getOntologyTermLabel());
+
+      ontologySuggestion.setDefinition(indexableOntologySuggestion.getDefinition());
+      ontologySuggestion.setSynonyms(indexableOntologySuggestion.getSynonyms());
+
+      suggestion.setOntologySuggestion(ontologySuggestion);
+    }
+    return suggestion;
   }
+
+
 
 }

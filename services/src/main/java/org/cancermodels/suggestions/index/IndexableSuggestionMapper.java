@@ -12,6 +12,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.cancermodels.suggestions.FieldsNames;
+import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
 import org.springframework.stereotype.Component;
 
 @Component

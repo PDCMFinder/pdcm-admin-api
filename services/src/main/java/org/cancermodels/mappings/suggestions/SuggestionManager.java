@@ -1,116 +1,108 @@
 package org.cancermodels.mappings.suggestions;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
-import org.cancermodels.MappingEntitySuggestion;
-import org.cancermodels.MappingEntitySuggestionRepository;
-import org.cancermodels.OntologySuggestion;
-import org.cancermodels.OntologySuggestionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cancermodels.Suggestion;
+import org.cancermodels.SuggestionRepository;
+import org.cancermodels.suggestions.index.SuggestionsSearcher;
 import org.springframework.stereotype.Component;
 
-/**
- * Class in charge of setting the suggestions for mapping entities base on:
- * 1) Existing mapping entities.
- * 2) Ontology terms.
- */
+@Slf4j
 @Component
 public class SuggestionManager {
 
-  private final MappingEntitiesSuggestionManager mappingEntitiesSuggestionManager;
-  private final MappingEntitySuggestionRepository mappingEntitySuggestionRepository;
-  private final OntologySuggestionRepository ontologySuggestionRepository;
+  private final SuggestionsSearcher suggestionsSearcher;
+  private final SuggestionRepository suggestionRepository;
   private final MappingEntityRepository mappingEntityRepository;
-  private final OntologySuggestionManager ontologySuggestionManager;
-
-  private static final Logger LOG = LoggerFactory.getLogger(SuggestionManager.class);
 
   public SuggestionManager(
-      MappingEntitiesSuggestionManager mappingEntitiesSuggestionManager,
-      MappingEntitySuggestionRepository mappingEntitySuggestionRepository,
-      OntologySuggestionRepository ontologySuggestionRepository,
-      MappingEntityRepository mappingEntityRepository,
-      OntologySuggestionManager ontologySuggestionManager) {
-
-    this.mappingEntitiesSuggestionManager = mappingEntitiesSuggestionManager;
-    this.mappingEntitySuggestionRepository = mappingEntitySuggestionRepository;
-    this.ontologySuggestionRepository = ontologySuggestionRepository;
+      SuggestionsSearcher suggestionsSearcher,
+      SuggestionRepository setSuggestionsByMappingEntities,
+      MappingEntityRepository mappingEntityRepository) {
+    this.suggestionsSearcher = suggestionsSearcher;
+    this.suggestionRepository = setSuggestionsByMappingEntities;
     this.mappingEntityRepository = mappingEntityRepository;
-    this.ontologySuggestionManager = ontologySuggestionManager;
   }
 
-  /**
-   * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
-   */
-  public void calculateSuggestions(List<MappingEntity> toProcess,  String type) {
-    LOG.info("Init suggestion calculation process");
-    resetData(toProcess);
+  public void calculateSuggestions(List<MappingEntity> mappingEntities) {
+    log.info("\nInit suggestion calculation process for {} entities", mappingEntities.size());
+    resetData(mappingEntities);
 
-    setSuggestionsByMappingEntities(toProcess, type);
-    setSuggestionsByOntologies(toProcess, type);
+    setSuggestions(mappingEntities);
 
-    saveMappingEntities(toProcess);
+//    saveMappingEntities(mappingEntities);
 
   }
 
   private void resetData(List<MappingEntity> toProcess) {
-    LOG.info("Resetting data");
+    log.info("Resetting data");
 
     for (MappingEntity mappingEntity : toProcess) {
-      mappingEntity.getMappingEntitySuggestions().clear();
-      mappingEntity.getOntologySuggestions().clear();
+      mappingEntity.getSuggestions().clear();
     }
     // Save all entities to execute the deletion on db
+    log.info("Resetting data: [init] save all entities after deleting suggestions.");
     mappingEntityRepository.saveAll(toProcess);
+    log.info("Resetting data: [end] save all entities after deleting suggestions.");
   }
 
   private void saveMappingEntities(List<MappingEntity> toProcess) {
-      mappingEntityRepository.saveAll(toProcess);
+    mappingEntityRepository.saveAll(toProcess);
   }
 
   /** Sets the suggestions based on similar mapping entities. */
-  private void setSuggestionsByMappingEntities(
-      List<MappingEntity> toProcess, String type) {
+  private void setSuggestions(List<MappingEntity> toProcess) {
 
-    LOG.info("Init mapping entity suggestions");
-    Set<MappingEntitySuggestion> allSuggestions = new HashSet<>();
+    log.info("Init mapping entity suggestions ({} entities)", toProcess.size());
+    Set<Suggestion> allSuggestions = new HashSet<>();
 
-    Map<MappingEntity, List<MappingEntitySuggestion>> suggestionsByEntity =
-        mappingEntitiesSuggestionManager.calculateSuggestions(toProcess, type);
+    Map<MappingEntity, List<Suggestion>> suggestionsByEntity = getSuggestionsByEntity(toProcess);
 
     for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
       // Children are saved explicitly
-      List<MappingEntitySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
-      mappingEntity.getMappingEntitySuggestions().addAll(suggestions);
+      List<Suggestion> suggestions = suggestionsByEntity.get(mappingEntity);
+      mappingEntity.getSuggestions().addAll(suggestions);
       allSuggestions.addAll(suggestions);
     }
 
-    mappingEntitySuggestionRepository.saveAll(allSuggestions);
-    LOG.info("Finish mapping entity suggestions");
+    suggestionRepository.saveAll(allSuggestions);
+    log.info("Finish mapping entity suggestions");
   }
 
-  private void setSuggestionsByOntologies(List<MappingEntity> toProcess, String type) {
-    LOG.info("Init ontology suggestions");
-
-    Set<OntologySuggestion> allSuggestions = new HashSet<>();
-
-    Map<MappingEntity, List<OntologySuggestion>> suggestionsByEntity =
-        ontologySuggestionManager.calculateSuggestions(toProcess, type);
-
-    for (MappingEntity mappingEntity : suggestionsByEntity.keySet()) {
-
-      // Children are saved explicitly as well
-      List<OntologySuggestion> suggestions = suggestionsByEntity.get(mappingEntity);
-      mappingEntity.getOntologySuggestions().addAll(suggestions);
-      allSuggestions.addAll(suggestions);
+  public Map<MappingEntity, List<Suggestion>> getSuggestionsByEntity(
+      List<MappingEntity> mappingEntities) {
+    Map<MappingEntity, List<Suggestion>> suggestionsByEntity = new HashMap<>();
+    for (MappingEntity mappingEntity : mappingEntities) {
+      List<Suggestion> suggestions =
+          suggestionsSearcher.searchTopSuggestions(mappingEntity);
+      suggestions.forEach(x -> x.setSuggestedMappingEntity(mappingEntity));
+      suggestionsByEntity.put(mappingEntity, suggestions);
     }
 
-    ontologySuggestionRepository.saveAll(allSuggestions);
-    LOG.info("Finish ontology suggestions");
+    return suggestionsByEntity;
+
+  }
+
+  public void runSuggestionReportForEntity(MappingEntity mappingEntity) throws IOException {
+    System.out.println("----------------------------------------------------------");
+    System.out.println("Entity id: " + mappingEntity.getId());
+    System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
+    System.out.println("Current mapping: " + mappingEntity.getMappedTermUrl());
+
+    List<Suggestion> suggestionsResults = suggestionsSearcher.searchTopSuggestions(mappingEntity);
+    for (Suggestion suggestion : suggestionsResults) {
+
+      System.out.print("\n" + suggestion.getSourceType() + "| ");
+      System.out.print(suggestion.getSuggestedTermUrl() + "| ");
+      System.out.print(suggestion.getSuggestedTermLabel() + "| ");
+      System.out.println("\n");
+    }
   }
 }

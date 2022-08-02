@@ -91,6 +91,7 @@ public class LuceneIndexReader {
         int maxCount = IndexSearcher.getMaxClauseCount();
         int newCount = maxCount + 500;
         log.error("Too many hits for query: " + maxCount + ".  Increasing to " + newCount);
+        log.error(query.toString());
         IndexSearcher.setMaxClauseCount(newCount);
         retry = true;
       }

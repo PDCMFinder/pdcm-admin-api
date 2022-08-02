@@ -68,20 +68,14 @@ public class MappingEntity {
   private List<MappingValue> mappingValues;
 
   /**
-   * Suggested mappings by rules (other mapping entities that are similar).
+   * Suggested mappings by rules or ontologies.
    */
   @OneToMany(
-      fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+      fetch = FetchType.LAZY,
+      cascade = {CascadeType.ALL},
+      orphanRemoval = true)
   @JoinColumn(name = "mapping_entity_id", nullable = false)
-  private List<MappingEntitySuggestion> mappingEntitySuggestions = new ArrayList<>();
-
-  /**
-   * Suggested mappings by ontologies (other mapping entities that are similar).
-   */
-  @OneToMany(
-      fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
-  @JoinColumn(name = "mapping_entity_id", nullable = false)
-  private List<OntologySuggestion> ontologySuggestions = new ArrayList<>();
+  private List<Suggestion> suggestions = new ArrayList<>();
 
   public Map<String, String> getValuesAsMap() {
     Map<String, String> map = new HashMap<>();

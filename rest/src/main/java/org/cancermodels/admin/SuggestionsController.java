@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.cancermodels.MappingEntity;
+import org.cancermodels.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
+import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.suggestions.index.IndexableSuggestionRepository;
-import org.cancermodels.suggestions.index.IndexableSuggestionResult;
 import org.cancermodels.suggestions.index.OntologiesIndexer;
 import org.cancermodels.suggestions.index.RulesIndexer;
 import org.cancermodels.suggestions.index.SuggestionsSearcher;
@@ -28,17 +29,21 @@ public class SuggestionsController {
   private final MappingEntityService mappingEntityService;
   private final SuggestionsSearcher suggestionsSearcher;
 
+  private final SuggestionManager suggestionManager;
+
   public SuggestionsController(
       OntologiesIndexer ontologiesIndexer,
       RulesIndexer rulesIndexer,
       IndexableSuggestionRepository repository,
       MappingEntityService mappingEntityService,
-      SuggestionsSearcher suggestionsSearcher) {
+      SuggestionsSearcher suggestionsSearcher,
+      SuggestionManager suggestionManager) {
     this.ontologiesIndexer = ontologiesIndexer;
     this.rulesIndexer = rulesIndexer;
     this.repository = repository;
     this.mappingEntityService = mappingEntityService;
     this.suggestionsSearcher = suggestionsSearcher;
+    this.suggestionManager = suggestionManager;
   }
 
   @PutMapping("index/ontologies")
@@ -57,10 +62,10 @@ public class SuggestionsController {
   }
 
   @GetMapping("calculateSuggestions/{id}")
-  List<IndexableSuggestionResult> getMappingEntity(@PathVariable int id) throws IOException {
+  List<Suggestion> getMappingEntity(@PathVariable int id) throws IOException {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
-    List<IndexableSuggestionResult> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
+    List<Suggestion> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
     return results;
   }
 
@@ -71,12 +76,12 @@ public class SuggestionsController {
 
     System.out.println("Report for treatments");
     for (MappingEntity mappingEntity : treatments) {
-      suggestionsSearcher.runSuggestionReportForEntity(mappingEntity);
+      suggestionManager.runSuggestionReportForEntity(mappingEntity);
     }
 
     System.out.println("Report for diagnosis");
     for (MappingEntity mappingEntity : treatments) {
-      suggestionsSearcher.runSuggestionReportForEntity(mappingEntity);
+      suggestionManager.runSuggestionReportForEntity(mappingEntity);
     }
   }
 

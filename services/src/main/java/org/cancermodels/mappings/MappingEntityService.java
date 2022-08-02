@@ -1,20 +1,15 @@
 package org.cancermodels.mappings;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.cancermodels.EntityType;
 import org.cancermodels.MappingEntity;
 import org.cancermodels.MappingEntityRepository;
 import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
-import org.cancermodels.mappings.automatic.AutomaticMappingManager;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -28,18 +23,14 @@ public class MappingEntityService {
 
   private final MappingEntityRepository mappingEntityRepository;
   private final EntityTypeService entityTypeService;
-
   private final SuggestionManager suggestionManager;
-  private final AutomaticMappingManager automaticMappingManager;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager,
-      AutomaticMappingManager automaticMappingManager) {
+      SuggestionManager suggestionManager) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
-    this.automaticMappingManager = automaticMappingManager;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -107,7 +98,17 @@ public class MappingEntityService {
   }
 
   public Optional<MappingEntity> findById(int id) {
-    return mappingEntityRepository.findById(id);
+    var res = mappingEntityRepository.findById(id);
+    MappingEntity mappingEntity = null;
+    if (res.isPresent())
+    {
+      mappingEntity = res.get();
+      List<MappingEntity> mappingEntities = new ArrayList<>();
+      mappingEntities.add(mappingEntity);
+//      suggestionManager.calculateSuggestions(mappingEntities);
+//      mappingEntityRepository.save(mappingEntity);
+    }
+    return Optional.of(mappingEntity);
   }
 
   /**
@@ -118,40 +119,9 @@ public class MappingEntityService {
     for (String type : mappingEntitiesMappedByType.keySet()) {
       // Process all mappings
       List<MappingEntity> toProcess = mappingEntitiesMappedByType.get(type);
-      suggestionManager.calculateSuggestions(toProcess, type);
+      suggestionManager.calculateSuggestions(toProcess);
     }
 
-  }
-
-  public void setMappingSuggestionsForOneEntity(int entityId) {
-    Optional<MappingEntity> mappingEntityOptional = findById(entityId);
-    if (mappingEntityOptional.isPresent())
-    {
-      MappingEntity mappingEntity = mappingEntityOptional.get();
-      suggestionManager.calculateSuggestions(
-          Collections.singletonList(mappingEntity), mappingEntity.getEntityType().getName());
-    }
-  }
-
-  public void setAutomaticMappings() {
-    Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
-    for (String type : mappingEntitiesMappedByType.keySet()) {
-      List<MappingEntity> unmappedMappingEntities = mappingEntitiesMappedByType.get(type).stream()
-          .filter(x -> x.getStatus().equals(Status.UNMAPPED.getLabel())).collect(
-          Collectors.toList());
-      List<MappingEntity> all = mappingEntitiesMappedByType.get(type);
-      automaticMappingManager.calculateAutomaticMappings(unmappedMappingEntities, type);
-    }
-  }
-
-  public void calculateAutomaticMappingsForOneEntity(int entityId) {
-    Optional<MappingEntity> mappingEntityOptional = findById(entityId);
-    if (mappingEntityOptional.isPresent())
-    {
-      MappingEntity mappingEntity = mappingEntityOptional.get();
-      automaticMappingManager.calculateAutomaticMappings(
-          Collections.singletonList(mappingEntity), mappingEntity.getEntityType().getName());
-    }
   }
 
   private Map<String, List<MappingEntity>> getMappingEntitiesMappedByType() {

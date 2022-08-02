@@ -1,37 +1,72 @@
 package org.cancermodels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString.Exclude;
+
 /**
- * Represents a mapping suggestion.
+ * Represents a mapping suggestion. It can come from a rule or an ontology.
  */
-public interface Suggestion<T> {
+@Entity
+@Data
+public class Suggestion {
+  private String sourceType;
+  private String suggestedTermLabel;
+  private String suggestedTermUrl;
+  private double score;
+  private double relativeScore;
+  @OneToOne(cascade = {CascadeType.ALL},
+      orphanRemoval = true)
+  private RuleSuggestion ruleSuggestion;
+  @OneToOne(cascade = {CascadeType.ALL},
+      orphanRemoval = true)
+  private OntologySuggestion ontologySuggestion;
 
-  /**
-   * Value from 0 to 100 representing how good the suggestion is.
-   */
-  int getScore();
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-  /**
-   * Returns the suggestion object (Mapping entity or ontology suggestion for instance).
-   * @return Object representing the suggestion (It's an object of the class implementing this
-   * interface).
-   */
-  T getSuggestion();
+  @OneToOne
+  @Exclude
+  @JsonIgnore
+  @EqualsAndHashCode.Include
+  @JoinColumn(name = "suggested_mapping_entity_id")
+  private MappingEntity suggestedMappingEntity;
 
-  /**
-   * Informs what was used for the suggestion (Rule/Ontology for instance).
-   * @return String with the source of the suggestion.
-   */
-  Source getSource();
+  @Data
+  @Entity
+  public static class RuleSuggestion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private int mappingEntityId;
+    @ElementCollection
+    private Map<String, String> data;
+  }
 
-  /**
-   * Gets the url of the ontology term in the suggestion.
-   * @return Ontology term url.
-   */
-  String getTermUrl();
-
-  /**
-   * Gets the label of the ontology term in the suggestion.
-   * @return Ontology term label.
-   */
-  String getTermLabel();
+  @Data
+  @Entity
+  public static class OntologySuggestion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private String definition;
+    @ElementCollection
+    private Set<String> synonyms;
+  }
 }
+
+
+
+

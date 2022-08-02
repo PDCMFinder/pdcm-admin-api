@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.exceptions;
 
 public class NonIndexableDocumentException extends RuntimeException {
 

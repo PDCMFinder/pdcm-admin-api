@@ -3,21 +3,14 @@ package org.cancermodels.admin;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.cancermodels.MappingEntity;
-import org.cancermodels.OntologySuggestion;
-import org.cancermodels.OntologyTerm;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.mappers.MappingEntityMapper;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
-import org.cancermodels.mappings.suggestions.OntologySuggestionManager;
-import org.cancermodels.mappings.suggestions.MappingEntitiesSuggestionManager;
 import org.cancermodels.ontologies.OntologyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,20 +34,12 @@ public class MappingController {
 
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
-  private final MappingEntitiesSuggestionManager suggestionsManager;
-  private final OntologyService ontologyService;
-  private final OntologySuggestionManager ontologySuggestionManager;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
-      MappingEntitiesSuggestionManager suggestionsManager,
-      OntologyService ontologyService,
-      OntologySuggestionManager ontologySuggestionManager) {
+      OntologyService ontologyService) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
-    this.suggestionsManager = suggestionsManager;
-    this.ontologyService = ontologyService;
-    this.ontologySuggestionManager = ontologySuggestionManager;
   }
 
   @GetMapping("/{id}")
@@ -123,40 +108,4 @@ public class MappingController {
     mappingEntityService.setMappingSuggestions();
   }
 
-  @GetMapping("/calculateSuggestions/{id}")
-  public void calculateSuggestionsOneEntity(@PathVariable int id) {
-    mappingEntityService.setMappingSuggestionsForOneEntity(id);
-  }
-
-  @GetMapping("/calculateAutomaticMappings")
-  public void calculateAutomaticMappings() {
-    mappingEntityService.setAutomaticMappings();
-  }
-
-  @GetMapping("/calculateAutomaticMappings/{id}")
-  public void calculateAutomaticMappingsOneEntity(@PathVariable int id) {
-    mappingEntityService.calculateAutomaticMappingsForOneEntity(id);
-  }
-
-  // This is a testing endpoint
-  @GetMapping("/testSuggestion")
-  public void testSuggestion() {
-    Optional<MappingEntity> mappingEntity = mappingEntityService.findById(819699);
-    var all = mappingEntityService.getAllByTypeName("treatment");
-    suggestionsManager.testOne(mappingEntity.get(), all);
-    System.out.println("end");
-  }
-
-  // This is a testing endpoint
-  @GetMapping("/testOntoSuggestion")
-  public Map<MappingEntity, List<OntologySuggestion>> testOntoSuggestion() {
-    Optional<MappingEntity> mappingEntity = mappingEntityService.findById(820905);
-    List<MappingEntity> list = Arrays.asList(mappingEntity.get());
-    List<OntologyTerm> ontologyTerms = ontologyService.getAllByType("treatment");
-//    var all = mappingEntityService.getAllByTypeName("treatment");
-//    suggestionsManager.testOne(mappingEntity.get(), all);
-    var rest = ontologySuggestionManager.calculateSuggestions(list, "treatment");
-    System.out.println(rest);
-    return rest;
-  }
 }

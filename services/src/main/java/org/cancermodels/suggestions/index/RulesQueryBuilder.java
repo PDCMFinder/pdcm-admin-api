@@ -36,8 +36,6 @@ public class RulesQueryBuilder {
         mappingValueConfHelper.getValuesWeightGreaterZero(mappingValues);
     MappingValue mainValue = mappingValueConfHelper.getMainValue(mappingValues);
     List<MappingValue> secondaryValues = mappingValueConfHelper.getSecondaryValues(mappingValues);
-    System.out.println("mainValue: " + mainValue);
-    System.out.println("secondaryValues: " + secondaryValues);
 
     // Build boost fuzzy term query for each value to process
     for (MappingValue mappingValue : toProcess) {

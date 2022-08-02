@@ -5,9 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.lucene.document.Document;
+import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
 import org.junit.jupiter.api.Test;
 
-class IndexableSuggestionMapperTest {
+class IndexableSuggestionOldMapperTest {
 
   private IndexableSuggestionMapper instance = new IndexableSuggestionMapper();
 
