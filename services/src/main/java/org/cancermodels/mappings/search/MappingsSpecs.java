@@ -39,7 +39,7 @@ public class MappingsSpecs {
       specification = (Specification<MappingEntity>) (root, query, criteriaBuilder) -> {
         Path<String> statusPath = root.get(MappingEntity_.status);
         query.distinct(true);
-        return PredicateBuilder.addInPredicates(
+        return PredicateBuilder.addLowerInPredicates(
             criteriaBuilder, statusPath, status);
       };
     }

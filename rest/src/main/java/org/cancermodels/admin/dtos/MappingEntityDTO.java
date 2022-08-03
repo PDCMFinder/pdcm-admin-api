@@ -17,7 +17,7 @@ public class MappingEntityDTO {
   private String mappedTermLabel;
   private String status;
   private String mappingType;
-  private String mappingType;
+  private String source;
   private List<Suggestion> suggestions;
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;

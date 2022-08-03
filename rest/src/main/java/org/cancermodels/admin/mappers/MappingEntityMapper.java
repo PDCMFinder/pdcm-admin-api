@@ -15,6 +15,8 @@ public class MappingEntityMapper {
     mappingEntityDTO.setMappedTermUrl(mappingEntity.getMappedTermUrl());
     mappingEntityDTO.setMappedTermLabel(mappingEntity.getMappedTermLabel());
     mappingEntityDTO.setStatus(mappingEntity.getStatus());
+    mappingEntityDTO.setMappingType(mappingEntity.getMappingType());
+    mappingEntityDTO.setSource(mappingEntity.getSource());
     mappingEntityDTO.setDateCreated(mappingEntity.getDateCreated());
     mappingEntityDTO.setDateUpdated(mappingEntity.getDateUpdated());
 
