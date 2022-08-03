@@ -8,14 +8,14 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-import org.cancermodels.EntityType;
-import org.cancermodels.EntityType_;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.MappingEntity_;
-import org.cancermodels.MappingKey;
-import org.cancermodels.MappingKey_;
-import org.cancermodels.MappingValue;
-import org.cancermodels.MappingValue_;
+import org.cancermodels.persistance.EntityType;
+import org.cancermodels.persistance.EntityType_;
+import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.MappingEntity_;
+import org.cancermodels.persistance.MappingKey;
+import org.cancermodels.persistance.MappingKey_;
+import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.persistance.MappingValue_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +62,7 @@ public class MappingsSpecs {
                 Path<EntityType> entityPath = root.get(MappingEntity_.entityType);
                 Path<String> entityTypeName = entityPath.get(EntityType_.name);
                 query.distinct(true);
-                return PredicateBuilder.addInPredicates(criteriaBuilder, entityTypeName, entityTypeNames);
+                return PredicateBuilder.addLowerInPredicates(criteriaBuilder, entityTypeName, entityTypeNames);
               };
     }
     return specification;

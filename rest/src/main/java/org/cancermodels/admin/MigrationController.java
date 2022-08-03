@@ -1,6 +1,6 @@
 package org.cancermodels.admin;
 
-import org.cancermodels.OntologyLoadReport;
+import org.cancermodels.persistance.OntologyLoadReport;
 import org.cancermodels.migration.RulesMigratorService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

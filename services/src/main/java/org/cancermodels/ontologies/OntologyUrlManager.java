@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import org.cancermodels.UnprocessedOntologyUrl;
+import org.cancermodels.persistance.UnprocessedOntologyUrl;
 import org.springframework.stereotype.Component;
 
 /**

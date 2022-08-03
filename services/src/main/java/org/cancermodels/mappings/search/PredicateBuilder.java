@@ -2,6 +2,7 @@ package org.cancermodels.mappings.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -12,6 +13,16 @@ public class PredicateBuilder {
   {
     List<Predicate> predicates = new ArrayList<>();
     predicates.add(path.in(values));
+    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+  }
+
+  public static Predicate addLowerInPredicates(
+      CriteriaBuilder criteriaBuilder, Path<String> path, List<String> values)
+  {
+    List<String> lowerCaseValues =
+        values.stream().map(String::toLowerCase).collect(Collectors.toList());
+    List<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.lower(path).in(lowerCaseValues));
     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
   }
 

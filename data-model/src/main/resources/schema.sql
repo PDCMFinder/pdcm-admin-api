@@ -16,7 +16,8 @@ CREATE TABLE mapping_key (
     entity_type_id INTEGER,
     key VARCHAR2,
     weight DECIMAL,
-    to_use_in_ontology_suggestion_calculation BOOLEAN
+    search_on_ontology BOOLEAN,
+    search_on_ontology_position INTEGER
 );
 
 ALTER TABLE mapping_key ADD CONSTRAINT pk_mapping_key PRIMARY KEY (id);

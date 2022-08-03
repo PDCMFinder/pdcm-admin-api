@@ -2,8 +2,8 @@ package org.cancermodels;
 
 public enum Source {
   RULE("Rule"),
-  ONTOLOGY("Ontology"),
-  OTHER("Other");
+  ONTOLOGY("NCIt"),
+  LEGACY("Legacy");
 
   private final String label;
 

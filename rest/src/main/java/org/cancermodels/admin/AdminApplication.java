@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(scanBasePackages = "org.cancermodels")
 @EntityScan("org.cancermodels")
 @EnableJpaRepositories("org.cancermodels")
-@PropertySource("services.properties")
+@PropertySource("classpath:/services.properties")
 
 public class AdminApplication {
 
