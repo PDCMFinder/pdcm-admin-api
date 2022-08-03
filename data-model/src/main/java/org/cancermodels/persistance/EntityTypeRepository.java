@@ -1,5 +1,6 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
+import org.cancermodels.persistance.EntityType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

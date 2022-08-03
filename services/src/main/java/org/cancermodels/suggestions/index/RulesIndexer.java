@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.MappingEntityRepository;
-import org.cancermodels.mappings.Status;
-import org.springframework.beans.factory.annotation.Value;
+import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.Status;
 import org.springframework.stereotype.Component;
 
 @Slf4j

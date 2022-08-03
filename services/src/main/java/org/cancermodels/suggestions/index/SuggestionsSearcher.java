@@ -9,10 +9,10 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.Suggestion;
-import org.cancermodels.Suggestion.OntologySuggestion;
-import org.cancermodels.Suggestion.RuleSuggestion;
+import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.persistance.Suggestion.OntologySuggestion;
+import org.cancermodels.persistance.Suggestion.RuleSuggestion;
 import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
 import org.springframework.stereotype.Component;
 

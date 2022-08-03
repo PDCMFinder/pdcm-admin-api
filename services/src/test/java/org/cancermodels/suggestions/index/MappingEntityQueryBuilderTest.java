@@ -4,7 +4,7 @@ import static org.cancermodels.general.MappingEntityCreator.createMappingEntityT
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
-import org.cancermodels.MappingEntity;
+import org.cancermodels.persistance.MappingEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

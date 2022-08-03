@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import org.apache.lucene.search.Query;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.general.MappingEntityCreator;
+import org.cancermodels.persistance.MappingEntity;
 import org.junit.jupiter.api.Test;
 
 class OntologyQueryBuilderTest {

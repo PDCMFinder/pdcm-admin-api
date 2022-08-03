@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

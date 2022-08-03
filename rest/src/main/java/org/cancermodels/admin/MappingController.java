@@ -4,7 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import org.cancermodels.MappingEntity;
+import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.mappers.MappingEntityMapper;

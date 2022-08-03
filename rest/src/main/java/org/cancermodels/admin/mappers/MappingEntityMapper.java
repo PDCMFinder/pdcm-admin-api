@@ -1,6 +1,6 @@
 package org.cancermodels.admin.mappers;
 
-import org.cancermodels.MappingEntity;
+import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package org.cancermodels.ontologies;
 
 import java.util.List;
-import org.cancermodels.UnprocessedOntologyUrl;
-import org.cancermodels.UnprocessedOntologyUrlRepository;
+import org.cancermodels.persistance.UnprocessedOntologyUrl;
+import org.cancermodels.persistance.UnprocessedOntologyUrlRepository;
 import org.springframework.stereotype.Service;
 
 @Service

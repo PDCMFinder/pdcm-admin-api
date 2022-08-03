@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Map;
@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString.Exclude;
+import org.cancermodels.persistance.MappingEntity;
 
 /**
  * Represents a mapping suggestion. It can come from a rule or an ontology.

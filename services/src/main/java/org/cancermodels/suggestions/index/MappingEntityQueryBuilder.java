@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.Query;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.MappingValue;
+import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.MappingValue;
 import org.springframework.stereotype.Component;
 
 /**

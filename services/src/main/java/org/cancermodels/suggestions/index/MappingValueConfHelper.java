@@ -2,8 +2,8 @@ package org.cancermodels.suggestions.index;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.cancermodels.KeySearchConfiguration;
-import org.cancermodels.MappingValue;
+import org.cancermodels.persistance.KeySearchConfiguration;
+import org.cancermodels.persistance.MappingValue;
 import org.springframework.stereotype.Component;
 
 @Component

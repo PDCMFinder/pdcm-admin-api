@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
@@ -52,9 +52,20 @@ public class MappingEntity {
   private String mappedTermUrl;
 
   /**
-   * Status. It can be for example: Created, Unmapped, automatic.
+   * Status of the mapping entity: [Mapped, Unmapped, Revision].
    */
   private String status;
+
+  /**
+   * Indicates how the mapping was done: [Manual, Automatic].
+   */
+  private String mappingType;
+
+  /**
+   * Indicates what was used to do the mapping: [Rule, NCIt]. Can be also "Legacy"
+   * for migrated data for which we don't have the information.
+   */
+  private String source;
 
   private LocalDateTime dateCreated;
 

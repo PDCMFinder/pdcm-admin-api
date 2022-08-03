@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.cancermodels.MappingEntity;
-import org.cancermodels.MappingEntityRepository;
-import org.cancermodels.Suggestion;
-import org.cancermodels.SuggestionRepository;
+import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.persistance.SuggestionRepository;
 import org.cancermodels.suggestions.index.SuggestionsSearcher;
 import org.springframework.stereotype.Component;
 

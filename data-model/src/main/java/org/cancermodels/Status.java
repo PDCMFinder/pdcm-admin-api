@@ -1,9 +1,9 @@
-package org.cancermodels.mappings;
+package org.cancermodels;
 
 public enum Status {
-  UNMAPPED("unmapped"),
-  MAPPED("mapped"),
-  REVISION("revision");
+  UNMAPPED("Unmapped"),
+  MAPPED("Mapped"),
+  REVISION("Revision");
 
   private final String label;
 

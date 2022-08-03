@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.lucene.search.Query;
-import org.cancermodels.MappingValue;
+import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.FieldsNames;
 import org.springframework.stereotype.Component;
 

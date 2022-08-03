@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;

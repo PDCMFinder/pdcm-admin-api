@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
-import org.cancermodels.Suggestion;
+import org.cancermodels.persistance.Suggestion;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "mappings")
@@ -16,6 +16,8 @@ public class MappingEntityDTO {
   private String mappedTermUrl;
   private String mappedTermLabel;
   private String status;
+  private String mappingType;
+  private String mappingType;
   private List<Suggestion> suggestions;
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;

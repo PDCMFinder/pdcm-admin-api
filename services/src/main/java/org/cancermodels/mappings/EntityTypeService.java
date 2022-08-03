@@ -1,8 +1,8 @@
 package org.cancermodels.mappings;
 
 import java.util.List;
-import org.cancermodels.EntityType;
-import org.cancermodels.EntityTypeRepository;
+import org.cancermodels.persistance.EntityType;
+import org.cancermodels.persistance.EntityTypeRepository;
 import org.springframework.stereotype.Component;
 
 @Component

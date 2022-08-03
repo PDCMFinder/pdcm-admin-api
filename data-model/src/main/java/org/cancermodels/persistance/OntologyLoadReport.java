@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.persistance;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
