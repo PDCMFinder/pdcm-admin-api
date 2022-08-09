@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.cancermodels.Status;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
@@ -58,8 +58,8 @@ public class MappingEntityService {
 
     Map<String, Map<String, Integer>> data = new HashMap<>();
 
-    String mappedKey = MappingEntityStatus.MAPPED.getDescription();
-    String unmappedKey = MappingEntityStatus.UNMAPPED.getDescription();
+    String mappedKey = Status.MAPPED.getLabel();
+    String unmappedKey = Status.UNMAPPED.getLabel();
 
     List<Object[]> list = mappingEntityRepository.countEntityTypeStatusByProvider(entityTypeName);
     for (Object[] row : list) {

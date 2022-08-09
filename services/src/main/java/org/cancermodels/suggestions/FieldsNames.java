@@ -8,7 +8,8 @@ public enum FieldsNames {
   ONTOLOGY_SYNONYM("ontology.synonym"),
   RULE_MAPPED_TERM_URL("rule.mappedTermUrl"),
   RULE_MAPPED_TERM_LABEL("rule.mappedTermLabel"),
-  RULE_VALUE("rule.value.");
+  RULE_VALUE("rule.value."),
+  RULE_ENTITY_TYPE_NAME("rule.entityTypeName");
 
   private final String name;
 
