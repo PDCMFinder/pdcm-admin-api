@@ -41,12 +41,9 @@ public class MappingsFilterBuilder {
     return this;
   }
 
-  public MappingsFilterBuilder withEntityTypeName(String entityTypeName)
+  public MappingsFilterBuilder withEntityTypeNames(List<String> entityTypeNames)
   {
-    if (entityTypeName == null) {
-      return this;
-    }
-    return withFilter(FilterTypes.ENTITY_TYPE, Collections.singletonList(entityTypeName));
+    return withFilter(FilterTypes.ENTITY_TYPE, entityTypeNames);
   }
 
   public MappingsFilterBuilder withMappingQuery(List<String> mappingQueries)

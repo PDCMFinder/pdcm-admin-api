@@ -1,6 +1,7 @@
 package org.cancermodels.mappings.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.ListJoin;
@@ -106,21 +107,29 @@ public class MappingsSpecs {
                   ListJoin<MappingEntity, MappingValue> subEntityValuesJoin =
                       subRoot.join(MappingEntity_.mappingValues);
                   Path<String> subMappingValuePath = subEntityValuesJoin.get(MappingValue_.value);
-                  Path<MappingKey> subMappingKeyPath = subEntityValuesJoin.get(MappingValue_.mappingKey);
+                  Path<MappingKey> subMappingKeyPath =
+                      subEntityValuesJoin.get(MappingValue_.mappingKey);
                   Path<String> subKeyValuePath = subMappingKeyPath.get(MappingKey_.key);
 
                   // Apply the conditions to key and value
-                  Predicate subKeyValuesPredicate = subKeyValuePath.in(key);
-                  Predicate subMappingValuesPredicate = subMappingValuePath.in(mappingQuery.get(key));
-                  Predicate subKeyAndValuePredicate = criteriaBuilder.and(
-                      subKeyValuesPredicate, subMappingValuesPredicate);
+                  Predicate subKeyValuesPredicate = PredicateBuilder.addLowerInPredicates(
+                      criteriaBuilder, subKeyValuePath, Arrays.asList(key));
+                  Predicate subMappingValuesPredicate =
+                      PredicateBuilder.addLowerInPredicates(
+                          criteriaBuilder, subMappingValuePath, mappingQuery.get(key));
 
-                  subQuery = subQuery.select(subRoot.get(MappingEntity_.ID)).where(subKeyAndValuePredicate);
+                  Predicate subKeyAndValuePredicate =
+                      criteriaBuilder.and(subKeyValuesPredicate, subMappingValuesPredicate);
+
+                  subQuery =
+                      subQuery
+                          .select(subRoot.get(MappingEntity_.ID))
+                          .where(subKeyAndValuePredicate);
                   // Add the subquery to the main query using an "in" statement
                   predicates.add(root.get(MappingEntity_.ID).in(subQuery));
                 }
                 query.distinct(true);
-               return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
               };
     }
     return specification;

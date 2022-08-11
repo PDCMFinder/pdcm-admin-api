@@ -61,7 +61,7 @@ public class MappingController {
    * @param mappingQuery search parameters involving the mapping labels and their values. A label
    *                     and its value are separated by ":".
    *                     Example: mq=DataSource:JAX&TumorType:Primary
-   * @param entityTypeName Name of the entity type we want to retrieve
+   * @param entityTypeNames Name of the entity type we want to retrieve
    * @param status Status of the mapping entity (created, ...)
    * @return Paginated Mappings that match the search criteria
    */
@@ -71,12 +71,12 @@ public class MappingController {
       PagedResourcesAssembler assembler,
 
       @RequestParam(value = "mq", required = false) List<String> mappingQuery,
-      @RequestParam(value = "entityType", required = false) String entityTypeName,
+      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
       @RequestParam(value = "status", required = false) List<String> status)
   {
 
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
-        .withEntityTypeName(entityTypeName)
+        .withEntityTypeNames(entityTypeNames)
         .withMappingQuery(mappingQuery)
         .withStatus(status)
         .build();
@@ -91,7 +91,7 @@ public class MappingController {
             mappingEntityDTOS,
             linkTo(methodOn(MappingController.class)
                 .search(
-                    pageable, assembler, mappingQuery, entityTypeName, status)).withSelfRel());
+                    pageable, assembler, mappingQuery, entityTypeNames, status)).withSelfRel());
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
