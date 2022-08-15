@@ -11,7 +11,7 @@ import org.springframework.hateoas.server.core.Relation;
 public class MappingEntityDTO {
   private int id;
   private String entityTypeName;
-  private List<MappingValue> mappingValues;
+  private List<MappingValueDTO> mappingValues;
   private String mappedTermUrl;
   private String mappedTermLabel;
   private String status;
@@ -20,3 +20,4 @@ public class MappingEntityDTO {
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;
 }
+
