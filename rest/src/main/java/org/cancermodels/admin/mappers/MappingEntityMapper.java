@@ -11,7 +11,7 @@ public class MappingEntityMapper {
     MappingEntityDTO mappingEntityDTO = new MappingEntityDTO();
     mappingEntityDTO.setId(mappingEntity.getId());
     mappingEntityDTO.setEntityTypeName(mappingEntity.getEntityType().getName());
-    mappingEntityDTO.setMappingValues(mappingEntity.getValuesAsMap());
+    mappingEntityDTO.setMappingValues(mappingEntity.getMappingValues());
     mappingEntityDTO.setMappedTermUrl(mappingEntity.getMappedTermUrl());
     mappingEntityDTO.setMappedTermLabel(mappingEntity.getMappedTermLabel());
     mappingEntityDTO.setStatus(mappingEntity.getStatus());
@@ -19,8 +19,6 @@ public class MappingEntityMapper {
     mappingEntityDTO.setSource(mappingEntity.getSource());
     mappingEntityDTO.setDateCreated(mappingEntity.getDateCreated());
     mappingEntityDTO.setDateUpdated(mappingEntity.getDateUpdated());
-
-    mappingEntityDTO.setSuggestions(mappingEntity.getSuggestions());
 
     return mappingEntityDTO;
   }

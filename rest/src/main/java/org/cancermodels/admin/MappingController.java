@@ -3,7 +3,9 @@ package org.cancermodels.admin;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collections;
 import java.util.List;
+import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
@@ -11,7 +13,7 @@ import org.cancermodels.admin.mappers.MappingEntityMapper;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
-import org.cancermodels.ontologies.OntologyService;
+import org.cancermodels.persistance.Suggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -23,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +39,14 @@ public class MappingController {
 
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
+  private final SuggestionManager suggestionManager;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
-      OntologyService ontologyService) {
+      SuggestionManager suggestionManager) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
+    this.suggestionManager = suggestionManager;
   }
 
   @GetMapping("/{id}")
@@ -95,6 +102,33 @@ public class MappingController {
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
+  }
+
+  @PutMapping("update")
+  public MappingEntityDTO updateMappingEntity( @RequestBody MappingEntity mappingEntity) {
+
+    MappingEntity updated = mappingEntityService.update(mappingEntity).orElseThrow(
+        ResourceNotFoundException::new);
+
+    return mappingEntityMapper.convertToDto(updated);
+  }
+
+  /**
+   * Return a list of suggestion for the given Mapping Entity.
+   * The mapping entity can already have calculated suggestions, in which case those are
+   * returned directly. If the mapping entity does not have any calculated suggestion, then
+   * the suggestion calculation process is called and the found suggestions retuned.
+   * @param id Internal id of the mapping entity.
+   * @return List of suggestions
+   */
+  @PostMapping("/{id}/suggestions")
+  List<Suggestion> getSuggestions(@PathVariable int id) {
+    MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+        ResourceNotFoundException::new);
+    if (mappingEntity.getSuggestions().isEmpty()) {
+      suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
+    }
+    return mappingEntity.getSuggestions();
   }
 
   @GetMapping("/getSummary")

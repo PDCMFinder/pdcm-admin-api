@@ -2,9 +2,8 @@ package org.cancermodels.admin.dtos;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import lombok.Data;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.persistance.MappingValue;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "mappings")
@@ -12,13 +11,12 @@ import org.springframework.hateoas.server.core.Relation;
 public class MappingEntityDTO {
   private int id;
   private String entityTypeName;
-  private Map<String, String> mappingValues;
+  private List<MappingValue> mappingValues;
   private String mappedTermUrl;
   private String mappedTermLabel;
   private String status;
   private String mappingType;
   private String source;
-  private List<Suggestion> suggestions;
   private LocalDateTime dateCreated;
   private LocalDateTime dateUpdated;
 }
