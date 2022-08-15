@@ -3,7 +3,8 @@ package org.cancermodels;
 public enum Status {
   UNMAPPED("Unmapped"),
   MAPPED("Mapped"),
-  REVISION("Revision");
+  REVISE("Revise"),
+  REQUEST("Request");
 
   private final String label;
 
