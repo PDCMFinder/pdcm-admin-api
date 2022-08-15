@@ -24,13 +24,15 @@ public class MappingEntityService {
   private final MappingEntityRepository mappingEntityRepository;
   private final EntityTypeService entityTypeService;
   private final SuggestionManager suggestionManager;
+  private final Updater updater;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager) {
+      SuggestionManager suggestionManager, Updater updater) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
+    this.updater = updater;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -132,6 +134,21 @@ public class MappingEntityService {
       map.put(entityTypeName.toLowerCase(), mappingEntitiesByType);
     }
     return map;
+  }
+
+  /**
+   * Updates some values in a mapping entity, if changed: Status, Mapping Term Label, Mapping Term Url
+   * @param mappingEntity Entity with the new information
+   * @return Mapping after it was updated
+   */
+  public Optional<MappingEntity> update(MappingEntity mappingEntity) {
+    var res = mappingEntityRepository.findById(mappingEntity.getId());
+    if (res.isPresent()) {
+      MappingEntity original = res.get();
+      return Optional.of(updater.update(original, mappingEntity)) ;
+    } else {
+      return Optional.empty();
+    }
   }
 
 }
