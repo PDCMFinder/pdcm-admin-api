@@ -1,5 +1,6 @@
 package org.cancermodels.persistance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ public class KeySearchConfiguration {
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "key_id", nullable = false)
+  @JsonIgnore
   private MappingKey mappingKey;
 
   /**
