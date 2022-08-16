@@ -141,8 +141,8 @@ public class MappingEntityService {
    * @param mappingEntity Entity with the new information
    * @return Mapping after it was updated
    */
-  public Optional<MappingEntity> update(MappingEntity mappingEntity) {
-    var res = mappingEntityRepository.findById(mappingEntity.getId());
+  public Optional<MappingEntity> update(int id, MappingEntity mappingEntity) {
+    var res = mappingEntityRepository.findById(id);
     if (res.isPresent()) {
       MappingEntity original = res.get();
       return Optional.of(updater.update(original, mappingEntity)) ;

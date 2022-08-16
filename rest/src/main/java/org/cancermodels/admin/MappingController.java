@@ -104,10 +104,10 @@ public class MappingController {
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
   }
 
-  @PutMapping("update")
-  public MappingEntityDTO updateMappingEntity( @RequestBody MappingEntity mappingEntity) {
+  @PutMapping("/{id}")
+  public MappingEntityDTO updateMappingEntity(@PathVariable int id, @RequestBody MappingEntity mappingEntity) {
 
-    MappingEntity updated = mappingEntityService.update(mappingEntity).orElseThrow(
+    MappingEntity updated = mappingEntityService.update(id, mappingEntity).orElseThrow(
         ResourceNotFoundException::new);
 
     return mappingEntityMapper.convertToDto(updated);
