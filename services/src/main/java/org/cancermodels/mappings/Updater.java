@@ -34,7 +34,7 @@ public class Updater {
    *  - Unmapped -> Request
    *  - Mapped -> Revise
    *  - Revise -> Mapped
-   *  - Request -> Mapped
+   *  - Request -> Unmapped
    *
    * @param original Mapping Entity it is in the database.
    * @param withChanges Edited Mapping entity.
@@ -64,7 +64,7 @@ public class Updater {
         valid = true;
       }
       else if (Status.REQUEST.getLabel().equalsIgnoreCase(originalStatus)
-          && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
+          && Status.UNMAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
       // Status did not change
