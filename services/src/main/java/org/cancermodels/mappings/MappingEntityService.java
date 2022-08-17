@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.cancermodels.MappingType;
 import org.cancermodels.Status;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
@@ -141,11 +142,11 @@ public class MappingEntityService {
    * @param mappingEntity Entity with the new information
    * @return Mapping after it was updated
    */
-  public Optional<MappingEntity> update(int id, MappingEntity mappingEntity) {
+  public Optional<MappingEntity> update(int id, MappingEntity mappingEntity, MappingType mappingType) {
     var res = mappingEntityRepository.findById(id);
     if (res.isPresent()) {
       MappingEntity original = res.get();
-      return Optional.of(updater.update(original, mappingEntity)) ;
+      return Optional.of(updater.update(original, mappingEntity, mappingType)) ;
     } else {
       return Optional.empty();
     }

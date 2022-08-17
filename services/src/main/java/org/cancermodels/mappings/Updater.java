@@ -1,6 +1,7 @@
 package org.cancermodels.mappings;
 
 import java.time.LocalDateTime;
+import org.cancermodels.MappingType;
 import org.cancermodels.Status;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
@@ -16,16 +17,42 @@ public class Updater {
   }
 
 
-  public MappingEntity update(MappingEntity original, MappingEntity withChanges) {
-    boolean statusChanged = checkStatusChange(original, withChanges);
+  public MappingEntity update(MappingEntity original, MappingEntity withChanges, MappingType mappingType) {
+    boolean mappedTermChanged = processMappedTermChange(original, withChanges, mappingType);
+    boolean statusChanged = processStatusChange(original, withChanges);
 
-    if (statusChanged) {
-      original.setStatus(withChanges.getStatus());
+    if (mappedTermChanged || statusChanged) {
       original.setDateUpdated(LocalDateTime.now());
       mappingEntityRepository.save(original);
     }
 
     return original;
+  }
+
+  private boolean processMappedTermChange(MappingEntity original, MappingEntity withChanges,
+      MappingType mappingType) {
+    boolean changed = false;
+    String originalMappedTermUrl =
+        original.getMappedTermUrl() == null ? "" : original.getMappedTermUrl() ;
+    String newMappedTermUrl =
+        withChanges.getMappedTermUrl() == null ? "" : withChanges.getMappedTermUrl() ;
+
+    if (!originalMappedTermUrl.equalsIgnoreCase(newMappedTermUrl) ) {
+      original.setMappedTermUrl(newMappedTermUrl);
+      original.setSource(withChanges.getSource());
+      String newMappedTermLabel = withChanges.getMappedTermLabel();
+      original.setMappedTermLabel(newMappedTermLabel);
+      original.setMappingType(mappingType.getLabel());
+      changed = true;
+    }
+
+    // A new mapping was generated
+    if (originalMappedTermUrl.equals("") && !newMappedTermUrl.equals("")) {
+      // Simulate a request of status change
+      withChanges.setStatus(Status.MAPPED.getLabel());
+    }
+
+    return changed;
   }
 
   /**
@@ -35,17 +62,17 @@ public class Updater {
    *  - Mapped -> Revise
    *  - Revise -> Mapped
    *  - Request -> Unmapped
-   *
-   * @param original Mapping Entity it is in the database.
+   *  @param original Mapping Entity it is in the database.
    * @param withChanges Edited Mapping entity.
    */
-  private boolean checkStatusChange(MappingEntity original, MappingEntity withChanges) {
+  private boolean processStatusChange(MappingEntity original, MappingEntity withChanges) {
     boolean changed = false;
     String originalStatus = original.getStatus();
     String newStatus = withChanges.getStatus();
     boolean valid = false;
     if (!originalStatus.equalsIgnoreCase(newStatus)) {
       changed = true;
+
       // Valid transitions
       if (Status.UNMAPPED.getLabel().equalsIgnoreCase(originalStatus)
           && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
@@ -66,7 +93,13 @@ public class Updater {
       else if (Status.REQUEST.getLabel().equalsIgnoreCase(originalStatus)
           && Status.UNMAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
+        original.setMappedTermUrl(null);
+        original.setMappedTermLabel(null);
+        original.setSource(null);
+        original.setMappingType(null);
       }
+      original.setStatus(newStatus);
+
       // Status did not change
     } else {
       valid = true;
@@ -79,4 +112,5 @@ public class Updater {
     }
     return changed;
   }
+
 }

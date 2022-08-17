@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Collections;
 import java.util.List;
+import org.cancermodels.MappingType;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
@@ -107,7 +108,7 @@ public class MappingController {
   @PutMapping("/{id}")
   public MappingEntityDTO updateMappingEntity(@PathVariable int id, @RequestBody MappingEntity mappingEntity) {
 
-    MappingEntity updated = mappingEntityService.update(id, mappingEntity).orElseThrow(
+    MappingEntity updated = mappingEntityService.update(id, mappingEntity, MappingType.MANUAL).orElseThrow(
         ResourceNotFoundException::new);
 
     return mappingEntityMapper.convertToDto(updated);
