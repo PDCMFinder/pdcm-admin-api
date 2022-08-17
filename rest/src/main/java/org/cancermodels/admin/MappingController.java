@@ -3,7 +3,11 @@ package org.cancermodels.admin;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import org.cancermodels.MappingType;
+import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
@@ -11,7 +15,7 @@ import org.cancermodels.admin.mappers.MappingEntityMapper;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
-import org.cancermodels.ontologies.OntologyService;
+import org.cancermodels.persistance.Suggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -23,6 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +41,14 @@ public class MappingController {
 
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
+  private final SuggestionManager suggestionManager;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
-      OntologyService ontologyService) {
+      SuggestionManager suggestionManager) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
+    this.suggestionManager = suggestionManager;
   }
 
   @GetMapping("/{id}")
@@ -61,7 +70,7 @@ public class MappingController {
    * @param mappingQuery search parameters involving the mapping labels and their values. A label
    *                     and its value are separated by ":".
    *                     Example: mq=DataSource:JAX&TumorType:Primary
-   * @param entityTypeName Name of the entity type we want to retrieve
+   * @param entityTypeNames Name of the entity type we want to retrieve
    * @param status Status of the mapping entity (created, ...)
    * @return Paginated Mappings that match the search criteria
    */
@@ -71,12 +80,12 @@ public class MappingController {
       PagedResourcesAssembler assembler,
 
       @RequestParam(value = "mq", required = false) List<String> mappingQuery,
-      @RequestParam(value = "entityType", required = false) String entityTypeName,
+      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
       @RequestParam(value = "status", required = false) List<String> status)
   {
 
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
-        .withEntityTypeName(entityTypeName)
+        .withEntityTypeNames(entityTypeNames)
         .withMappingQuery(mappingQuery)
         .withStatus(status)
         .build();
@@ -91,10 +100,50 @@ public class MappingController {
             mappingEntityDTOS,
             linkTo(methodOn(MappingController.class)
                 .search(
-                    pageable, assembler, mappingQuery, entityTypeName, status)).withSelfRel());
+                    pageable, assembler, mappingQuery, entityTypeNames, status)).withSelfRel());
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
+  }
+
+  @GetMapping("/statusCounts")
+  public Map<String, Long> getCountsByStatus(
+      @RequestParam(value = "mq", required = false) List<String> mappingQuery,
+      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames) {
+
+    MappingsFilter filter = MappingsFilterBuilder.getInstance()
+        .withEntityTypeNames(entityTypeNames)
+        .withMappingQuery(mappingQuery)
+        .build();
+
+    return mappingEntityService.countStatusWithFilter(filter);
+  }
+
+  @PutMapping("/{id}")
+  public MappingEntityDTO updateMappingEntity(@PathVariable int id, @RequestBody MappingEntity mappingEntity) {
+
+    MappingEntity updated = mappingEntityService.update(id, mappingEntity, MappingType.MANUAL).orElseThrow(
+        ResourceNotFoundException::new);
+
+    return mappingEntityMapper.convertToDto(updated);
+  }
+
+  /**
+   * Return a list of suggestion for the given Mapping Entity.
+   * The mapping entity can already have calculated suggestions, in which case those are
+   * returned directly. If the mapping entity does not have any calculated suggestion, then
+   * the suggestion calculation process is called and the found suggestions retuned.
+   * @param id Internal id of the mapping entity.
+   * @return List of suggestions
+   */
+  @PostMapping("/{id}/suggestions")
+  List<Suggestion> getSuggestions(@PathVariable int id) {
+    MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+        ResourceNotFoundException::new);
+    if (mappingEntity.getSuggestions().isEmpty()) {
+      suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
+    }
+    return mappingEntity.getSuggestions();
   }
 
   @GetMapping("/getSummary")

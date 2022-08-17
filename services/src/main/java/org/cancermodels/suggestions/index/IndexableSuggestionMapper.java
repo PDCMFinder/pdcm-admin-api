@@ -97,6 +97,11 @@ public class IndexableSuggestionMapper {
               FieldsNames.RULE_MAPPED_TERM_LABEL.getName(),
               rule.getMappedTermLabel(),
               Field.Store.YES));
+      fields.add(
+          new StringField(
+              FieldsNames.RULE_ENTITY_TYPE_NAME.getName(),
+              rule.getEntityTypeName(),
+              Field.Store.YES));
 
       Map<String, String> data = rule.getData();
       for (String key : data.keySet()) {
@@ -119,6 +124,7 @@ public class IndexableSuggestionMapper {
     if (sourceType.equalsIgnoreCase("Rule")) {
       String mappedTermUrl = document.get(FieldsNames.RULE_MAPPED_TERM_URL.getName());
       String mappedTermLabel = document.get(FieldsNames.RULE_MAPPED_TERM_LABEL.getName());
+      String entityTypeName = document.get(FieldsNames.RULE_ENTITY_TYPE_NAME.getName());
       Map<String, String> values = new HashMap<>();
       List<IndexableField> valueFields = document.getFields().stream()
           .filter(x -> x.name().startsWith(FieldsNames.RULE_VALUE.getName())).collect(
@@ -132,6 +138,7 @@ public class IndexableSuggestionMapper {
       ruleSuggestion.setMappedTermUrl(mappedTermUrl);
       ruleSuggestion.setMappedTermLabel(mappedTermLabel);
       ruleSuggestion.setData(values);
+      ruleSuggestion.setEntityTypeName(entityTypeName);
 
       indexableSuggestion.setRule(ruleSuggestion);
     }

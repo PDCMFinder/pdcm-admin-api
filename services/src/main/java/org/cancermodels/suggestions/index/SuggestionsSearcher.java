@@ -96,6 +96,7 @@ public class SuggestionsSearcher {
       suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
       ruleSuggestion.setMappingEntityId(Integer.parseInt(indexableSuggestion.getId()));
       ruleSuggestion.setData(indexableRuleSuggestion.getData());
+      ruleSuggestion.setEntityTypeName(indexableRuleSuggestion.getEntityTypeName());
       suggestion.setRuleSuggestion(ruleSuggestion);
     }
     if (indexableSuggestion.getSourceType().equalsIgnoreCase("ontology"))

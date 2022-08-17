@@ -34,6 +34,7 @@ public class MappingKey {
    */
   private String key;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "mappingKey", cascade = CascadeType.ALL,
       fetch = FetchType.LAZY, optional = false)
   private KeySearchConfiguration keySearchConfiguration;

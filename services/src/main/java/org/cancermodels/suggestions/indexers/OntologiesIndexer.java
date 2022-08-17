@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -9,6 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
+import org.cancermodels.suggestions.index.Constants;
+import org.cancermodels.suggestions.index.IndexableOntologySuggestion;
+import org.cancermodels.suggestions.index.IndexableSuggestion;
+import org.cancermodels.suggestions.index.IndexableSuggestionMapper;
+import org.cancermodels.suggestions.index.LuceneIndexWriter;
+import org.cancermodels.suggestions.index.NcitTerm;
+import org.cancermodels.suggestions.index.OboParser;
+import org.cancermodels.suggestions.index.QueryHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

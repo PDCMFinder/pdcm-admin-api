@@ -1,14 +1,12 @@
 package org.cancermodels;
 
-public enum Status {
-  UNMAPPED("Unmapped"),
-  MAPPED("Mapped"),
-  REVISE("Revise"),
-  REQUEST("Request");
+public enum MappingType {
+  MANUAL("Manual"),
+  AUTOMATIC("Automatic");
 
   private final String label;
 
-  Status(String label) {
+  MappingType(String label) {
     this.label = label;
   }
 

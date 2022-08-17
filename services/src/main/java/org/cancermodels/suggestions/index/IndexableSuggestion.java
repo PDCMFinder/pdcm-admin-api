@@ -27,17 +27,3 @@ public class IndexableSuggestion {
   private IndexableRuleSuggestion rule;
 }
 
-@Data
-class IndexableOntologySuggestion {
-  private String ontologyTermId;
-  private String ontologyTermLabel;
-  private String definition;
-  private Set<String> synonyms;
-}
-
-@Data
-class IndexableRuleSuggestion {
-  private String mappedTermUrl;
-  private String mappedTermLabel;
-  private Map<String, String> data;
-}

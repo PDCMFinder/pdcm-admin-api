@@ -1,14 +1,16 @@
 package org.cancermodels.mappings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.cancermodels.MappingType;
+import org.cancermodels.Status;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.MappingEntityStatus;
 import org.cancermodels.mappings.MappingSummaryByTypeAndProvider.SummaryEntry;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsSpecs;
@@ -24,13 +26,15 @@ public class MappingEntityService {
   private final MappingEntityRepository mappingEntityRepository;
   private final EntityTypeService entityTypeService;
   private final SuggestionManager suggestionManager;
+  private final Updater updater;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager) {
+      SuggestionManager suggestionManager, Updater updater) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
+    this.updater = updater;
   }
 
   public Page<MappingEntity> findPaginatedAndFiltered(
@@ -38,6 +42,23 @@ public class MappingEntityService {
 
     Specification<MappingEntity> specs = buildSpecifications(mappingsFilter);
     return mappingEntityRepository.findAll(specs, pageable);
+  }
+
+  public Map<String, Long> countStatusWithFilter(MappingsFilter filter) {
+    Map<String, Long> counts = new HashMap<>();
+    Specification<MappingEntity> specs = buildSpecifications(filter);
+
+    for (Status status : Status.values()) {
+      counts.put(status.getLabel(), getCountByStatus(status.getLabel(), specs));
+    }
+    return counts;
+  }
+
+  private long getCountByStatus(String status, Specification<MappingEntity> specs) {
+    Specification<MappingEntity> specsByStatus= specs.and(MappingsSpecs.withStatus(
+        Collections.singletonList(status)));
+    return mappingEntityRepository.count(specsByStatus);
+
   }
 
   private Specification<MappingEntity> buildSpecifications(MappingsFilter mappingsFilter)
@@ -58,8 +79,8 @@ public class MappingEntityService {
 
     Map<String, Map<String, Integer>> data = new HashMap<>();
 
-    String mappedKey = MappingEntityStatus.MAPPED.getDescription();
-    String unmappedKey = MappingEntityStatus.UNMAPPED.getDescription();
+    String mappedKey = Status.MAPPED.getLabel();
+    String unmappedKey = Status.UNMAPPED.getLabel();
 
     List<Object[]> list = mappingEntityRepository.countEntityTypeStatusByProvider(entityTypeName);
     for (Object[] row : list) {
@@ -105,8 +126,6 @@ public class MappingEntityService {
       mappingEntity = res.get();
       List<MappingEntity> mappingEntities = new ArrayList<>();
       mappingEntities.add(mappingEntity);
-//      suggestionManager.calculateSuggestions(mappingEntities);
-//      mappingEntityRepository.save(mappingEntity);
     }
     return Optional.of(mappingEntity);
   }
@@ -132,6 +151,21 @@ public class MappingEntityService {
       map.put(entityTypeName.toLowerCase(), mappingEntitiesByType);
     }
     return map;
+  }
+
+  /**
+   * Updates some values in a mapping entity, if changed: Status, Mapping Term Label, Mapping Term Url
+   * @param mappingEntity Entity with the new information
+   * @return Mapping after it was updated
+   */
+  public Optional<MappingEntity> update(int id, MappingEntity mappingEntity, MappingType mappingType) {
+    var res = mappingEntityRepository.findById(id);
+    if (res.isPresent()) {
+      MappingEntity original = res.get();
+      return Optional.of(updater.update(original, mappingEntity, mappingType)) ;
+    } else {
+      return Optional.empty();
+    }
   }
 
 }

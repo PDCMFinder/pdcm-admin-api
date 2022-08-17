@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,6 +12,12 @@ import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.Status;
+import org.cancermodels.suggestions.index.Constants;
+import org.cancermodels.suggestions.index.IndexableRuleSuggestion;
+import org.cancermodels.suggestions.index.IndexableSuggestion;
+import org.cancermodels.suggestions.index.IndexableSuggestionMapper;
+import org.cancermodels.suggestions.index.LuceneIndexWriter;
+import org.cancermodels.suggestions.index.QueryHelper;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -62,6 +68,7 @@ public class RulesIndexer {
     indexableSuggestion.setId(mappingEntity.getId().toString());
     indexableSuggestion.setSourceType("Rule");
     IndexableRuleSuggestion rule = new IndexableRuleSuggestion();
+    rule.setEntityTypeName(mappingEntity.getEntityType().getName());
     rule.setData(formatRuleValues(mappingEntity.getValuesAsMap()));
     rule.setMappedTermLabel(mappingEntity.getMappedTermLabel());
     rule.setMappedTermUrl(mappingEntity.getMappedTermUrl());
