@@ -1,6 +1,7 @@
 package org.cancermodels.mappings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,23 @@ public class MappingEntityService {
 
     Specification<MappingEntity> specs = buildSpecifications(mappingsFilter);
     return mappingEntityRepository.findAll(specs, pageable);
+  }
+
+  public Map<String, Long> countStatusWithFilter(MappingsFilter filter) {
+    Map<String, Long> counts = new HashMap<>();
+    Specification<MappingEntity> specs = buildSpecifications(filter);
+
+    for (Status status : Status.values()) {
+      counts.put(status.getLabel(), getCountByStatus(status.getLabel(), specs));
+    }
+    return counts;
+  }
+
+  private long getCountByStatus(String status, Specification<MappingEntity> specs) {
+    Specification<MappingEntity> specsByStatus= specs.and(MappingsSpecs.withStatus(
+        Collections.singletonList(status)));
+    return mappingEntityRepository.count(specsByStatus);
+
   }
 
   private Specification<MappingEntity> buildSpecifications(MappingsFilter mappingsFilter)
@@ -108,8 +126,6 @@ public class MappingEntityService {
       mappingEntity = res.get();
       List<MappingEntity> mappingEntities = new ArrayList<>();
       mappingEntities.add(mappingEntity);
-//      suggestionManager.calculateSuggestions(mappingEntities);
-//      mappingEntityRepository.save(mappingEntity);
     }
     return Optional.of(mappingEntity);
   }

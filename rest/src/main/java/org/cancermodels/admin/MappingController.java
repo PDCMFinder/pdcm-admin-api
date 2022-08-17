@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.cancermodels.MappingType;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;
@@ -103,6 +104,19 @@ public class MappingController {
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
+  }
+
+  @GetMapping("/statusCounts")
+  public Map<String, Long> getCountsByStatus(
+      @RequestParam(value = "mq", required = false) List<String> mappingQuery,
+      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames) {
+
+    MappingsFilter filter = MappingsFilterBuilder.getInstance()
+        .withEntityTypeNames(entityTypeNames)
+        .withMappingQuery(mappingQuery)
+        .build();
+
+    return mappingEntityService.countStatusWithFilter(filter);
   }
 
   @PutMapping("/{id}")
