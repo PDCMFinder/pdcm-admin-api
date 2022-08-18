@@ -12,6 +12,15 @@ public enum Status {
     this.label = label;
   }
 
+  public static Status getStatusByName(String name) {
+    for (Status status : Status.values()) {
+      if (status.getLabel().equalsIgnoreCase(name)) {
+        return status;
+      }
+    }
+    throw new IllegalArgumentException("Status " + name + " does not exist");
+  }
+
   public String getLabel() {
     return label;
   }
