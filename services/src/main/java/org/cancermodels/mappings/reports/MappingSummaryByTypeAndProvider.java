@@ -1,4 +1,4 @@
-package org.cancermodels.mappings;
+package org.cancermodels.mappings.reports;
 
 import java.util.List;
 import lombok.Data;
