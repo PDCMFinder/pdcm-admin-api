@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.cancermodels.MappingEntityKeyBuilder;
 
 @Entity
 @Data
@@ -120,11 +121,7 @@ public class MappingEntity {
   }
 
   public String buildMappingKey(){
-    String key = entityType.getName();
-    key += getValuesAsMapString();
-    key = key.replaceAll("[^a-zA-Z0-9 _-]","");
-    key = DigestUtils.sha256Hex(key);
-    return key.toLowerCase();
+    return MappingEntityKeyBuilder.buildKey(this);
   }
 
 }
