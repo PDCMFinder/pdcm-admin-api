@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.cancermodels.MappingType;
+import org.cancermodels.types.MappingType;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
@@ -21,7 +21,8 @@ public class MappingEntityService {
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager, Updater updater) {
+      SuggestionManager suggestionManager,
+      Updater updater) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
@@ -74,10 +75,6 @@ public class MappingEntityService {
     }
     return map;
   }
-
-
-
-
 
   public List<MappingEntity> getAllByTypeName(String entityTypeName) {
     return mappingEntityRepository.findAllByEntityTypeNameIgnoreCase(entityTypeName);

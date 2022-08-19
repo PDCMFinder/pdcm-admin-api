@@ -2,7 +2,7 @@ package org.cancermodels.admin;
 
 import java.util.Collections;
 import java.util.List;
-import org.cancermodels.MappingType;
+import org.cancermodels.types.MappingType;
 import org.cancermodels.NewMappingsDetectorService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;

@@ -11,7 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.Status;
+import org.cancermodels.types.Status;
 import org.cancermodels.suggestions.index.Constants;
 import org.cancermodels.suggestions.index.IndexableRuleSuggestion;
 import org.cancermodels.suggestions.index.IndexableSuggestion;

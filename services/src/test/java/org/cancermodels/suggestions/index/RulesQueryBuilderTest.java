@@ -53,7 +53,7 @@ class RulesQueryBuilderTest {
             + "rule.value.sampleDiagnosis:system~2 rule.value.sampleDiagnosis:cancer~2)^[BOOST1] "
             + "(rule.value.originTissue:central~2 rule.value.originTissue:nervous~2 "
             + "rule.value.originTissue:system~2)^[BOOST2] "
-            + "(rule.value.tumourType:primary~2)^[BOOST3] "
+            + "(rule.value.tumorType:primary~2)^[BOOST3] "
             + "(rule.value.sampleDiagnosis:\"central nervous system cancer\"~1)^[BOOST4] "
             + "(rule.value.sampleDiagnosis:central~2 rule.value.sampleDiagnosis:nervous~2 "
             + "rule.value.sampleDiagnosis:system~2 rule.value.sampleDiagnosis:central~2 "

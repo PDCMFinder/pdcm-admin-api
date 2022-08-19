@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.types;
 
 public enum Status {
   UNMAPPED("Unmapped"),

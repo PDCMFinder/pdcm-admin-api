@@ -39,7 +39,7 @@ public class MappingEntityKeyBuilder {
       if (entityTypeName.equalsIgnoreCase(EntityTypeName.Diagnosis.getLabel())) {
         key = buildKeyDiagnosisMapping(
             valuesAsMap.get("SampleDiagnosis"),
-            valuesAsMap.get("TumourType"),
+            valuesAsMap.get("TumorType"),
             valuesAsMap.get("OriginTissue"),
             valuesAsMap.get("DataSource"));
       }

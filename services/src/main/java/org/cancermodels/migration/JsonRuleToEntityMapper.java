@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.Status;
+import org.cancermodels.types.Status;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.persistance.MappingEntity;

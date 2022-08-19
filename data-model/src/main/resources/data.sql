@@ -8,7 +8,7 @@ values (2, 'SampleDiagnosis', 0.9, 1, true, 1);
 insert into MAPPING_KEY (id, key, weight, entity_type_id, search_on_ontology, search_on_ontology_position)
 values (3, 'OriginTissue', 0.08, 1, true, 0);
 insert into MAPPING_KEY (id, key, weight, entity_type_id, search_on_ontology, search_on_ontology_position)
-values (4, 'TumourType', 0.02, 1, false, null);
+values (4, 'TumorType', 0.02, 1, false, null);
 
 insert into MAPPING_KEY (id, key, weight, entity_type_id, search_on_ontology, search_on_ontology_position)
 values (5, 'DataSource', 0, 2, false, null);
