@@ -63,7 +63,7 @@ public class NewMappingsDetectorService {
   }
 
   @Transactional
-  public void detectNewUnmappedTerms() {
+  public Map<String, Integer> detectNewUnmappedTerms() {
     // We need to delete Unmapped terms first so we don't end up with orphan values.
     mappingEntityRepository.deleteAllByStatus(Status.UNMAPPED.getLabel());
 
@@ -79,6 +79,20 @@ public class NewMappingsDetectorService {
 
     mappingEntityRepository.saveAll(newMappingEntities);
 
+    return getCountsByType(newMappingEntities);
+
+  }
+
+  private Map<String, Integer> getCountsByType(Set<MappingEntity> mappingEntities) {
+    Map<String, Integer> countsByType = new HashMap<>();
+    countsByType.put(EntityTypeName.Diagnosis.getLabel().toLowerCase(), 0);
+    countsByType.put(EntityTypeName.Treatment.getLabel().toLowerCase(), 0);
+    mappingEntities.forEach(
+        x -> {
+          String key = x.getEntityType().getName().toLowerCase();
+          countsByType.put(key, countsByType.get(key) + 1);
+        });
+    return countsByType;
   }
 
   public void populateMissingMappingsContainer() {

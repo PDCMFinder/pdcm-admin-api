@@ -2,6 +2,7 @@ package org.cancermodels.admin;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.cancermodels.types.MappingType;
 import org.cancermodels.NewMappingsDetectorService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -82,10 +83,8 @@ public class MappingController {
   }
 
   @PutMapping("/detectNewMappings")
-  public void detectNewMappings() {
-
-    newMappingsDetectorService.detectNewUnmappedTerms();
-    System.out.println("END");
+  public Map<String, Integer> detectNewMappings() {
+    return newMappingsDetectorService.detectNewUnmappedTerms();
   }
 
 }
