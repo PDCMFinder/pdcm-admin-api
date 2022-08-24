@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.FieldsNames;
+import org.cancermodels.suggestions.search_engine.util.QueryConstants;
 import org.springframework.stereotype.Component;
 
 /**

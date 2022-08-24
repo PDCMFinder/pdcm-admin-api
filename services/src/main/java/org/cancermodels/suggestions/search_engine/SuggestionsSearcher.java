@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +50,10 @@ public class SuggestionsSearcher {
   public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity) {
     Objects.requireNonNull(mappingEntity);
     List<Suggestion> topSuggestions = new ArrayList<>();
+    log.info("Searching suggestions for {}", mappingEntity.getId());
     log.info("Entity values: " + mappingEntity.getValuesAsMap());
+    System.out.println("Searching suggestions for: " + mappingEntity.getMappingKey());
+    System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
 
     try {
 
@@ -94,7 +97,7 @@ public class SuggestionsSearcher {
 
       suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
       suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
-      ruleSuggestion.setMappingEntityId(Integer.parseInt(indexableSuggestion.getId()));
+      ruleSuggestion.setKey(indexableSuggestion.getId());
       ruleSuggestion.setData(indexableRuleSuggestion.getData());
       ruleSuggestion.setEntityTypeName(indexableRuleSuggestion.getEntityTypeName());
       suggestion.setRuleSuggestion(ruleSuggestion);
@@ -116,7 +119,5 @@ public class SuggestionsSearcher {
     }
     return suggestion;
   }
-
-
 
 }

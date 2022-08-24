@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -9,6 +9,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
@@ -17,6 +18,8 @@ import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.cancermodels.suggestions.search_engine.util.Constants;
+import org.cancermodels.suggestions.search_engine.util.QueryConstants;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -75,6 +78,16 @@ public class QueryHelper {
     return builder.build();
   }
 
+  public Query joinQueriesMustMode(List<Query> queries) {
+    BooleanQuery.Builder builder = new Builder();
+    for (Query query : queries) {
+      if (query != null) {
+        builder.add(query, Occur.MUST);
+      }
+    }
+    return builder.build();
+  }
+
   private String[] tokenize(String text) throws IOException {
     List<String> tokens = new ArrayList<>();
     // New analyzer needs to be created because if the same as the on for the indexer is used
@@ -89,6 +102,10 @@ public class QueryHelper {
     }
 
     return tokens.toArray(String[]::new);
+  }
+
+  public Query buildMustNotQuery(String field, String text) {
+    return new TermQuery(new Term(field, text));
   }
 
   private String[] getLimitedNumberOfWords(String[] words) {

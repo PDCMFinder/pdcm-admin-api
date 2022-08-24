@@ -12,12 +12,12 @@ import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.types.Status;
-import org.cancermodels.suggestions.index.Constants;
-import org.cancermodels.suggestions.index.IndexableRuleSuggestion;
-import org.cancermodels.suggestions.index.IndexableSuggestion;
-import org.cancermodels.suggestions.index.IndexableSuggestionMapper;
-import org.cancermodels.suggestions.index.LuceneIndexWriter;
-import org.cancermodels.suggestions.index.QueryHelper;
+import org.cancermodels.suggestions.search_engine.util.Constants;
+import org.cancermodels.suggestions.search_engine.IndexableRuleSuggestion;
+import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
+import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
+import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
+import org.cancermodels.suggestions.search_engine.QueryHelper;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -65,7 +65,7 @@ public class RulesIndexer {
 
   private IndexableSuggestion mappingEntityToIndexableSuggestion(MappingEntity mappingEntity) {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
-    indexableSuggestion.setId(mappingEntity.getId().toString());
+    indexableSuggestion.setId(mappingEntity.getMappingKey());
     indexableSuggestion.setSourceType("Rule");
     IndexableRuleSuggestion rule = new IndexableRuleSuggestion();
     rule.setEntityTypeName(mappingEntity.getEntityType().getName());

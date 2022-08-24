@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import static org.cancermodels.general.MappingEntityCreator.createMappingEntityTestInstance;
 import static org.mockito.Mockito.verify;
@@ -26,7 +26,8 @@ class MappingEntityQueryBuilderTest {
   void testBuildSuggestionQuery() throws IOException {
     MappingEntity mappingEntity = createMappingEntityTestInstance();
     instance.buildSuggestionQuery(mappingEntity);
-    verify(rulesQueryBuilder).buildRulesQuery(mappingEntity.getMappingValues());
+    verify(rulesQueryBuilder).buildRulesQuery(mappingEntity.getMappingValues(),
+        mappingEntity.getMappingKey());
     verify(ontologyQueryBuilder).buildOntologiesQuery(mappingEntity.getMappingValues());
   }
 

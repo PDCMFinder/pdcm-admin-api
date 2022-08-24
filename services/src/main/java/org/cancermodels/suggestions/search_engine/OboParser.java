@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

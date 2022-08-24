@@ -1,7 +1,5 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
-import java.util.Map;
-import java.util.Set;
 import lombok.Data;
 
 /**

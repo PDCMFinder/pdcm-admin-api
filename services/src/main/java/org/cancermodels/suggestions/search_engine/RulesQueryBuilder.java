@@ -1,11 +1,18 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.FieldsNames;
+import org.cancermodels.suggestions.search_engine.util.QueryConstants;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,10 +34,11 @@ public class RulesQueryBuilder {
   /**
    * Creates a query that will search in a {@link IndexableSuggestion} document using rules fields.
    * @param mappingValues Mapping values to use in the query building
+   * @param mappingKey
    * @return A {@link Query} with the rule fields.
    * @throws IOException If the query cannot be built.
    */
-  public Query buildRulesQuery(List<MappingValue> mappingValues) throws IOException {
+  public Query buildRulesQuery(List<MappingValue> mappingValues, String mappingKey) throws IOException {
     List<Query> queries = new ArrayList<>();
     List<MappingValue> toProcess =
         mappingValueConfHelper.getValuesWeightGreaterZero(mappingValues);
@@ -65,7 +73,13 @@ public class RulesQueryBuilder {
               mainValue, combinedText, QueryConstants.MULTI_TERM_PHRASE_RELEVANCE_MULTIPLIER));
     }
 
-    return queryHelper.joinQueriesShouldMode(queries);
+    Query partialQuery = queryHelper.joinQueriesShouldMode(queries);
+
+    // The same rule shouldn't be a suggestion
+    Query ignoreOwnId = queryHelper.buildMustNotQuery("id", mappingKey);
+
+    BooleanQuery.Builder builder = new Builder();
+    return builder.add(partialQuery, Occur.SHOULD).add(ignoreOwnId, Occur.MUST_NOT).build();
   }
 
   private Query buildRulesTermsQuery(MappingValue mappingValue, String queryText, double relevance)

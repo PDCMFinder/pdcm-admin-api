@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine.util;
 
 public class QueryConstants {
   public static final double RULE_MULTIPLIER = 10;

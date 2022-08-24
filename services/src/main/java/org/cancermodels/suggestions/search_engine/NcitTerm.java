@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 /**
  * A representation of a NCIt term as it comes from the ncit.obo file.
@@ -6,7 +6,6 @@ package org.cancermodels.suggestions.index;
 
 import java.util.Set;
 import lombok.Data;
-import org.apache.lucene.document.Document;
 
 @Data
 public class NcitTerm {

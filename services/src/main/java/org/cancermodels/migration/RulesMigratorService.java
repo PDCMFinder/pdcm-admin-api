@@ -1,6 +1,7 @@
 package org.cancermodels.migration;
 
 import java.util.List;
+import java.util.Set;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class RulesMigratorService {
 
   public void loadOldRulesInDb() {
     mappingEntityRepository.deleteAll();
-    List<MappingEntity> diagnosisRules = oldRulesReader.readRules("diagnosis_mappings.json");
-    List<MappingEntity> treatmentRules = oldRulesReader.readRules("treatment_mappings.json");
+    Set<MappingEntity> diagnosisRules = oldRulesReader.readRules("diagnosis_mappings.json");
+    Set<MappingEntity> treatmentRules = oldRulesReader.readRules("treatment_mappings.json");
     mappingEntityRepository.saveAll(diagnosisRules);
     mappingEntityRepository.saveAll(treatmentRules);
   }

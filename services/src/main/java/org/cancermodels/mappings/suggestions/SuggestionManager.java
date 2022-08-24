@@ -11,7 +11,7 @@ import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.persistance.SuggestionRepository;
-import org.cancermodels.suggestions.index.SuggestionsSearcher;
+import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.stereotype.Component;
 
 @Slf4j

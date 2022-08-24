@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import static org.cancermodels.general.MappingEntityCreator.createMappingEntityTestInstance;
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.general.MappingEntityCreator;
+import org.cancermodels.suggestions.search_engine.util.QueryConstants;
 import org.junit.jupiter.api.Test;
 
 class RulesQueryBuilderTest {
@@ -20,7 +21,8 @@ class RulesQueryBuilderTest {
   @Test
   void buildRulesQuery() throws IOException {
     MappingEntity mappingEntity = createMappingEntityTestInstance();
-    Query query = instance.buildRulesQuery(mappingEntity.getMappingValues());
+    Query query = instance.buildRulesQuery(mappingEntity.getMappingValues(),
+        mappingEntity.getMappingKey());
 
     String expected = getExpectedRule();
 

@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.index;
+package org.cancermodels.suggestions.search_engine;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class MappingEntityQueryBuilder {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
     mappingValues = MappingValueConfHelper.getFormattedValues(mappingValues);
-    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues);
+    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
 
     return ensembleFinalQuery(ruleQuery, ontologyQuery);

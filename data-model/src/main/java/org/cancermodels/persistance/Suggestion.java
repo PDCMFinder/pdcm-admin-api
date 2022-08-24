@@ -51,7 +51,7 @@ public class Suggestion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private int mappingEntityId;
+    private String key;
     private String entityTypeName;
     @ElementCollection
     private Map<String, String> data;

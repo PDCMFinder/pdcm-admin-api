@@ -8,7 +8,7 @@ import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.suggestions.indexers.OntologiesIndexer;
 import org.cancermodels.suggestions.indexers.RulesIndexer;
-import org.cancermodels.suggestions.index.SuggestionsSearcher;
+import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
