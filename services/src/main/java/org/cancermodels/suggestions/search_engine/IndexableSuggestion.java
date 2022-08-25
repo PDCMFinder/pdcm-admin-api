@@ -23,5 +23,6 @@ public class IndexableSuggestion {
   private IndexableOntologySuggestion ontology;
 
   private IndexableRuleSuggestion rule;
+
 }
 

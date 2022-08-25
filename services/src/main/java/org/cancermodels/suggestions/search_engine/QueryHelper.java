@@ -9,7 +9,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
@@ -19,7 +18,6 @@ import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.cancermodels.suggestions.search_engine.util.Constants;
-import org.cancermodels.suggestions.search_engine.util.QueryConstants;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -104,16 +102,11 @@ public class QueryHelper {
     return tokens.toArray(String[]::new);
   }
 
-  public Query buildMustNotQuery(String field, String text) {
-    return new TermQuery(new Term(field, text));
-  }
-
   private String[] getLimitedNumberOfWords(String[] words) {
     if (words.length > Constants.MAX_NUMBER_TERMS_BY_QUERY) {
       return Arrays.copyOfRange(words, 0, Constants.MAX_NUMBER_TERMS_BY_QUERY);
     }
     return words;
   }
-
 
 }

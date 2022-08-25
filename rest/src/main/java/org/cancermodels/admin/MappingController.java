@@ -1,5 +1,6 @@
 package org.cancermodels.admin;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public class MappingController {
    * @return List of suggestions
    */
   @PostMapping("/{id}/suggestions")
-  List<Suggestion> getSuggestions(@PathVariable int id) {
+  List<Suggestion> getSuggestions(@PathVariable int id) throws IOException {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
     if (mappingEntity.getSuggestions().isEmpty()) {
@@ -78,7 +79,7 @@ public class MappingController {
   }
 
   @GetMapping("/calculateSuggestions")
-  public void getSimilar() {
+  public void getSimilar() throws IOException {
     mappingEntityService.setMappingSuggestions();
   }
 

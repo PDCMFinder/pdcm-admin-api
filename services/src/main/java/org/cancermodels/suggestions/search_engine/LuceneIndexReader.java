@@ -25,6 +25,9 @@ public class LuceneIndexReader {
   @Value( "${lucene_index_dir}" )
   private String luceneIndexDir;
 
+  @Value("${number_of_suggested_mappings}")
+  private int numberOfSuggestedMappings;
+
   private static IndexSearcher indexSearcher;
 
   private final AnalyzerProvider analyzerProvider;
@@ -49,7 +52,7 @@ public class LuceneIndexReader {
 
   public TopDocs executeQuery(Query query) throws IOException {
     log.info("Executing query: [" + query.toString() + "]");
-    TopDocs hits = getIndexSearcher().search(query, 10);
+    TopDocs hits = getIndexSearcher().search(query, numberOfSuggestedMappings);
     log.info(hits.scoreDocs.length + " hits");
     return hits;
   }
@@ -67,12 +70,12 @@ public class LuceneIndexReader {
     Query query = new QueryParser(field, analyzerProvider.getAnalyzer())
         .parse(queryString);
     log.info("Compiled query {}", query.toString());
-    return trySearch(query, 10);
+    return trySearch(query, numberOfSuggestedMappings);
   }
 
   public TopDocs search(Query query) throws IOException {
-    log.info("Search with query: " + query.toString());
-    return trySearch(query, 10);
+    log.info("Search with query: {\n" + query.toString() + "\n}");
+    return trySearch(query, numberOfSuggestedMappings);
   }
 
   private TopDocs trySearch(Query query, int maxHits) {

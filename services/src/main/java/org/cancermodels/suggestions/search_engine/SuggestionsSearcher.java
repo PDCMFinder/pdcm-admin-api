@@ -47,23 +47,57 @@ public class SuggestionsSearcher {
    *  example, sampleDiagnosis for a diagnosis or treatmentName for a treatment) is similar enough
    *  to the label, definition or synonym in the ontology.
    */
-  public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity) {
+  public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity) throws IOException {
     Objects.requireNonNull(mappingEntity);
-    List<Suggestion> topSuggestions = new ArrayList<>();
+    List<Suggestion> topSuggestions;
     log.info("Searching suggestions for {}", mappingEntity.getId());
     log.info("Entity values: " + mappingEntity.getValuesAsMap());
     System.out.println("Searching suggestions for: " + mappingEntity.getMappingKey());
     System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
 
-    try {
+    Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
+    System.out.println("***");
+    System.out.println("suggestionQuery::: is this longer than expected");
+    System.out.println(suggestionQuery);
+    System.out.println("---");
+    topSuggestions = retrieveDocsByQuery(suggestionQuery);
+    setRelativeScoreValues(topSuggestions, mappingEntity);
 
-      Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
-      TopDocs topDocs = luceneIndexReader.search(suggestionQuery);
+    return topSuggestions;
+  }
+
+  public Suggestion getHelperSuggestion(MappingEntity mappingEntity) throws IOException {
+    return getHelperDocumentByMappingEntity(mappingEntity);
+  }
+
+  private void setRelativeScoreValues(List<Suggestion> suggestions, MappingEntity mappingEntity)
+      throws IOException {
+    // Get the helper document that represents the doc with a perfect score
+    Suggestion helperDocSuggestion = getHelperDocumentByMappingEntity(mappingEntity);
+    double maxScore = helperDocSuggestion.getScore();
+    System.out.println("maxScore: " + maxScore);
+    suggestions.forEach(x -> {
+      double relativeScore = x.getScore() * 100 / maxScore;
+      x.setRelativeScore(relativeScore);
+    });
+  }
+
+  private Suggestion getHelperDocumentByMappingEntity(MappingEntity mappingEntity)
+      throws IOException {
+    Query query = mappingEntityQueryBuilder.buildHelperDocumentQuery(mappingEntity);
+    List<Suggestion> results = retrieveDocsByQuery(query);
+    // We expect only one document
+    return results.get(0);
+  }
+
+  private List<Suggestion> retrieveDocsByQuery(Query query) {
+    List<Suggestion> topSuggestions;
+    try {
+      TopDocs topDocs = luceneIndexReader.search(query);
       topSuggestions = processTopDocs(topDocs);
     } catch (Exception exception) {
       throw new SuggestionCalculationException(exception);
     }
-
     return topSuggestions;
   }
 
@@ -90,9 +124,11 @@ public class SuggestionsSearcher {
     Suggestion suggestion = new Suggestion();
     suggestion.setSourceType(indexableSuggestion.getSourceType());
 
-    if (indexableSuggestion.getSourceType().equalsIgnoreCase("rule"))
+    IndexableRuleSuggestion indexableRuleSuggestion = indexableSuggestion.getRule();
+
+    if (indexableRuleSuggestion != null)
     {
-      IndexableRuleSuggestion indexableRuleSuggestion = indexableSuggestion.getRule();
+
       Suggestion.RuleSuggestion ruleSuggestion = new RuleSuggestion();
 
       suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
@@ -102,10 +138,11 @@ public class SuggestionsSearcher {
       ruleSuggestion.setEntityTypeName(indexableRuleSuggestion.getEntityTypeName());
       suggestion.setRuleSuggestion(ruleSuggestion);
     }
-    if (indexableSuggestion.getSourceType().equalsIgnoreCase("ontology"))
+    IndexableOntologySuggestion indexableOntologySuggestion
+        = indexableSuggestion.getOntology();
+    if (indexableOntologySuggestion != null)
     {
-      IndexableOntologySuggestion indexableOntologySuggestion
-          = indexableSuggestion.getOntology();
+
       Suggestion.OntologySuggestion ontologySuggestion = new OntologySuggestion();
 
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +

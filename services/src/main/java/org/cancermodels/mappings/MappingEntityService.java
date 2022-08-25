@@ -1,5 +1,6 @@
 package org.cancermodels.mappings;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class MappingEntityService {
   /**
    * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
    */
-  public void setMappingSuggestions() {
+  public void setMappingSuggestions() throws IOException {
     Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
     for (String type : mappingEntitiesMappedByType.keySet()) {
       // Process all mappings

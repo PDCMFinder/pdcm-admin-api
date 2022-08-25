@@ -31,7 +31,7 @@ public class SuggestionManager {
     this.mappingEntityRepository = mappingEntityRepository;
   }
 
-  public void calculateSuggestions(List<MappingEntity> mappingEntities) {
+  public void calculateSuggestions(List<MappingEntity> mappingEntities) throws IOException {
     log.info("\nInit suggestion calculation process for {} entities", mappingEntities.size());
     resetData(mappingEntities);
 
@@ -53,12 +53,8 @@ public class SuggestionManager {
     log.info("Resetting data: [end] save all entities after deleting suggestions.");
   }
 
-  private void saveMappingEntities(List<MappingEntity> toProcess) {
-    mappingEntityRepository.saveAll(toProcess);
-  }
-
   /** Sets the suggestions based on similar mapping entities. */
-  private void setSuggestions(List<MappingEntity> toProcess) {
+  private void setSuggestions(List<MappingEntity> toProcess) throws IOException {
 
     log.info("Init mapping entity suggestions ({} entities)", toProcess.size());
     Set<Suggestion> allSuggestions = new HashSet<>();
@@ -77,7 +73,7 @@ public class SuggestionManager {
   }
 
   public Map<MappingEntity, List<Suggestion>> getSuggestionsByEntity(
-      List<MappingEntity> mappingEntities) {
+      List<MappingEntity> mappingEntities) throws IOException {
     Map<MappingEntity, List<Suggestion>> suggestionsByEntity = new HashMap<>();
     for (MappingEntity mappingEntity : mappingEntities) {
       List<Suggestion> suggestions =

@@ -13,6 +13,7 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.cancermodels.suggestions.FieldsNames;
 import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
+import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -122,41 +123,52 @@ public class IndexableSuggestionMapper {
     indexableSuggestion.setSourceType(sourceType);
 
     if (sourceType.equalsIgnoreCase("Rule")) {
-      String mappedTermUrl = document.get(FieldsNames.RULE_MAPPED_TERM_URL.getName());
-      String mappedTermLabel = document.get(FieldsNames.RULE_MAPPED_TERM_LABEL.getName());
-      String entityTypeName = document.get(FieldsNames.RULE_ENTITY_TYPE_NAME.getName());
-      Map<String, String> values = new HashMap<>();
-      List<IndexableField> valueFields = document.getFields().stream()
-          .filter(x -> x.name().startsWith(FieldsNames.RULE_VALUE.getName())).collect(
-          Collectors.toList());
-      for (IndexableField field : valueFields) {
-        values.put(field.name(), document.get(field.name()));
-      }
-
-      IndexableRuleSuggestion ruleSuggestion = new IndexableRuleSuggestion();
-
-      ruleSuggestion.setMappedTermUrl(mappedTermUrl);
-      ruleSuggestion.setMappedTermLabel(mappedTermLabel);
-      ruleSuggestion.setData(values);
-      ruleSuggestion.setEntityTypeName(entityTypeName);
-
-      indexableSuggestion.setRule(ruleSuggestion);
+      addRuleData(indexableSuggestion, document);
     }
     else if (sourceType.equalsIgnoreCase("Ontology")) {
-      String label = document.get(FieldsNames.ONTOLOGY_LABEL.getName());
-      String definition = document.get(FieldsNames.ONTOLOGY_DEFINITION.getName());
-      Set<String> synonyms = Set.of(document.getValues(FieldsNames.ONTOLOGY_SYNONYM.getName()));
-
-      IndexableOntologySuggestion ontologySuggestion = new IndexableOntologySuggestion();
-      ontologySuggestion.setOntologyTermId(id);
-      ontologySuggestion.setOntologyTermLabel(label);
-      ontologySuggestion.setDefinition(definition);
-      ontologySuggestion.setSynonyms(synonyms);
-
-      indexableSuggestion.setOntology(ontologySuggestion);
+      addOntologyData(indexableSuggestion, document, id);
+    } else if (sourceType.equalsIgnoreCase(Constants.HELPER_DOCUMENT_TYPE)) {
+      addRuleData(indexableSuggestion, document);
+      addOntologyData(indexableSuggestion, document, id);
     }
 
     return indexableSuggestion;
 
+  }
+
+  private void addRuleData(IndexableSuggestion indexableSuggestion, Document document) {
+    String mappedTermUrl = document.get(FieldsNames.RULE_MAPPED_TERM_URL.getName());
+    String mappedTermLabel = document.get(FieldsNames.RULE_MAPPED_TERM_LABEL.getName());
+    String entityTypeName = document.get(FieldsNames.RULE_ENTITY_TYPE_NAME.getName());
+    Map<String, String> values = new HashMap<>();
+    List<IndexableField> valueFields = document.getFields().stream()
+        .filter(x -> x.name().startsWith(FieldsNames.RULE_VALUE.getName())).collect(
+            Collectors.toList());
+    for (IndexableField field : valueFields) {
+      values.put(field.name(), document.get(field.name()));
+    }
+
+    IndexableRuleSuggestion ruleSuggestion = new IndexableRuleSuggestion();
+
+    ruleSuggestion.setMappedTermUrl(mappedTermUrl);
+    ruleSuggestion.setMappedTermLabel(mappedTermLabel);
+    ruleSuggestion.setData(values);
+    ruleSuggestion.setEntityTypeName(entityTypeName);
+
+    indexableSuggestion.setRule(ruleSuggestion);
+  }
+
+  private void addOntologyData(IndexableSuggestion indexableSuggestion, Document document, String id) {
+    String label = document.get(FieldsNames.ONTOLOGY_LABEL.getName());
+    String definition = document.get(FieldsNames.ONTOLOGY_DEFINITION.getName());
+    Set<String> synonyms = Set.of(document.getValues(FieldsNames.ONTOLOGY_SYNONYM.getName()));
+
+    IndexableOntologySuggestion ontologySuggestion = new IndexableOntologySuggestion();
+    ontologySuggestion.setOntologyTermId(id);
+    ontologySuggestion.setOntologyTermLabel(label);
+    ontologySuggestion.setDefinition(definition);
+    ontologySuggestion.setSynonyms(synonyms);
+
+    indexableSuggestion.setOntology(ontologySuggestion);
   }
 }

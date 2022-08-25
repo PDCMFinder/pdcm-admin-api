@@ -76,7 +76,7 @@ public class RulesQueryBuilder {
     Query partialQuery = queryHelper.joinQueriesShouldMode(queries);
 
     // The same rule shouldn't be a suggestion
-    Query ignoreOwnId = queryHelper.buildMustNotQuery("id", mappingKey);
+    Query ignoreOwnId = queryHelper.getTermQuery("id", mappingKey);
 
     BooleanQuery.Builder builder = new Builder();
     return builder.add(partialQuery, Occur.SHOULD).add(ignoreOwnId, Occur.MUST_NOT).build();
