@@ -37,6 +37,11 @@ public class IndexerController {
     this.suggestionManager = suggestionManager;
   }
 
+  @PutMapping("index")
+  public void indexAll() throws IOException {
+    indexer.index();
+  }
+
   @PutMapping("index/ontologies")
   public void indexOntologies() throws IOException {
     indexer.indexOntologies();

@@ -33,6 +33,7 @@ public class Indexer {
   public void index() throws IOException {
     rulesIndexer.index();
     ontologiesIndexer.index();
+    helperDocumentsIndexer.index();
   }
 
   public void indexHelperDocuments() throws IOException {

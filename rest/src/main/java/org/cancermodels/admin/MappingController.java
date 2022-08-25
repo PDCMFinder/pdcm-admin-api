@@ -2,6 +2,7 @@ package org.cancermodels.admin;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import org.cancermodels.types.MappingType;
@@ -75,6 +76,8 @@ public class MappingController {
     if (mappingEntity.getSuggestions().isEmpty()) {
       suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
     }
+    List<Suggestion> suggestions = mappingEntity.getSuggestions();
+    suggestions.sort(Comparator.comparing(Suggestion::getRelativeScore).reversed());
     return mappingEntity.getSuggestions();
   }
 

@@ -3,6 +3,7 @@ package org.cancermodels.suggestions.search_engine;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
@@ -10,9 +11,10 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.OntologySuggestion;
+import org.cancermodels.persistance.RuleSuggestion;
+import org.cancermodels.persistance.RuleSuggestionData;
 import org.cancermodels.persistance.Suggestion;
-import org.cancermodels.persistance.Suggestion.OntologySuggestion;
-import org.cancermodels.persistance.Suggestion.RuleSuggestion;
 import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
 import org.springframework.stereotype.Component;
 
@@ -56,10 +58,6 @@ public class SuggestionsSearcher {
     System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
 
     Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
-    System.out.println("***");
-    System.out.println("suggestionQuery::: is this longer than expected");
-    System.out.println(suggestionQuery);
-    System.out.println("---");
     topSuggestions = retrieveDocsByQuery(suggestionQuery);
     setRelativeScoreValues(topSuggestions, mappingEntity);
 
@@ -129,12 +127,12 @@ public class SuggestionsSearcher {
     if (indexableRuleSuggestion != null)
     {
 
-      Suggestion.RuleSuggestion ruleSuggestion = new RuleSuggestion();
+      RuleSuggestion ruleSuggestion = new RuleSuggestion();
 
       suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
       suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
       ruleSuggestion.setKey(indexableSuggestion.getId());
-      ruleSuggestion.setData(indexableRuleSuggestion.getData());
+      setRuleData(indexableRuleSuggestion.getData(), ruleSuggestion);
       ruleSuggestion.setEntityTypeName(indexableRuleSuggestion.getEntityTypeName());
       suggestion.setRuleSuggestion(ruleSuggestion);
     }
@@ -143,7 +141,7 @@ public class SuggestionsSearcher {
     if (indexableOntologySuggestion != null)
     {
 
-      Suggestion.OntologySuggestion ontologySuggestion = new OntologySuggestion();
+      OntologySuggestion ontologySuggestion = new OntologySuggestion();
 
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +
           indexableOntologySuggestion.getOntologyTermId().replace(":", "_"));
@@ -155,6 +153,19 @@ public class SuggestionsSearcher {
       suggestion.setOntologySuggestion(ontologySuggestion);
     }
     return suggestion;
+  }
+
+  private void setRuleData(Map<String, String> data, RuleSuggestion ruleSuggestion) {
+
+    ruleSuggestion.getMappingValues().clear();
+    for (String key : data.keySet()) {
+      RuleSuggestionData element = new RuleSuggestionData();
+
+      element.setKey(key);
+      element.setValue(data.get(key));
+      element.setRuleSuggestion(ruleSuggestion);
+      ruleSuggestion.getMappingValues().add(element);
+    }
   }
 
 }
