@@ -1,6 +1,7 @@
 package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -91,8 +92,12 @@ public class HelperDocumentsIndexer {
     MappingValue mainValue = mappingValueConfHelper.getMainValue(mappingEntity.getMappingValues());
     String text = mainValue.getValue();
     indexableOntologySuggestion.setOntologyTermLabel(text);
-    indexableOntologySuggestion.setDefinition(text);
-    indexableOntologySuggestion.setSynonyms(new HashSet<>( Collections.singletonList(text)));
+    String definition = "text containing " + text;
+    indexableOntologySuggestion.setDefinition(definition);
+    List<String> synonyms = new ArrayList<>();
+    synonyms.add(text);
+    synonyms.add("synonym containing " + text);
+    indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setOntologyTermLabel("N/A");
     return indexableOntologySuggestion;
   }

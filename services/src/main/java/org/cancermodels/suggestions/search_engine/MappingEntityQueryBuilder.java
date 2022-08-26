@@ -55,7 +55,7 @@ public class MappingEntityQueryBuilder {
     Query finalQuery = builder.add(
         ruleAndOntologyCombinedQuery, Occur.SHOULD).add(sourceTypeQuery, Occur.MUST_NOT).build();
 
-    log.info("finalQuery: {}", finalQuery.toString());
+    log.info("Suggestion query: {}", finalQuery.toString());
 
     return finalQuery;
   }
@@ -67,12 +67,12 @@ public class MappingEntityQueryBuilder {
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
     Query finalQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);
-    log.info("Query to get helper document: {}", finalQuery.toString());
+    log.info("Helper query: {}", finalQuery.toString());
     return finalQuery;
   }
 
   Query combineRuleAndOntologyQuery(Query ruleQuery, Query ontologyQuery) {
-    return new DisjunctionMaxQuery(Arrays.asList(ruleQuery, ontologyQuery), 1);
+    return new DisjunctionMaxQuery(Arrays.asList(ruleQuery, ontologyQuery), 0);
   }
 
 }
