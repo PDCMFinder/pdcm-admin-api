@@ -41,8 +41,7 @@ public class MappingEntityQueryBuilder {
    */
   public Query buildSuggestionQuery(MappingEntity mappingEntity) throws IOException {
 
-    List<MappingValue> mappingValues =
-        MappingValueConfHelper.getFormattedValues(mappingEntity.getMappingValues());
+    List<MappingValue> mappingValues = mappingEntity.getMappingValues();
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
 
@@ -63,7 +62,6 @@ public class MappingEntityQueryBuilder {
   public Query buildHelperDocumentQuery(MappingEntity mappingEntity) throws IOException {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
-    mappingValues = MappingValueConfHelper.getFormattedValues(mappingValues);
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
     Query finalQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);

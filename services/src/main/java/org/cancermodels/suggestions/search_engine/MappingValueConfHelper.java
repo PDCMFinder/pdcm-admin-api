@@ -5,16 +5,10 @@ import java.util.stream.Collectors;
 import org.cancermodels.persistance.KeySearchConfiguration;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.exceptions.InvalidKeySearchConfiguration;
-import org.cancermodels.suggestions.search_engine.util.TextFormatter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MappingValueConfHelper {
-
-  public static List<MappingValue> getFormattedValues(List<MappingValue> mappingValues) {
-    mappingValues.forEach(x -> x.setValue(TextFormatter.abbreviateMaxTextLength(x.getValue())));
-    return mappingValues;
-  }
 
   public List<MappingValue> getValuesWeightGreaterZero(List<MappingValue> mappingValues) {
     return mappingValues.stream()
