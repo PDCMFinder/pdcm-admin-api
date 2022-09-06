@@ -18,7 +18,8 @@ public class OntologyService {
   private final OntologyTermManager ontologyTermManager;
   private final OntologyLoadReporter ontologyLoadReporter;
 
-  public OntologyService(OntologyLoader ontologyLoader,
+  public OntologyService(
+      OntologyLoader ontologyLoader,
       OntologyTermManager ontologyTermService,
       OntologyLoadReporter ontologyLoadReportService) {
     this.ontologyLoader = ontologyLoader;

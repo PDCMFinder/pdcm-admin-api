@@ -1,0 +1,30 @@
+branches:
+  Diagnosis:
+    # Malignant Neoplasm
+    - NCIT_C9305
+  Treatment:
+    # Chemical Modifier
+    - NCIT_C1932
+    # Dietary Supplement
+    - NCIT_C1505
+    # Drug or Chem by Struct
+    - NCIT_C1913
+    # Industrial Aid
+    - NCIT_C45678
+    # Pharma Substance
+    - NCIT_C1909
+    # Physiology
+    - NCIT_C1899
+    # Hematopoietic
+    - NCIT_C15431
+    # Therapeutic Procedures
+    - NCIT_C49236
+    # Clinical Study
+    - NCIT_C15206
+    # Gene Product
+    - NCIT_C26548
+  Regimen:
+    # Chemotherapy Regimen or Agent Combination
+    - NCIT_C12218
+    # FOLFOX Regimen
+    - NCIT_C11197
