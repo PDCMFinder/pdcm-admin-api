@@ -30,4 +30,6 @@ public interface MappingEntityRepository extends
   List<MappingEntity> findAllByEntityTypeNameIgnoreCase(String entityTypeName);
 
   Optional<MappingEntity> findById(int id);
+
+  void deleteAllByStatus(String status);
 }

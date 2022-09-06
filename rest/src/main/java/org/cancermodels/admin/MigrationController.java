@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/migration")
 public class MigrationController {
 
-  private RulesMigratorService rulesMigratorService;
+  private final RulesMigratorService rulesMigratorService;
 
   public MigrationController(RulesMigratorService rulesMigratorService) {
     this.rulesMigratorService = rulesMigratorService;

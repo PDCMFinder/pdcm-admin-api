@@ -6,9 +6,8 @@ import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
-import org.cancermodels.suggestions.indexers.OntologiesIndexer;
-import org.cancermodels.suggestions.indexers.RulesIndexer;
-import org.cancermodels.suggestions.index.SuggestionsSearcher;
+import org.cancermodels.suggestions.indexers.Indexer;
+import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,34 +20,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/indexer")
 public class IndexerController {
-  private final OntologiesIndexer ontologiesIndexer;
-  private final RulesIndexer rulesIndexer;
+  private final Indexer indexer;
   private final MappingEntityService mappingEntityService;
   private final SuggestionsSearcher suggestionsSearcher;
 
   private final SuggestionManager suggestionManager;
 
   public IndexerController(
-      OntologiesIndexer ontologiesIndexer,
-      RulesIndexer rulesIndexer,
+      Indexer indexer,
       MappingEntityService mappingEntityService,
       SuggestionsSearcher suggestionsSearcher,
       SuggestionManager suggestionManager) {
-    this.ontologiesIndexer = ontologiesIndexer;
-    this.rulesIndexer = rulesIndexer;
+    this.indexer = indexer;
     this.mappingEntityService = mappingEntityService;
     this.suggestionsSearcher = suggestionsSearcher;
     this.suggestionManager = suggestionManager;
   }
 
+  @PutMapping("index")
+  public void indexAll() throws IOException {
+    indexer.index();
+  }
+
   @PutMapping("index/ontologies")
   public void indexOntologies() throws IOException {
-    ontologiesIndexer.index();
+    indexer.indexOntologies();
   }
 
   @PutMapping("index/rules")
   public void indexRules() throws IOException {
-    rulesIndexer.index();
+    indexer.indexRules();
+  }
+
+  @PutMapping("index/helperDocuments")
+  public void indexHelperDocuments() throws IOException {
+    indexer.indexHelperDocuments();
   }
 
   @GetMapping("calculateSuggestions/{id}")
@@ -73,6 +79,13 @@ public class IndexerController {
     for (MappingEntity mappingEntity : treatments) {
       suggestionManager.runSuggestionReportForEntity(mappingEntity);
     }
+  }
+
+  @GetMapping("getHelperSuggestion/{id}")
+  public Suggestion getHelperDoc(@PathVariable int id) throws IOException {
+    MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+        ResourceNotFoundException::new);
+    return suggestionsSearcher.getHelperSuggestion(mappingEntity);
   }
 
 }

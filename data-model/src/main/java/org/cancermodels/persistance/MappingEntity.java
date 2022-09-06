@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.cancermodels.MappingEntityKeyBuilder;
 
 @Entity
 @Data
@@ -76,7 +76,7 @@ public class MappingEntity {
    * providers data
    */
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "mappingEntity")
-  private List<MappingValue> mappingValues;
+  private List<MappingValue> mappingValues = new ArrayList<>();
 
   /**
    * Suggested mappings by rules or ontologies.
@@ -98,6 +98,9 @@ public class MappingEntity {
 
   private String getValuesAsMapString() {
     StringBuilder valuesSb = new StringBuilder();
+    if (mappingValues == null) {
+      return "";
+    }
     for (MappingValue mappingValue : mappingValues) {
       valuesSb.append(mappingValue.getMappingKey().getKey()).append(": ")
           .append(mappingValue.getValue()).append(" ");
@@ -120,11 +123,7 @@ public class MappingEntity {
   }
 
   public String buildMappingKey(){
-    String key = entityType.getName();
-    key += getValuesAsMapString();
-    key = key.replaceAll("[^a-zA-Z0-9 _-]","");
-    key = DigestUtils.sha256Hex(key);
-    return key.toLowerCase();
+    return MappingEntityKeyBuilder.buildKey(this);
   }
 
 }

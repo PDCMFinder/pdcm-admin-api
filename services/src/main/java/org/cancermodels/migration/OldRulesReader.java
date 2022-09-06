@@ -1,7 +1,9 @@
 package org.cancermodels.migration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.util.ResourceReader;
@@ -20,13 +22,13 @@ public class OldRulesReader {
     this.entityTypeService = entityTypeService;
   }
 
-  public List<MappingEntity> readRules(String fileName) {
+  public Set<MappingEntity> readRules(String fileName) {
 
-    List<MappingEntity> mappingEntities = new ArrayList<>();
+    Set<MappingEntity> mappingEntities = new HashSet<>();
 
     String json = ResourceReader.readFileToString("old_rules/" + fileName);
     // TODO: Check spelling
-    json = json.replaceAll("TumorType", "TumourType");
+    json = json.replaceAll("TumourType", "TumorType");
     JsonRuleToEntityMapper mappingEntityMapper = new JsonRuleToEntityMapper(entityTypeService);
 
     try {

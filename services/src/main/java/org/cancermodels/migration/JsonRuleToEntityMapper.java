@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.cancermodels.types.MappingType;
+import org.cancermodels.types.Source;
+import org.cancermodels.types.Status;
 import org.cancermodels.persistance.EntityType;
 import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.persistance.MappingEntity;
@@ -52,13 +55,15 @@ public class JsonRuleToEntityMapper {
     // Making status simpler: mapped or unmapped (from the existing data, might introduce others later)
     String newStatus = originalStatus;
     if ("validated".equalsIgnoreCase(originalStatus)) {
-      newStatus = "mapped";
+      newStatus = Status.MAPPED.getLabel();
     }
     else if("created".equalsIgnoreCase(originalStatus)) {
-      newStatus = "mapped";
+      newStatus = Status.MAPPED.getLabel();
     }
 
-    mappingEntity.setStatus(newStatus);
+    mappingEntity.setStatus(Status.getStatusByName(newStatus).getLabel());
+    mappingEntity.setMappingType(MappingType.MANUAL.getLabel());
+    mappingEntity.setSource(Source.LEGACY.getLabel());
 
     if (!jsonObject.isNull("dateCreated")) {
       Timestamp dataCreatedTimeStamp = new Timestamp(jsonObject.getLong("dateCreated"));

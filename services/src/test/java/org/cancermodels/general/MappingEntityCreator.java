@@ -60,7 +60,7 @@ public class MappingEntityCreator {
 
     MappingKey mappingKey4 = new MappingKey();
     mappingKey4.setEntityType(entityType);
-    mappingKey4.setKey("TumourType");
+    mappingKey4.setKey("TumorType");
     KeySearchConfiguration conf4 = new KeySearchConfiguration();
     conf4.setId(4);
     conf4.setWeight(WEIGHT_4);
