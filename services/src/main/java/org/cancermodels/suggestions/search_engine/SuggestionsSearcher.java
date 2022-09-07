@@ -144,7 +144,7 @@ public class SuggestionsSearcher {
       OntologySuggestion ontologySuggestion = new OntologySuggestion();
 
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +
-          indexableOntologySuggestion.getOntologyTermId().replace(":", "_"));
+          indexableOntologySuggestion.getNcit().replace(":", "_"));
       suggestion.setSuggestedTermLabel(indexableOntologySuggestion.getOntologyTermLabel());
 
       ontologySuggestion.setDefinition(indexableOntologySuggestion.getDefinition());

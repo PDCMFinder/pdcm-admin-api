@@ -99,6 +99,7 @@ public class HelperDocumentsIndexer {
     synonyms.add("synonym containing " + text);
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setOntologyTermLabel("N/A");
+    indexableOntologySuggestion.setNcit("N/A");
     return indexableOntologySuggestion;
   }
 }

@@ -81,6 +81,12 @@ public class IndexableSuggestionMapper {
         fields.add(
             new TextField(FieldsNames.ONTOLOGY_SYNONYM.getName(), synonym, Field.Store.YES));
       }
+
+      if (ontology.getNcit() != null) {
+        fields.add(new TextField(
+            FieldsNames.ONTOLOGY_NCIT_TERM.getName(),
+            ontology.getNcit(), Field.Store.YES));
+      }
     }
     return fields;
   }
@@ -162,9 +168,13 @@ public class IndexableSuggestionMapper {
     String label = document.get(FieldsNames.ONTOLOGY_LABEL.getName());
     String definition = document.get(FieldsNames.ONTOLOGY_DEFINITION.getName());
     Set<String> synonyms = Set.of(document.getValues(FieldsNames.ONTOLOGY_SYNONYM.getName()));
+    String ncitTerm = document.get(FieldsNames.ONTOLOGY_NCIT_TERM.getName());
+//    long id = document.get(FieldsNames.Oni.getName());
 
     IndexableOntologySuggestion ontologySuggestion = new IndexableOntologySuggestion();
-    ontologySuggestion.setOntologyTermId(id);
+
+    ontologySuggestion.setNcit(ncitTerm);
+    ontologySuggestion.setOntologyTermId(0);//todo: change
     ontologySuggestion.setOntologyTermLabel(label);
     ontologySuggestion.setDefinition(definition);
     ontologySuggestion.setSynonyms(synonyms);

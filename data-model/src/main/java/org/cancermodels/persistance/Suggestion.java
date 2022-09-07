@@ -30,6 +30,7 @@ public class Suggestion {
   @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
   private OntologySuggestion ontologySuggestion;
 
+  @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;

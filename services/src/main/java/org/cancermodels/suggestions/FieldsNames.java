@@ -3,6 +3,7 @@ package org.cancermodels.suggestions;
 public enum FieldsNames {
   ID("id"),
   SOURCE_TYPE("sourceType"),
+  ONTOLOGY_NCIT_TERM("ontology.ncit_term"),
   ONTOLOGY_LABEL("ontology.label"),
   ONTOLOGY_DEFINITION("ontology.definition"),
   ONTOLOGY_SYNONYM("ontology.synonym"),

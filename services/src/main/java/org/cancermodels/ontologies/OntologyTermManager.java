@@ -33,7 +33,7 @@ class OntologyTermManager {
 
     OntologyTerm ontologyTerm = new OntologyTerm(url,
         updatedTermLabel, type, description );
-    ontologyTerm.setSynonyms(new ArrayList<>(synonyms));
+    ontologyTerm.setSynonyms(synonyms);
     return ontologyTerm;
   }
 

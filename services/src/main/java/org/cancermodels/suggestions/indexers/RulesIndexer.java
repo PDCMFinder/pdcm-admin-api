@@ -68,6 +68,7 @@ public class RulesIndexer {
     indexableSuggestion.setId(mappingEntity.getMappingKey());
     indexableSuggestion.setSourceType("Rule");
     IndexableRuleSuggestion rule = new IndexableRuleSuggestion();
+    rule.setMappingEntityId(mappingEntity.getId());
     rule.setEntityTypeName(mappingEntity.getEntityType().getName());
     rule.setData(mappingEntity.getValuesAsMap());
     rule.setMappedTermLabel(mappingEntity.getMappedTermLabel());

@@ -2,6 +2,7 @@ package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -53,7 +54,7 @@ public class OntologyTerm {
 
     @Lob
     @ElementCollection
-    private List<String> synonyms;
+    private Set<String> synonyms;
 
     @NonNull
     @Lob

@@ -7,7 +7,8 @@ import lombok.Data;
 public
 class IndexableOntologySuggestion {
 
-  private String ontologyTermId;
+  private long ontologyTermId;
+  private String ncit;
   private String ontologyTermLabel;
   private String definition;
   private Set<String> synonyms;
