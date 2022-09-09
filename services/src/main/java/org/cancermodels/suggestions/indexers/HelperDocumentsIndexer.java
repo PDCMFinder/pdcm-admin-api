@@ -85,6 +85,7 @@ public class HelperDocumentsIndexer {
     indexableRuleSuggestion.setEntityTypeName(mappingEntity.getEntityType().getName());
     indexableRuleSuggestion.setMappedTermLabel("N/A");
     indexableRuleSuggestion.setMappedTermUrl("N/A");
+    indexableRuleSuggestion.setKey("N/A");
     return indexableRuleSuggestion;
   }
   private IndexableOntologySuggestion buildHelperIndexableOntologySuggestion(MappingEntity mappingEntity) {
@@ -100,6 +101,7 @@ public class HelperDocumentsIndexer {
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setOntologyTermLabel("N/A");
     indexableOntologySuggestion.setNcit("N/A");
+    indexableOntologySuggestion.setKey("N/A");
     return indexableOntologySuggestion;
   }
 }

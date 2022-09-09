@@ -63,15 +63,15 @@ public class OntologiesIndexer {
 
   private IndexableSuggestion ncitTermToIndexableSuggestion(OntologyTerm ontologyTerm) {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
-    indexableSuggestion.setId(ontologyTerm.getId().toString());
+    indexableSuggestion.setId(ontologyTerm.getId()+"");
     indexableSuggestion.setSourceType("Ontology");
     IndexableOntologySuggestion ontology = new IndexableOntologySuggestion();
-    ontology.setOntologyTermId(ontologyTerm.getId());
     ontology.setNcit(getNcitIdFromUrl(ontologyTerm.getUrl()));
     String definition = StringUtils.abbreviate(ontologyTerm.getDescription(), Constants.MAX_TEXT_LENGTH);
     ontology.setDefinition(definition);
     ontology.setOntologyTermLabel(ontologyTerm.getLabel());
     ontology.setSynonyms(getFormattedSynonyms(ontologyTerm.getSynonyms()));
+    ontology.setKey(ontologyTerm.getKey());
     indexableSuggestion.setOntology(ontology);
 
     return indexableSuggestion;

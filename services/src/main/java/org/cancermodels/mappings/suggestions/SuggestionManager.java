@@ -78,7 +78,6 @@ public class SuggestionManager {
     for (MappingEntity mappingEntity : mappingEntities) {
       List<Suggestion> suggestions =
           suggestionsSearcher.searchTopSuggestions(mappingEntity);
-      suggestions.forEach(x -> x.setSuggestedMappingEntity(mappingEntity));
       suggestionsByEntity.put(mappingEntity, suggestions);
     }
 

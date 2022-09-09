@@ -35,6 +35,10 @@ public class OntologyService {
     return ontologyTermManager.getAll();
   }
 
+  public OntologyTerm getById(int id) {
+    return ontologyTermManager.getById(id);
+  }
+
   /**
    * Gets all ontology terms as a map, where the key is the type (treatment and regimen grouped
    * as a single one).

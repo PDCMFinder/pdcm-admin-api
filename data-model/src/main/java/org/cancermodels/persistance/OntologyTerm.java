@@ -36,10 +36,14 @@ import lombok.ToString;
 public class OntologyTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @NonNull
     @EqualsAndHashCode.Include
+    @ToString.Include
+    private String key;
+
+    @NonNull
     @ToString.Include
     private String url;
 

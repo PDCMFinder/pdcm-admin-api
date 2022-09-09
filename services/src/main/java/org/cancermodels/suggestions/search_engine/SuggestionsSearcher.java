@@ -3,7 +3,6 @@ package org.cancermodels.suggestions.search_engine;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
@@ -11,9 +10,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.OntologySuggestion;
-import org.cancermodels.persistance.RuleSuggestion;
-import org.cancermodels.persistance.RuleSuggestionData;
+import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.persistance.OntologyTermRepository;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
 import org.springframework.stereotype.Component;
@@ -28,14 +26,20 @@ public class SuggestionsSearcher {
   private final MappingEntityQueryBuilder mappingEntityQueryBuilder;
   private final LuceneIndexReader luceneIndexReader;
   private final IndexableSuggestionMapper indexableSuggestionMapper;
+  private final OntologyTermRepository ontologyTermRepository;
+  private final MappingEntityRepository mappingEntityRepository;
 
   public SuggestionsSearcher(
       MappingEntityQueryBuilder mappingEntityQueryBuilder,
       LuceneIndexReader luceneIndexReader,
-      IndexableSuggestionMapper indexableSuggestionMapper) {
+      IndexableSuggestionMapper indexableSuggestionMapper,
+      OntologyTermRepository ontologyTermRepository,
+      MappingEntityRepository mappingEntityRepository) {
     this.mappingEntityQueryBuilder = mappingEntityQueryBuilder;
     this.luceneIndexReader = luceneIndexReader;
     this.indexableSuggestionMapper = indexableSuggestionMapper;
+    this.ontologyTermRepository = ontologyTermRepository;
+    this.mappingEntityRepository = mappingEntityRepository;
   }
 
   /**
@@ -126,46 +130,25 @@ public class SuggestionsSearcher {
 
     if (indexableRuleSuggestion != null)
     {
-
-      RuleSuggestion ruleSuggestion = new RuleSuggestion();
-
       suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
       suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
-      ruleSuggestion.setKey(indexableSuggestion.getId());
-      setRuleData(indexableRuleSuggestion.getData(), ruleSuggestion);
-      ruleSuggestion.setEntityTypeName(indexableRuleSuggestion.getEntityTypeName());
-      suggestion.setRuleSuggestion(ruleSuggestion);
+      MappingEntity mappingEntity = mappingEntityRepository.findByMappingKey(
+          indexableRuleSuggestion.getKey());
+      suggestion.setMappingEntity(mappingEntity);
     }
     IndexableOntologySuggestion indexableOntologySuggestion
         = indexableSuggestion.getOntology();
     if (indexableOntologySuggestion != null)
     {
-
-      OntologySuggestion ontologySuggestion = new OntologySuggestion();
-
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +
           indexableOntologySuggestion.getNcit().replace(":", "_"));
       suggestion.setSuggestedTermLabel(indexableOntologySuggestion.getOntologyTermLabel());
 
-      ontologySuggestion.setDefinition(indexableOntologySuggestion.getDefinition());
-      ontologySuggestion.setSynonyms(indexableOntologySuggestion.getSynonyms());
+      suggestion.setOntologyTerm(
+          ontologyTermRepository.findByKey(indexableOntologySuggestion.getKey()));
 
-      suggestion.setOntologySuggestion(ontologySuggestion);
     }
     return suggestion;
-  }
-
-  private void setRuleData(Map<String, String> data, RuleSuggestion ruleSuggestion) {
-
-    ruleSuggestion.getMappingValues().clear();
-    for (String key : data.keySet()) {
-      RuleSuggestionData element = new RuleSuggestionData();
-
-      element.setKey(key);
-      element.setValue(data.get(key));
-      element.setRuleSuggestion(ruleSuggestion);
-      ruleSuggestion.getMappingValues().add(element);
-    }
   }
 
 }

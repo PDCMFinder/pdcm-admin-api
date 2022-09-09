@@ -1,10 +1,13 @@
 package org.cancermodels.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import org.cancermodels.admin.dtos.SuggestionDTO;
+import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.types.MappingType;
 import org.cancermodels.NewMappingsDetectorService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -32,15 +35,18 @@ public class MappingController {
   private final MappingEntityMapper mappingEntityMapper;
   private final SuggestionManager suggestionManager;
   private final NewMappingsDetectorService newMappingsDetectorService;
+  private final SuggestionMapper suggestionMapper;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
       SuggestionManager suggestionManager,
-      NewMappingsDetectorService newMappingsDetectorService) {
+      NewMappingsDetectorService newMappingsDetectorService,
+      SuggestionMapper suggestionMapper) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
     this.suggestionManager = suggestionManager;
     this.newMappingsDetectorService = newMappingsDetectorService;
+    this.suggestionMapper = suggestionMapper;
   }
 
   @GetMapping("/{id}")
@@ -70,15 +76,18 @@ public class MappingController {
    * @return List of suggestions
    */
   @PostMapping("/{id}/suggestions")
-  List<Suggestion> getSuggestions(@PathVariable int id) throws IOException {
+  List<SuggestionDTO> getSuggestions(@PathVariable int id) throws IOException {
+    List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
     if (mappingEntity.getSuggestions().isEmpty()) {
       suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
     }
     List<Suggestion> suggestions = mappingEntity.getSuggestions();
-    suggestions.sort(Comparator.comparing(Suggestion::getRelativeScore).reversed());
-    return mappingEntity.getSuggestions();
+    suggestions.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
+
+    suggestionDTOS.sort(Comparator.comparing(SuggestionDTO::getRelativeScore).reversed());
+    return suggestionDTOS;
   }
 
   @GetMapping("/calculateSuggestions")

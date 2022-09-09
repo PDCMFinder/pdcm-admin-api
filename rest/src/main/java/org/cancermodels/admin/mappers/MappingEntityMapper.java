@@ -1,6 +1,5 @@
 package org.cancermodels.admin.mappers;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import org.cancermodels.admin.dtos.MappingValueDTO;
 import org.cancermodels.admin.dtos.MappingValueDTO.MappingKeyDTO;

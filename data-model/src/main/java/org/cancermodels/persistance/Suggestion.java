@@ -1,7 +1,6 @@
 package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,30 +17,28 @@ import lombok.ToString.Exclude;
 @Entity
 @Data
 public class Suggestion {
-  private String sourceType;
-  private String suggestedTermLabel;
-  private String suggestedTermUrl;
-  private double score;
-  private double relativeScore;
-
-  @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-  private RuleSuggestion ruleSuggestion;
-
-  @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-  private OntologySuggestion ontologySuggestion;
 
   @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
+  private String sourceType;
+  private String suggestedTermLabel;
+  private String suggestedTermUrl;
+  private double score;
+  private double relativeScore;
+
   @OneToOne
   @Exclude
-  @JsonIgnore
   @EqualsAndHashCode.Include
   @JoinColumn(name = "suggested_mapping_entity_id")
-  private MappingEntity suggestedMappingEntity;
+  private MappingEntity mappingEntity;
+
+  @OneToOne
+  @Exclude
+  @EqualsAndHashCode.Include
+  @JoinColumn(name = "suggested_ontology_term_id")
+  private OntologyTerm ontologyTerm;
 
 }
-
-
