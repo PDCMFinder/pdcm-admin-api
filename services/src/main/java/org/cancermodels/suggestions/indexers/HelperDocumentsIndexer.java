@@ -2,7 +2,6 @@ package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +17,7 @@ import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
 import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
 import org.cancermodels.suggestions.search_engine.MappingValueConfHelper;
-import org.cancermodels.suggestions.search_engine.QueryHelper;
+import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.springframework.stereotype.Component;
 
@@ -85,6 +84,7 @@ public class HelperDocumentsIndexer {
     indexableRuleSuggestion.setEntityTypeName(mappingEntity.getEntityType().getName());
     indexableRuleSuggestion.setMappedTermLabel("N/A");
     indexableRuleSuggestion.setMappedTermUrl("N/A");
+    indexableRuleSuggestion.setKey("N/A");
     return indexableRuleSuggestion;
   }
   private IndexableOntologySuggestion buildHelperIndexableOntologySuggestion(MappingEntity mappingEntity) {
@@ -99,6 +99,8 @@ public class HelperDocumentsIndexer {
     synonyms.add("synonym containing " + text);
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setOntologyTermLabel("N/A");
+    indexableOntologySuggestion.setNcit("N/A");
+    indexableOntologySuggestion.setKey("N/A");
     return indexableOntologySuggestion;
   }
 }

@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.search_engine;
+package org.cancermodels.suggestions.search_engine.query_builder;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class MappingEntityQueryBuilder {
   public Query buildSuggestionQuery(MappingEntity mappingEntity) throws IOException {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
-    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
+    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
 
     Query ruleAndOntologyCombinedQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);
@@ -62,7 +62,7 @@ public class MappingEntityQueryBuilder {
   public Query buildHelperDocumentQuery(MappingEntity mappingEntity) throws IOException {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
-    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingValues, mappingEntity.getMappingKey());
+    Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
     Query finalQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);
     log.info("Helper query: {}", finalQuery.toString());

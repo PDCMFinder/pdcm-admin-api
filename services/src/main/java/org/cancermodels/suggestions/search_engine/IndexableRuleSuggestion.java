@@ -7,6 +7,7 @@ import lombok.Data;
 public
 class IndexableRuleSuggestion {
 
+  private String key;
   private String mappedTermUrl;
   private String mappedTermLabel;
   private String entityTypeName;

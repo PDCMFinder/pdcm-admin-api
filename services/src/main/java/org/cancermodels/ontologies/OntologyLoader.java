@@ -169,6 +169,7 @@ public class OntologyLoader {
 
   private OntologyTerm createOntologyTermFromJson(JSONObject term, String ontologyType) {
     String url = term.getString("iri");
+    String ncit = term.getString("short_form");
 
     String termLabel = term.getString("label");
     termLabel = termLabel.replaceAll(",", "");
@@ -195,7 +196,7 @@ public class OntologyLoader {
     }
 
     return ontologyTermService.createOntologyTerm(
-        url, termLabel, ontologyType, description.toString(), synonymsSet);
+        ncit, url, termLabel, ontologyType, description.toString(), synonymsSet);
   }
 
 }

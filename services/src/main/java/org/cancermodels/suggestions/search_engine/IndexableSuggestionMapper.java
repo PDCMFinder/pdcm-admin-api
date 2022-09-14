@@ -81,7 +81,16 @@ public class IndexableSuggestionMapper {
         fields.add(
             new TextField(FieldsNames.ONTOLOGY_SYNONYM.getName(), synonym, Field.Store.YES));
       }
+
+      fields.add(new TextField(
+          FieldsNames.ONTOLOGY_NCIT_TERM.getName(),
+          ontology.getNcit(), Field.Store.YES));
+
+      fields.add(new TextField(
+          FieldsNames.ONTOLOGY_KEY.getName(),
+          ontology.getNcit(), Field.Store.YES));
     }
+
     return fields;
   }
 
@@ -102,6 +111,12 @@ public class IndexableSuggestionMapper {
           new StringField(
               FieldsNames.RULE_ENTITY_TYPE_NAME.getName(),
               rule.getEntityTypeName(),
+              Field.Store.YES));
+
+      fields.add(
+          new StringField(
+              FieldsNames.RULE_KEY.getName(),
+              rule.getKey(),
               Field.Store.YES));
 
       Map<String, String> data = rule.getData();
@@ -140,6 +155,7 @@ public class IndexableSuggestionMapper {
     String mappedTermUrl = document.get(FieldsNames.RULE_MAPPED_TERM_URL.getName());
     String mappedTermLabel = document.get(FieldsNames.RULE_MAPPED_TERM_LABEL.getName());
     String entityTypeName = document.get(FieldsNames.RULE_ENTITY_TYPE_NAME.getName());
+    String key = document.get(FieldsNames.RULE_KEY.getName());
     Map<String, String> values = new HashMap<>();
     List<IndexableField> valueFields = document.getFields().stream()
         .filter(x -> x.name().startsWith(FieldsNames.RULE_VALUE.getName())).collect(
@@ -154,6 +170,7 @@ public class IndexableSuggestionMapper {
     ruleSuggestion.setMappedTermLabel(mappedTermLabel);
     ruleSuggestion.setData(values);
     ruleSuggestion.setEntityTypeName(entityTypeName);
+    ruleSuggestion.setKey(key);
 
     indexableSuggestion.setRule(ruleSuggestion);
   }
@@ -162,12 +179,16 @@ public class IndexableSuggestionMapper {
     String label = document.get(FieldsNames.ONTOLOGY_LABEL.getName());
     String definition = document.get(FieldsNames.ONTOLOGY_DEFINITION.getName());
     Set<String> synonyms = Set.of(document.getValues(FieldsNames.ONTOLOGY_SYNONYM.getName()));
+    String ncitTerm = document.get(FieldsNames.ONTOLOGY_NCIT_TERM.getName());
+    String key = document.get(FieldsNames.ONTOLOGY_KEY.getName());
 
     IndexableOntologySuggestion ontologySuggestion = new IndexableOntologySuggestion();
-    ontologySuggestion.setOntologyTermId(id);
+
+    ontologySuggestion.setNcit(ncitTerm);
     ontologySuggestion.setOntologyTermLabel(label);
     ontologySuggestion.setDefinition(definition);
     ontologySuggestion.setSynonyms(synonyms);
+    ontologySuggestion.setKey(key);
 
     indexableSuggestion.setOntology(ontologySuggestion);
   }

@@ -1,4 +1,4 @@
-package org.cancermodels.suggestions.search_engine;
+package org.cancermodels.suggestions.search_engine.query_builder;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,6 +17,7 @@ import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.cancermodels.suggestions.search_engine.AnalyzerProvider;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.springframework.stereotype.Component;
 

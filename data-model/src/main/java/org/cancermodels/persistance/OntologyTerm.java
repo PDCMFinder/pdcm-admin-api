@@ -2,6 +2,7 @@ package org.cancermodels.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -35,10 +36,14 @@ import lombok.ToString;
 public class OntologyTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @NonNull
     @EqualsAndHashCode.Include
+    @ToString.Include
+    private String key;
+
+    @NonNull
     @ToString.Include
     private String url;
 
@@ -53,7 +58,7 @@ public class OntologyTerm {
 
     @Lob
     @ElementCollection
-    private List<String> synonyms;
+    private Set<String> synonyms;
 
     @NonNull
     @Lob

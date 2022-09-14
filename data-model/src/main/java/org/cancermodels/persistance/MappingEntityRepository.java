@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MappingEntityRepository extends
-    JpaRepository<MappingEntity, Long>, JpaSpecificationExecutor<MappingEntity> {
+    JpaRepository<MappingEntity, Integer>, JpaSpecificationExecutor<MappingEntity> {
 
   @Query(
       value =
@@ -29,7 +29,7 @@ public interface MappingEntityRepository extends
 
   List<MappingEntity> findAllByEntityTypeNameIgnoreCase(String entityTypeName);
 
-  Optional<MappingEntity> findById(int id);
-
   void deleteAllByStatus(String status);
+
+  MappingEntity findByMappingKey(String key);
 }

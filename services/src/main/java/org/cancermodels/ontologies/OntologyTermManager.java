@@ -19,6 +19,7 @@ class OntologyTermManager {
   }
 
   public OntologyTerm createOntologyTerm(
+      String ncit,
       String url,
       String termLabel,
       String type,
@@ -31,9 +32,9 @@ class OntologyTermManager {
       updatedTermLabel = updateTermLabel(updatedTermLabel);
     }
 
-    OntologyTerm ontologyTerm = new OntologyTerm(url,
-        updatedTermLabel, type, description );
-    ontologyTerm.setSynonyms(new ArrayList<>(synonyms));
+    OntologyTerm ontologyTerm = new OntologyTerm(
+        ncit, url, updatedTermLabel, type, description );
+    ontologyTerm.setSynonyms(synonyms);
     return ontologyTerm;
   }
 
@@ -51,6 +52,10 @@ class OntologyTermManager {
 
   public List<OntologyTerm> getAll() {
     return ontologyTermRepository.findAll();
+  }
+
+  public OntologyTerm getById(int id) {
+    return ontologyTermRepository.getById(id);
   }
 
   public List<OntologyTerm> getAllByType(String type) {
