@@ -14,6 +14,7 @@ import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.persistance.OntologyTermRepository;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
+import org.cancermodels.suggestions.search_engine.query_builder.MappingEntityQueryBuilder;
 import org.springframework.stereotype.Component;
 
 /**

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
 import org.cancermodels.admin.mappers.MappingEntityMapper;
+import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
 import org.cancermodels.mappings.search.SearchService;
@@ -31,11 +32,14 @@ public class SearchController {
 
   private final SearchService searchService;
   private final MappingEntityMapper mappingEntityMapper;
+  private final SuggestionMapper suggestionMapper;
 
   public SearchController(SearchService searchService,
-      MappingEntityMapper mappingEntityMapper) {
+      MappingEntityMapper mappingEntityMapper,
+      SuggestionMapper suggestionMapper) {
     this.searchService = searchService;
     this.mappingEntityMapper = mappingEntityMapper;
+    this.suggestionMapper = suggestionMapper;
   }
 
   /**

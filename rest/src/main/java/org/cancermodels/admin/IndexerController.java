@@ -1,7 +1,10 @@
 package org.cancermodels.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import org.cancermodels.admin.dtos.SuggestionDTO;
+import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
@@ -25,16 +28,19 @@ public class IndexerController {
   private final SuggestionsSearcher suggestionsSearcher;
 
   private final SuggestionManager suggestionManager;
+  private final SuggestionMapper suggestionMapper;
 
   public IndexerController(
       Indexer indexer,
       MappingEntityService mappingEntityService,
       SuggestionsSearcher suggestionsSearcher,
-      SuggestionManager suggestionManager) {
+      SuggestionManager suggestionManager,
+      SuggestionMapper suggestionMapper) {
     this.indexer = indexer;
     this.mappingEntityService = mappingEntityService;
     this.suggestionsSearcher = suggestionsSearcher;
     this.suggestionManager = suggestionManager;
+    this.suggestionMapper = suggestionMapper;
   }
 
   @PutMapping("index")
@@ -58,11 +64,13 @@ public class IndexerController {
   }
 
   @GetMapping("calculateSuggestions/{id}")
-  List<Suggestion> getMappingEntity(@PathVariable int id) throws IOException {
+  List<SuggestionDTO> getMappingEntity(@PathVariable int id) throws IOException {
+    List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
     List<Suggestion> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
-    return results;
+    results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
+    return suggestionDTOS;
   }
 
   @GetMapping("executeSuggestionsReport")

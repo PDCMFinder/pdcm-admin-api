@@ -8,7 +8,7 @@ import org.apache.lucene.document.Document;
 import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
 import org.junit.jupiter.api.Test;
 
-class IndexableSuggestionOldMapperTest {
+class IndexableSuggestionMapperTest {
 
   private IndexableSuggestionMapper instance = new IndexableSuggestionMapper();
 
@@ -101,9 +101,17 @@ class IndexableSuggestionOldMapperTest {
     data.put("key3", "value3");
     data.put("key4", "value4");
     indexableRuleSuggestion.setData(data);
+    indexableRuleSuggestion.setKey("key");
+    indexableRuleSuggestion.setEntityTypeName("entityTypeName");
     indexableSuggestion.setRule(indexableRuleSuggestion);
 
     Document document = instance.toDocument(indexableSuggestion);
-    System.out.println(document);
+    assertEquals("entityTypeName", document.get("rule.entityTypeName"));
+    assertEquals("mappedTermUrlValue", document.get("rule.mappedTermUrl"));
+    assertEquals("mappedTermLabelValue", document.get("rule.mappedTermLabel"));
+    assertEquals("value1", document.get("rule.value.key1"));
+    assertEquals("value2", document.get("rule.value.key2"));
+    assertEquals("value3", document.get("rule.value.key3"));
+    assertEquals("value4", document.get("rule.value.key4"));
   }
 }

@@ -17,7 +17,7 @@ import org.cancermodels.suggestions.search_engine.IndexableRuleSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
 import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
-import org.cancermodels.suggestions.search_engine.QueryHelper;
+import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.springframework.stereotype.Component;
 
 @Slf4j
