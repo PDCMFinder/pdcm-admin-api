@@ -29,6 +29,9 @@ public interface MappingEntityRepository extends
 
   List<MappingEntity> findAllByEntityTypeNameIgnoreCase(String entityTypeName);
 
+  List<MappingEntity> findAllByEntityTypeNameIgnoreCaseAndStatusOrderByMappingKeyAsc(
+      String entityTypeName, String status);
+
   void deleteAllByStatus(String status);
 
   MappingEntity findByMappingKey(String key);
