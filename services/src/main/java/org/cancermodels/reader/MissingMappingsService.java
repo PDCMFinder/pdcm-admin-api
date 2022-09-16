@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.reader;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -13,10 +13,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.cancermodels.EntityTypeName;
+import org.cancermodels.MappingEntityKeyBuilder;
 import org.cancermodels.mappings.MappingEntityCreator;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.reader.DataReader;
 import org.cancermodels.types.Status;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ import tech.tablesaw.api.Table;
  */
 @Slf4j
 @Component
-public class NewMappingsDetectorService {
+public class MissingMappingsService {
 
   @Value("${data-dir}")
   private String rootDir;
@@ -49,7 +50,7 @@ public class NewMappingsDetectorService {
   // New mappings that need to be saved at the end of the process.
   private Set<MappingEntity> newMappingEntities;
 
-  public NewMappingsDetectorService(DataReader dataReader,
+  public MissingMappingsService(DataReader dataReader,
       MappingEntityRepository mappingEntityRepository,
       MappingEntityCreator mappingEntityCreator) {
     this.dataReader = dataReader;
@@ -62,6 +63,11 @@ public class NewMappingsDetectorService {
         .forEach(x -> existingMappingKeys.put(x.getMappingKey(), x.getId()));
   }
 
+  /**
+   * Reads treatment and diagnosis data and detects terms that are unmapped, creating the
+   * corresponding mapping entities (unmapped) so the curator can map them later.
+   * @return a map with the counts of the new detected terms.
+   */
   @Transactional
   public Map<String, Integer> detectNewUnmappedTerms() {
     // We need to delete Unmapped terms first so we don't end up with orphan values.
@@ -73,7 +79,7 @@ public class NewMappingsDetectorService {
     // record from tsv already exists.
     loadExistingMappingKeys();
 
-    populateMissingMappingsContainer();
+    generateMissingMappings();
 
     log.info("Read {} new mappings", newMappingEntities.size());
 
@@ -95,16 +101,16 @@ public class NewMappingsDetectorService {
     return countsByType;
   }
 
-  public void populateMissingMappingsContainer() {
+  private void generateMissingMappings() {
 
     List<Path> folders = getProviderDirs();
     for (Path path : folders) {
-      populateDiagnosisEntities(path);
-      populateTreatmentEntities(path);
+      generateDiagnosisEntities(path);
+      generateTreatmentEntities(path);
     }
   }
 
-  private void populateDiagnosisEntities(Path path) {
+  private void generateDiagnosisEntities(Path path) {
     log.info("\nSearching diagnosis for " + path.toString());
     String dataSource = path.getFileName().toString();
     log.info("DataSource: " + dataSource);
@@ -113,7 +119,7 @@ public class NewMappingsDetectorService {
     readDiagnosisAttributesFromTemplate(metaDataTemplate, dataSource);
   }
 
-  private void populateTreatmentEntities(Path path) {
+  private void generateTreatmentEntities(Path path) {
     log.info("\nSearching treatments for " + path.toString());
     String dataSource = path.getFileName().toString();
     log.info("DataSource: " + dataSource);
@@ -122,7 +128,7 @@ public class NewMappingsDetectorService {
     readTreatmentAttributesFromTemplate(drugDataTemplate, dataSource);
   }
 
-  public void readDiagnosisAttributesFromTemplate(Map<String, Table> tables, String dataSource) {
+  private void readDiagnosisAttributesFromTemplate(Map<String, Table> tables, String dataSource) {
     try {
       Table sampleTable = tables.get("metadata-patient_sample.tsv");
 
@@ -150,7 +156,7 @@ public class NewMappingsDetectorService {
     }
   }
 
-  public void readTreatmentAttributesFromTemplate(Map<String, Table> tables, String abbrev){
+  private void readTreatmentAttributesFromTemplate(Map<String, Table> tables, String abbrev){
 
     Table drugTable = tables.get("drugdosing-Sheet1.tsv");
     Table treatmentTable = tables.get("patienttreatment-Sheet1.tsv");

@@ -42,4 +42,15 @@ class MappingEntityKeyBuilderTest {
         = "9811fb52e07de50d4c4afb0caca69d95e367e4a7bb458ca00a99a6823b21e233";
     assertEquals(testSHA256, key);
   }
+
+  @Test
+  void buildKeySimilarDiagnosisGivesDifferentKey() {
+    String key1 = MappingEntityKeyBuilder.buildKeyDiagnosisMapping(
+        "Invasive Ductal Carcinoma, Not Otherwise Specified", "tumorTypeTest",
+        "originTissueTest", "dataSourceTest");
+    String key2 = MappingEntityKeyBuilder.buildKeyDiagnosisMapping(
+        "Invasive Ductal Carcinoma Not Otherwise Specified", "tumorTypeTest",
+        "originTissueTest", "dataSourceTest");
+    assertNotEquals(key1, key2);
+  }
 }

@@ -52,7 +52,7 @@ public class OntologySearcherByText {
 
     Query finalQuery = builder.add(
         ontologyQuery, Occur.SHOULD).add(sourceTypeQuery, Occur.MUST_NOT).build();
-    
+
     return queryProcessor.execute(finalQuery);
   }
 }

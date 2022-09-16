@@ -66,7 +66,6 @@ public class SearchController {
       @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
       @RequestParam(value = "status", required = false) List<String> status)
   {
-
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
         .withEntityTypeNames(entityTypeNames)
         .withMappingQuery(mappingQuery)
