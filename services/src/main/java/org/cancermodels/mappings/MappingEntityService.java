@@ -95,4 +95,12 @@ public class MappingEntityService {
         entityTypeName, status);
   }
 
+  public void deleteAll() {
+    mappingEntityRepository.deleteAll();
+  }
+
+  public void savAll(List<MappingEntity> mappingEntities) {
+    mappingEntityRepository.saveAll(mappingEntities);
+  }
+
 }

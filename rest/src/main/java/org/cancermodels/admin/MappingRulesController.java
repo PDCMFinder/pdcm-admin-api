@@ -54,4 +54,14 @@ public class MappingRulesController {
     zipOutputStream.close();
   }
 
+  /**
+   * Deletes all the mapping entities and reload the data from the json files with the mapping rules.
+   * Because the json files contain only Mapped data, any mappings in other status
+   * (Revise, Unmapped, Request) will be lost.
+   */
+  @GetMapping("/restoreMappedMappingEntitiesFromJsons")
+  public void getSimilar() throws IOException {
+    mappingRulesService.restoreMappedMappingEntitiesFromJsons();
+  }
+
 }

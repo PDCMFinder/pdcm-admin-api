@@ -1,6 +1,5 @@
 package org.cancermodels.migration;
 
-import java.util.List;
 import java.util.Set;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;

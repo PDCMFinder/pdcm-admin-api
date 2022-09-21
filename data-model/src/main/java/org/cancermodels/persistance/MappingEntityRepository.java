@@ -34,5 +34,7 @@ public interface MappingEntityRepository extends
 
   void deleteAllByStatus(String status);
 
+  void deleteAllByEntityTypeName(String entityTypeName);
+
   MappingEntity findByMappingKey(String key);
 }

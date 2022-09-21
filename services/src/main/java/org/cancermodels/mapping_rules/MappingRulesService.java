@@ -1,13 +1,23 @@
 package org.cancermodels.mapping_rules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.cancermodels.EntityTypeName;
+import org.cancermodels.mappings.EntityTypeService;
 import org.cancermodels.mappings.MappingEntityService;
+import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.persistance.MappingKey;
+import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.types.Status;
+import org.cancermodels.util.FileManager;
 import org.cancermodels.util.JSONHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,12 +26,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class MappingRulesService {
 
-  private final MappingEntityService mappingEntityService;
+  @Value("${data-dir}")
+  private String rootDir;
 
-  public MappingRulesService(MappingEntityService mappingEntityService) {
+  private final MappingEntityService mappingEntityService;
+  private final EntityTypeService entityTypeService;
+
+  public MappingRulesService(MappingEntityService mappingEntityService,
+      EntityTypeService entityTypeService) {
     this.mappingEntityService = mappingEntityService;
+    this.entityTypeService = entityTypeService;
   }
 
+  /**
+   * Convert the mapped entities in the db into a JSON file
+   * @param entityTypeName Treatment or Diagnosis
+   * @return A string with a json array where each object is the json representation of a
+   * mapping entity.
+   * @throws JsonProcessingException
+   */
   public String buildMappingRulesJson(String entityTypeName)
       throws JsonProcessingException {
     validateEntityType(entityTypeName);
@@ -60,4 +83,73 @@ public class MappingRulesService {
     mappingRule.setDateUpdated(mappingEntity.getDateUpdated());
     return mappingRule;
   }
+
+  private MappingEntity mappingRuleToMappingEntity(MappingRule mappingRule) {
+    MappingEntity mappingEntity = new MappingEntity();
+    mappingEntity.setMappingKey(mappingRule.getMappingKey());
+    EntityType entityType = getEntityType(mappingRule.getEntityType());
+    mappingEntity.setEntityType(entityType);
+    mappingEntity.setMappingValues(
+        getMappingValuesFromMap(mappingRule.getMappingValues(), mappingEntity, entityType));
+    mappingEntity.setMappedTermLabel(mappingRule.getMappedTermLabel());
+    mappingEntity.setMappedTermUrl(mappingRule.getMappedTermUrl());
+    mappingEntity.setStatus(mappingRule.getStatus());
+    mappingEntity.setMappingType(mappingRule.getMappingType());
+    mappingEntity.setSource(mappingRule.getSource());
+    mappingEntity.setDateCreated(mappingRule.getDateCreated());
+    mappingEntity.setDateUpdated(mappingRule.getDateUpdated());
+    return mappingEntity;
+  }
+
+  /**
+   * Deletes all the mapping entities and reload the data from the json files with the mapping rules.
+   * Because the json files contain only Mapped data, any mappings in other status
+   * (Revise, Unmapped, Request) will be lost.
+   */
+  public void restoreMappedMappingEntitiesFromJsons() throws IOException {
+    mappingEntityService.deleteAll();
+    for (EntityType entityType : entityTypeService.getAll()) {
+      List<MappingRule> mappingRules = readRulesFromJsonByType(entityType);
+      List<MappingEntity> mappingEntities = mappingRules.stream().map(
+          this::mappingRuleToMappingEntity).collect(
+          Collectors.toList());
+      mappingEntityService.savAll(mappingEntities);
+    }
+
+  }
+
+  private List<MappingValue> getMappingValuesFromMap(
+      Map<String, String> map, MappingEntity mappingEntity, EntityType entityType) {
+    List<MappingValue> mappingValues = new ArrayList<>();
+    for (String key : map.keySet()) {
+      MappingValue mappingValue = new MappingValue();
+      mappingValue.setMappingEntity(mappingEntity);
+      mappingValue.setMappingKey(getMappingKeyByName(key, entityType));
+      mappingValue.setValue(map.get(key));
+      mappingValues.add(mappingValue);
+    }
+    return mappingValues;
+  }
+
+  private MappingKey getMappingKeyByName(String name, EntityType entityType) {
+    List<MappingKey> mappingKeys = entityType.getMappingKeys();
+    for (MappingKey mappingKey : mappingKeys) {
+      if (mappingKey.getKey().equalsIgnoreCase(name)) {
+        return mappingKey;
+      }
+    }
+    return null;
+  }
+
+  private EntityType getEntityType(String name) {
+    return entityTypeService.getEntityTypeByName(name);
+  }
+
+  private List<MappingRule> readRulesFromJsonByType(EntityType entityType) throws IOException {
+    String mappingJsonFilePath = rootDir + "/mapping/" + entityType.getMappingRulesFileName();
+    String json = FileManager.getStringFromFile(mappingJsonFilePath);
+    return JSONHelper.fromJson(json, new TypeReference<>() {
+    });
+  }
+
 }
