@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdcm-h2-dev
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pdcm-h2-dev
+    spec:
+      containers:
+        - name: pdcm-h2-dev
+          image: 'oscarfonts/h2:1.4.197'
+          ports:
+          - containerPort: 81
+          volumeMounts:
+            - name: pv-data
+              mountPath: /opt/h2-data
+      volumes:
+        - name: pv-data
+          persistentVolumeClaim:
+            claimName: pdcm-admin-dev-pvc

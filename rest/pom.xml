@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>rest</artifactId>
+  <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
@@ -44,6 +45,45 @@
     </dependency>
 
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>org.cancermodels.admin.AdminApplication</mainClass>
+          <layout>ZIP</layout>
+          <skip>false</skip>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <from>
+            <image>adoptopenjdk:11-jre-hotspot</image>
+          </from>
+          <to>
+            <image>registry.hub.docker.com/pdxfinder/pdcm-admin-api</image>
+          </to>
+          <container>
+            <mainClass>org.cancermodels.admin.AdminApplication</mainClass>
+          </container>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
 
 
 </project>

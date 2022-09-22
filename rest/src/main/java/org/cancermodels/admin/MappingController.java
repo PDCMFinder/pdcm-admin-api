@@ -9,7 +9,7 @@ import java.util.Map;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.types.MappingType;
-import org.cancermodels.NewMappingsDetectorService;
+import org.cancermodels.reader.MissingMappingsService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
@@ -34,18 +34,18 @@ public class MappingController {
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
   private final SuggestionManager suggestionManager;
-  private final NewMappingsDetectorService newMappingsDetectorService;
+  private final MissingMappingsService missingMappingsService;
   private final SuggestionMapper suggestionMapper;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
       SuggestionManager suggestionManager,
-      NewMappingsDetectorService newMappingsDetectorService,
+      MissingMappingsService newMappingsDetectorService,
       SuggestionMapper suggestionMapper) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
     this.suggestionManager = suggestionManager;
-    this.newMappingsDetectorService = newMappingsDetectorService;
+    this.missingMappingsService = newMappingsDetectorService;
     this.suggestionMapper = suggestionMapper;
   }
 
@@ -100,9 +100,14 @@ public class MappingController {
     mappingEntityService.setMappingSuggestions();
   }
 
+  /**
+   * Reads treatment and diagnosis data and detects terms that are unmapped, creating the
+   * corresponding mapping entities (unmapped) so the curator can map them later.
+   * @return a map with the counts of the new detected terms.
+   */
   @PutMapping("/detectNewMappings")
   public Map<String, Integer> detectNewMappings() {
-    return newMappingsDetectorService.detectNewUnmappedTerms();
+    return missingMappingsService.detectNewUnmappedTerms();
   }
 
 }
