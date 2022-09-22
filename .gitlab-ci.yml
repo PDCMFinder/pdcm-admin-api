@@ -12,7 +12,7 @@ maven-build:
   only:
     refs:
       - main
-      - development
+      - develop
 
 deploy-HH-WP-WEBADMIN-dev:
   stage: deploy
@@ -34,7 +34,7 @@ deploy-HH-WP-WEBADMIN-dev:
     - kubectl get pods,service,deploy,replicaset,ing -n "${HH_WP_WEBADMIN_DEV_NAMESPACE}"
   only:
     refs:
-      - development
+      - develop
 
 deploy-HH-WP-WEBADMIN-master:
   stage: deploy
