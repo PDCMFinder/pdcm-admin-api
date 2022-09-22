@@ -49,6 +49,11 @@ public class MappingController {
     this.suggestionMapper = suggestionMapper;
   }
 
+  /**
+   * Get the DTO representation of a {@link MappingEntity}.
+   * @param id Id of the mapping entity.
+   * @return {@link MappingEntityDTO} object.
+   */
   @GetMapping("/{id}")
   MappingEntityDTO getMappingEntity(@PathVariable int id) {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
