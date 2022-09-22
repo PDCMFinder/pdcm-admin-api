@@ -9,10 +9,7 @@ ALTER TABLE entity_type ADD CONSTRAINT pk_entity_type PRIMARY KEY (id);
 CREATE TABLE mapping_key (
     id INTEGER NOT NULL,
     entity_type_id INTEGER,
-    key VARCHAR2,
-    weight DECIMAL,
-    search_on_ontology BOOLEAN,
-    search_on_ontology_position INTEGER
+    key VARCHAR2
 );
 
 ALTER TABLE mapping_key ADD CONSTRAINT pk_mapping_key PRIMARY KEY (id);
@@ -25,14 +22,34 @@ ALTER TABLE mapping_key
 ALTER TABLE mapping_key
 ADD CONSTRAINT uc_mapping_key UNIQUE (entity_type_id, key);
 
+CREATE TABLE key_search_configuration (
+    id INTEGER NOT NULL,
+    main_field VARCHAR2,
+    search_on_ontology BOOLEAN,
+    multi_field_query BOOLEAN,
+    weight DOUBLE,
+    key_id INTEGER NOT NULL
+);
+
+ALTER TABLE key_search_configuration ADD CONSTRAINT pk_key_search_configuration PRIMARY KEY (id);
+
+ALTER TABLE key_search_configuration
+    ADD CONSTRAINT fk_key_search_configuration_mapping_key
+    FOREIGN KEY (key_id)
+    REFERENCES mapping_key (id);
+
+
 CREATE TABLE mapping_entity (
     id INTEGER NOT NULL,
+    mapping_key VARCHAR2 NOT NULL,
     entity_type_id INTEGER,
     mapped_term_label VARCHAR2,
     mapped_term_url VARCHAR2,
     status VARCHAR2,
     date_created TIMESTAMP,
-    date_updated TIMESTAMP
+    date_updated TIMESTAMP,
+    mapping_type VARCHAR2,
+    source VARCHAR2
 );
 
 ALTER TABLE mapping_entity ADD CONSTRAINT pk_mapping_entity PRIMARY KEY (id);
@@ -55,24 +72,6 @@ ALTER TABLE mapping_value
 -- ALTER TABLE mapping_value
 -- ADD CONSTRAINT uc_mapping_value UNIQUE (key_id, value);
 
-CREATE TABLE mapping_entity_suggestion (
-    id INTEGER NOT NULL,
-    mapping_entity_id INTEGER,
-    suggested_mapping_entity_id INTEGER,
-    score NUMERIC(4,2)
-);
-
-ALTER TABLE mapping_entity_suggestion ADD CONSTRAINT pk_mapping_entity_suggestion PRIMARY KEY (id);
-
-ALTER TABLE mapping_entity_suggestion
-    ADD CONSTRAINT fk_mapping_entity_suggestion_mapping_entity_01
-    FOREIGN KEY (mapping_entity_id)
-    REFERENCES mapping_entity (id) ON DELETE CASCADE;
-
-ALTER TABLE mapping_entity_suggestion
-    ADD CONSTRAINT fk_mapping_entity_suggestion_mapping_entity_02
-    FOREIGN KEY (suggested_mapping_entity_id)
-    REFERENCES mapping_entity (id) ON DELETE CASCADE;
 
 CREATE TABLE ontology_term (
     id INTEGER NOT NULL,
@@ -89,8 +88,8 @@ CREATE TABLE ontology_term_synonyms (
     synonyms VARCHAR2
 );
 
-ALTER TABLE ontology_term_synomyms
-    ADD CONSTRAINT fk_ontology_term_synomyms_ontology_term
+ALTER TABLE ontology_term_synonyms
+    ADD CONSTRAINT fk_ontology_term_synonyms_ontology_term
     FOREIGN KEY (ontology_term_id)
     REFERENCES ontology_term (id);
 
@@ -103,12 +102,33 @@ CREATE TABLE ontology_load_report (
     number_regimen_terms  INTEGER NOT NULL
 );
 
-CREATE TABLE unprocessed_ontology_url (
+ALTER TABLE ontology_load_report ADD CONSTRAINT pk_ontology_load_report PRIMARY KEY (id);
+
+CREATE TABLE suggestion (
     id INTEGER NOT NULL,
-    URL VARCHAR2,
-    TYPE VARCHAR2,
-    attempts  INTEGER NOT NULL,
-    error_message  VARCHAR2,
-    note  VARCHAR2,
-    raw_term_url VARCHAR2
+    relative_score DOUBLE NOT NULL,
+    score DOUBLE NOT NULL,
+    source_type VARCHAR2,
+    suggested_term_label VARCHAR2,
+    suggested_term_url VARCHAR2,
+    suggested_mapping_entity_id INTEGER NOT NULL,
+    suggested_ontology_term_id INTEGER NOT NULL,
+    mapping_entity_id  INTEGER NOT NULL
 );
+
+ALTER TABLE suggestion ADD CONSTRAINT pk_suggestion PRIMARY KEY (id);
+
+ALTER TABLE suggestion
+    ADD CONSTRAINT fk_suggestion_mapping_entity_01
+    FOREIGN KEY (suggested_mapping_entity_id)
+    REFERENCES mapping_entity (id);
+
+ALTER TABLE suggestion
+    ADD CONSTRAINT fk_suggestion_ontology_term
+    FOREIGN KEY (suggested_ontology_term_id)
+    REFERENCES ontology_term (id);
+
+ALTER TABLE suggestion
+    ADD CONSTRAINT fk_suggestion_mapping_entity_02
+    FOREIGN KEY (mapping_entity_id)
+    REFERENCES ontology_term (id);
