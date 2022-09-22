@@ -111,8 +111,8 @@ CREATE TABLE suggestion (
     source_type VARCHAR2,
     suggested_term_label VARCHAR2,
     suggested_term_url VARCHAR2,
-    suggested_mapping_entity_id INTEGER NOT NULL,
-    suggested_ontology_term_id INTEGER NOT NULL,
+    suggested_mapping_entity_id INTEGER,
+    suggested_ontology_term_id INTEGER,
     mapping_entity_id  INTEGER NOT NULL
 );
 
@@ -131,4 +131,4 @@ ALTER TABLE suggestion
 ALTER TABLE suggestion
     ADD CONSTRAINT fk_suggestion_mapping_entity_02
     FOREIGN KEY (mapping_entity_id)
-    REFERENCES ontology_term (id);
+    REFERENCES mapping_entity (id);
