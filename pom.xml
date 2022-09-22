@@ -52,5 +52,22 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <configuration>
+            <!--
+            besides hindering the packaging, this also skips running the app after build when calling spring-boot:run. You have to enable it in the
+            corresponding module by setting skip to false, there.
+            -->
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
 </project>

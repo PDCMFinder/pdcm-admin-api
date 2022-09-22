@@ -40,6 +40,15 @@ public class MappingEntityService {
   }
 
   /**
+   * Find a {@link MappingEntity} using its key.
+   * @param key key of the mapping entity.
+   * @return Optional with the Mapping entity if found.
+   */
+  public MappingEntity findByKey(String key) {
+    return mappingEntityRepository.findByMappingKey(key);
+  }
+
+  /**
    * Updates some values in a mapping entity, if changed: Status, Mapping Term Label, Mapping Term Url
    * @param mappingEntity Entity with the new information
    * @return Mapping after it was updated
@@ -79,6 +88,19 @@ public class MappingEntityService {
 
   public List<MappingEntity> getAllByTypeName(String entityTypeName) {
     return mappingEntityRepository.findAllByEntityTypeNameIgnoreCase(entityTypeName);
+  }
+
+  public List<MappingEntity> getAllByTypeNameAndStatus(String entityTypeName, String status) {
+    return mappingEntityRepository.findAllByEntityTypeNameIgnoreCaseAndStatusOrderByMappingKeyAsc(
+        entityTypeName, status);
+  }
+
+  public void deleteAll() {
+    mappingEntityRepository.deleteAll();
+  }
+
+  public void savAll(List<MappingEntity> mappingEntities) {
+    mappingEntityRepository.saveAll(mappingEntities);
   }
 
 }
