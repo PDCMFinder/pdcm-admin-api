@@ -58,26 +58,16 @@
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>com.google.cloud.tools</groupId>
-          <artifactId>jib-maven-plugin</artifactId>
-          <version>2.8.0</version>
           <configuration>
-            <from>
-              <image>adoptopenjdk:11-jre-hotspot</image>
-            </from>
-            <to>
-              <image>registry.hub.docker.com/pdxfinder/pdcm-admin-api</image>
-            </to>
-            <container>
-              <mainClass>org.cancermodels.admin.AdminApplication</mainClass>
-            </container>
+            <!--
+            besides hindering the packaging, this also skips running the app after build when calling spring-boot:run. You have to enable it in the
+            corresponding module by setting skip to false, there.
+            -->
+            <skip>true</skip>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
   </build>
-
 
 </project>

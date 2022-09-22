@@ -1,8 +1,3 @@
-DROP TABLE mapping_value cascade;
-DROP TABLE entity_type cascade;
-DROP TABLE mapping_entity cascade;
-DROP TABLE mapping_key cascade;
-
 CREATE TABLE entity_type (
     id INTEGER NOT NULL,
     name VARCHAR2,
@@ -89,7 +84,7 @@ CREATE TABLE ontology_term (
 
 ALTER TABLE ontology_term ADD CONSTRAINT pk_ontology_term PRIMARY KEY (id);
 
-CREATE TABLE ontology_term_synomyms (
+CREATE TABLE ontology_term_synonyms (
     ontology_term_id INTEGER NOT NULL,
     synonyms VARCHAR2
 );
