@@ -66,6 +66,24 @@
             <skip>true</skip>
           </configuration>
         </plugin>
+        <!--  Moving this here because when it was in the rest project if failed in
+        gitlab as it is run from the root project and it didn't have a reference to jib-->
+        <plugin>
+          <groupId>com.google.cloud.tools</groupId>
+          <artifactId>jib-maven-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <from>
+              <image>adoptopenjdk:11-jre-hotspot</image>
+            </from>
+            <to>
+              <image>registry.hub.docker.com/pdxfinder/pdcm-admin-api</image>
+            </to>
+            <container>
+              <mainClass>org.cancermodels.admin.AdminApplication</mainClass>
+            </container>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
