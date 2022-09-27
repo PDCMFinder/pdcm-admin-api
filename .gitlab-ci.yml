@@ -2,17 +2,25 @@ stages:
   - build
   - deploy
 
-maven-build:
+maven-build-dev:
   image: maven:3.6.3-openjdk-11
   stage: build
   script:
-    - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:"$CI_COMMIT_REF_NAME" -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=${CI_COMMIT_SHA}
-    - mvn jib:build -Djib.to.auth.username=${CI_REGISTRY_USER} -Djib.to.auth.password=${CI_REGISTRY_PASSWORD} -Djib.to.image=${CI_REGISTRY_IMAGE}:"$CI_COMMIT_REF_NAME" -Djib.to.tags=${CI_COMMIT_SHA}
+    - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:dev -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=dev
+
+  only:
+    refs:
+      - develop
+
+maven-build-prod:
+  image: maven:3.6.3-openjdk-11
+  stage: build
+  script:
+    - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:prod -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=prod
 
   only:
     refs:
       - main
-      - develop
 
 deploy-HH-WP-WEBADMIN-dev:
   stage: deploy
@@ -49,10 +57,10 @@ deploy-HH-WP-WEBADMIN-master:
 
     - sed -i "s/latest/$CI_COMMIT_SHA/g" k8-deploy/prod/pdcm-admin-api-deployment.yaml
 
-    - kubectl apply -f k8-deploy/prod/pdcm-admin-api-deployment.yaml --record
-    - kubectl rollout status -f k8-deploy/prod/pdcm-admin-api-deployment.yaml
+    - kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record
+    - kubectl rollout status -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
 
-    - kubectl apply -f k8-deploy/prod/pdcm-admin-api-service.yaml --record
+    - kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-service.yaml --record
     - kubectl get pods,service,deploy,replicaset,ing -n "${HH_WP_WEBADMIN_NAMESPACE}"
   only:
     refs:

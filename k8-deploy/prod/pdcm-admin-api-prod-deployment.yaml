@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: pdcm-admin-api-dev
-  namespace: pdx-admin-interface-dev
+  name: pdcm-admin-api
+  namespace: pdx-admin-interface
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: pdcm-admin-api-dev
+        app: pdcm-admin-api
     spec:
       containers:
-        - name: pdcm-admin-api-dev
-          image: 'pdxfinder/pdcm-admin-api:dev'
+        - name: pdcm-admin-api
+          image: 'pdxfinder/pdcm-admin-api:prod'
           imagePullPolicy: Always
           args:
-            - --data-base-location=tcp://hh-rke-wp-webadmin-20-worker-1.caas.ebi.ac.uk:30710
+            - --data-base-location=tcp://hh-rke-wp-webadmin-20-worker-1.caas.ebi.ac.uk:30283
             - --data-dir=/opt/pdcm-data
           ports:
             - containerPort: 8080
@@ -29,5 +29,5 @@ spec:
       volumes:
         - name: pv-data
           persistentVolumeClaim:
-            claimName: pdcm-admin-dev-pvc
+            claimName: pdcm-admin-pvc
 
