@@ -2,17 +2,27 @@ stages:
   - build
   - deploy
 
-maven-build:
+maven-build-dev:
   image: maven:3.6.3-openjdk-11
   stage: build
   script:
     - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:"$CI_COMMIT_REF_NAME" -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=${CI_COMMIT_SHA}
-    - mvn jib:build -Djib.to.auth.username=${CI_REGISTRY_USER} -Djib.to.auth.password=${CI_REGISTRY_PASSWORD} -Djib.to.image=${CI_REGISTRY_IMAGE}:"$CI_COMMIT_REF_NAME" -Djib.to.tags=${CI_COMMIT_SHA}
+    - mvn jib:build -Djib.to.auth.username=${CI_REGISTRY_USER} -Djib.to.auth.password=${CI_REGISTRY_PASSWORD} -Djib.to.image=${CI_REGISTRY_IMAGE}:dev -Djib.to.tags=dev
+
+  only:
+    refs:
+      - develop
+
+maven-build-prod:
+  image: maven:3.6.3-openjdk-11
+  stage: build
+  script:
+    - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:"$CI_COMMIT_REF_NAME" -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=${CI_COMMIT_SHA}
+    - mvn jib:build -Djib.to.auth.username=${CI_REGISTRY_USER} -Djib.to.auth.password=${CI_REGISTRY_PASSWORD} -Djib.to.image=${CI_REGISTRY_IMAGE}:prod -Djib.to.tags=prod
 
   only:
     refs:
       - main
-      - develop
 
 deploy-HH-WP-WEBADMIN-dev:
   stage: deploy
