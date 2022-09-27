@@ -1,17 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: pdcm-h2-dev
-  namespace: pdx-admin-interface-dev
+  name: pdcm-h2
+  namespace: pdx-admin-interface
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: pdcm-h2-dev
+        app: pdcm-h2
     spec:
       containers:
-        - name: pdcm-h2-dev
+        - name: pdcm-h2
           image: 'oscarfonts/h2:1.4.197'
           ports:
           - containerPort: 81
@@ -21,4 +21,4 @@ spec:
       volumes:
         - name: pv-data
           persistentVolumeClaim:
-            claimName: pdcm-admin-dev-pvc
+            claimName: pdcm-admin-pvc
