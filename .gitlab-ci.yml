@@ -33,6 +33,8 @@ deploy-HH-WP-WEBADMIN-dev:
     - kubectl config use-context "${HH_WP_WEBADMIN_DEV_NAMESPACE}"
     - kubectl version
 
+    - sed -i "s|DATA_REPO_GITLAB_TOKEN|${DATA_REPO_GITLAB_TOKEN}|g" k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml
+
     - kubectl apply -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml --record
     - kubectl rollout status -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml
 
@@ -52,6 +54,8 @@ deploy-HH-WP-WEBADMIN-master:
     - kubectl config set-context "${HH_WP_WEBADMIN_NAMESPACE}" --cluster=local --user=${HH_WP_WEBADMIN_USER} --namespace="${HH_WP_WEBADMIN_NAMESPACE}"
     - kubectl config use-context "${HH_WP_WEBADMIN_NAMESPACE}"
     - kubectl version
+
+    - sed -i "s|DATA_REPO_GITLAB_TOKEN|${DATA_REPO_GITLAB_TOKEN}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
 
     - kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record
     - kubectl rollout status -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml

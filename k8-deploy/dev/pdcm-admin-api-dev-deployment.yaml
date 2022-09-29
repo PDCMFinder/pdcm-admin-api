@@ -17,6 +17,8 @@ spec:
           args:
             - --data-base-location=tcp://hh-rke-wp-webadmin-20-worker-1.caas.ebi.ac.uk:30710
             - --data-dir=/opt/pdcm-data
+            - --data_repo_gitlab_branch=dev
+            - --data_repo_gitlab_token=DATA_REPO_GITLAB_TOKEN
           ports:
             - containerPort: 8080
 #          envFrom:
