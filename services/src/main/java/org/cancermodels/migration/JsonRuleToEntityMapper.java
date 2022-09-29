@@ -61,6 +61,11 @@ public class JsonRuleToEntityMapper {
       newStatus = Status.MAPPED.getLabel();
     }
 
+    // Ignore orphaned status!
+    if (originalStatus.equalsIgnoreCase("orphaned")) {
+      return null;
+    }
+
     mappingEntity.setStatus(Status.getStatusByName(newStatus).getLabel());
     mappingEntity.setMappingType(MappingType.MANUAL.getLabel());
     mappingEntity.setSource(Source.LEGACY.getLabel());
