@@ -23,6 +23,12 @@ public class InputDataDownloaderService {
   @Value("${data-dir}")
   private String dataDir;
 
+  @Value("${providers_data_path}")
+  private String providersRootFolderPath;
+
+  @Value("${mapping_path}")
+  private String mappingPath;
+
   public InputDataDownloaderService(InputFilesFinder inputFilesFinder) {
     this.inputFilesFinder = inputFilesFinder;
   }
@@ -44,8 +50,12 @@ public class InputDataDownloaderService {
   }
 
   private void deleteData() throws IOException {
-    log.warn("Deleting all data in {}", dataDir);
-    FileUtils.cleanDirectory(new File(dataDir));
+    String providersDataDirectory = dataDir + "/" + providersRootFolderPath;
+    String mappingRulesDirectory = dataDir + "/" + mappingPath;
+    log.warn("Deleting all data in {}", providersDataDirectory);
+    FileUtils.cleanDirectory(new File(providersDataDirectory));
+    log.warn("Deleting all data in {}", mappingRulesDirectory);
+    FileUtils.cleanDirectory(new File(mappingRulesDirectory));
   }
 
   private void writeFiles(List<RepositoryFile> files) throws IOException {
