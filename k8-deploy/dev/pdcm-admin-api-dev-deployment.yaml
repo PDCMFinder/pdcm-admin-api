@@ -31,5 +31,5 @@ spec:
       volumes:
         - name: pv-data
           persistentVolumeClaim:
-            claimName: pdcm-admin-dev-pvc
+            claimName: pdcm-data-dev-pvc
 
