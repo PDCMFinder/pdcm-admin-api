@@ -1,6 +1,7 @@
 package org.cancermodels.exception_handling;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cancermodels.input_data.exceptions.InputFileDownloadException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleIllegalArgumentException(
       IllegalArgumentException ex, WebRequest request) {
     String error = "Invalid parameters";
+    return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+  }
+
+  @ExceptionHandler(InputFileDownloadException.class)
+  protected ResponseEntity<Object> handleIllegalArgumentException(
+      InputFileDownloadException ex, WebRequest request) {
+    String error = "Exception downloading input file";
     return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
   }
 

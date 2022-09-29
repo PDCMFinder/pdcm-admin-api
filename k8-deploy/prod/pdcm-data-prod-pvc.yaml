@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pdcm-admin-dev-pvc
-  namespace: pdx-admin-interface-dev
+  name: pdcm-data-pvc
+  namespace: pdx-admin-interface
 spec:
   accessModes:
     - ReadWriteOnce
