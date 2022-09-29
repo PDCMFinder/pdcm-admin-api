@@ -35,7 +35,14 @@ deploy-HH-WP-WEBADMIN-dev:
 
     - sed -i "s|DATA_REPO_GITLAB_TOKEN|${DATA_REPO_GITLAB_TOKEN}|g" k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml
 
-    - kubectl apply -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml --record
+    - |
+      if kubectl apply -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml --record | grep -q unchanged; then
+          echo "=> Patching deployment to force image update."
+          kubectl patch -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml --record -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+      else
+          echo "=> Deployment apply has changed the object, no need to force image update."
+      fi
+
     - kubectl rollout status -f k8-deploy/dev/pdcm-admin-api-dev-deployment.yaml
 
     - kubectl apply -f k8-deploy/dev/pdcm-admin-api-dev-service.yaml --record
@@ -57,7 +64,14 @@ deploy-HH-WP-WEBADMIN-master:
 
     - sed -i "s|DATA_REPO_GITLAB_TOKEN|${DATA_REPO_GITLAB_TOKEN}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
 
-    - kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record
+    - |
+      if kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record | grep -q unchanged; then
+          echo "=> Patching deployment to force image update."
+          kubectl patch -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+      else
+          echo "=> Deployment apply has changed the object, no need to force image update."
+      fi
+
     - kubectl rollout status -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
 
     - kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-service.yaml --record
