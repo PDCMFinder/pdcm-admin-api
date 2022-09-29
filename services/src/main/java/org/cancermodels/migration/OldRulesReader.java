@@ -37,7 +37,9 @@ public class OldRulesReader {
         for (int i = 0; i < rows.length(); i++) {
           JSONObject row = rows.getJSONObject(i);
           MappingEntity mappingEntity = mappingEntityMapper.jsonObjectToMappingEntity(row);
-          mappingEntities.add(mappingEntity);
+          if (mappingEntity != null) {
+            mappingEntities.add(mappingEntity);
+          }
         }
       }
 
