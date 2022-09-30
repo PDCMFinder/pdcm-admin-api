@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -15,6 +16,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.cancermodels.suggestions.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -87,7 +89,7 @@ public class LuceneIndexReader {
         retry = false;
         return getIndexSearcher().search(query, maxHits);
       }
-      catch (IndexSearcher.TooManyClauses | IOException e)
+      catch (IndexSearcher.TooManyClauses tmce)
       {
         // The default is 1024.
         int maxCount = IndexSearcher.getMaxClauseCount();
@@ -96,6 +98,13 @@ public class LuceneIndexReader {
         log.error(query.toString());
         IndexSearcher.setMaxClauseCount(newCount);
         retry = true;
+      }
+      catch (IOException e)
+      {
+        if (e instanceof IndexNotFoundException) {
+          throw new QueryException("There is not indexed data to execute the query.");
+        }
+        throw new QueryException(e);
       }
     }
     return null;
