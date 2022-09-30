@@ -52,10 +52,16 @@ public class InputDataDownloaderService {
   private void deleteData() throws IOException {
     String providersDataDirectory = dataDir + "/" + providersRootFolderPath;
     String mappingRulesDirectory = dataDir + "/" + mappingPath;
-    log.warn("Deleting all data in {}", providersDataDirectory);
-    FileUtils.cleanDirectory(new File(providersDataDirectory));
-    log.warn("Deleting all data in {}", mappingRulesDirectory);
-    FileUtils.cleanDirectory(new File(mappingRulesDirectory));
+    cleanDirectoryIfExists(providersDataDirectory);
+    cleanDirectoryIfExists(mappingRulesDirectory);
+  }
+
+  private void cleanDirectoryIfExists(String directoryPath) throws IOException {
+    File directory = new File(directoryPath);
+    if (directory.exists()) {
+      log.warn("Deleting all data in {}", directoryPath);
+      FileUtils.cleanDirectory(directory);
+    }
   }
 
   private void writeFiles(List<RepositoryFile> files) throws IOException {
