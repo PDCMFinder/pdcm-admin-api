@@ -132,3 +132,13 @@ ALTER TABLE suggestion
     ADD CONSTRAINT fk_suggestion_mapping_entity_02
     FOREIGN KEY (mapping_entity_id)
     REFERENCES mapping_entity (id);
+
+CREATE TABLE process_report (
+    id INTEGER NOT NULL,
+    module VARCHAR2,
+    attribute VARCHAR2,
+    value VARCHAR2,
+    date TIMESTAMP
+);
+
+ALTER TABLE process_report ADD CONSTRAINT pk_process_report PRIMARY KEY (id);

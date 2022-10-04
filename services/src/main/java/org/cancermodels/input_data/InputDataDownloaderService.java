@@ -2,9 +2,12 @@ package org.cancermodels.input_data;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.cancermodels.process_report.ProcessReportService;
+import org.cancermodels.types.ProcessReportModules;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +32,12 @@ public class InputDataDownloaderService {
   @Value("${mapping_path}")
   private String mappingPath;
 
-  public InputDataDownloaderService(InputFilesFinder inputFilesFinder) {
+  private final ProcessReportService processReportService;
+
+  public InputDataDownloaderService(InputFilesFinder inputFilesFinder,
+      ProcessReportService processReportService) {
     this.inputFilesFinder = inputFilesFinder;
+    this.processReportService = processReportService;
   }
 
   /**
@@ -43,10 +50,19 @@ public class InputDataDownloaderService {
       deleteData();
       List<RepositoryFile> files = inputFilesFinder.getListFilesToDownload();
       writeFiles(files);
+      registerProcess();
       log.info("End download input data.");
+
     } catch (GitLabApiException | IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private void registerProcess() {
+    processReportService.register(
+        ProcessReportModules.INPUT_DATA,
+        "Updated",
+        LocalDateTime.now().toString());
   }
 
   private void deleteData() throws IOException {
