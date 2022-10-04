@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.cancermodels.process_report.ProcessReportService;
-import org.cancermodels.types.ProcessReportAttributes;
 import org.cancermodels.types.ProcessReportModules;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
@@ -62,7 +61,7 @@ public class InputDataDownloaderService {
   private void registerProcess() {
     processReportService.register(
         ProcessReportModules.INPUT_DATA,
-        ProcessReportAttributes.UPDATED,
+        "Updated",
         LocalDateTime.now().toString());
   }
 
