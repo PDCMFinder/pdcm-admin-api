@@ -1,6 +1,6 @@
 package org.cancermodels.admin;
 
-import org.cancermodels.input_data.InputDataDownloaderService;
+import org.cancermodels.input_data.InputDataUpdaterService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/downloadInputData")
-public class InputDataDownloadController {
+@RequestMapping("/api/updateInputData")
+public class InputDataUpdaterController {
 
-  private final InputDataDownloaderService inputDataDownloaderService;
+  private final InputDataUpdaterService inputDataUpdaterService;
 
-  public InputDataDownloadController(
-      InputDataDownloaderService inputDataDownloaderService) {
-    this.inputDataDownloaderService = inputDataDownloaderService;
+  public InputDataUpdaterController(
+      InputDataUpdaterService inputDataDownloaderService) {
+    this.inputDataUpdaterService = inputDataDownloaderService;
   }
 
   @PostMapping
   public void downloadInputData() {
-    inputDataDownloaderService.downloadInputData();
+    inputDataUpdaterService.updateInputData();
   }
 }
