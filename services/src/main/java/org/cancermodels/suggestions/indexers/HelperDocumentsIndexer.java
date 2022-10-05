@@ -21,6 +21,11 @@ import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.springframework.stereotype.Component;
 
+/**
+ * Create customised documents that help with the calculation of the relative scores of the
+ * suggestions. The documents created here represent a "perfect" match so we can use their scores
+ * to check how good real results actually are.
+ */
 @Slf4j
 @Component
 public class HelperDocumentsIndexer {
@@ -73,7 +78,6 @@ public class HelperDocumentsIndexer {
         buildHelperIndexableOntologySuggestion(mappingEntity);
     indexableSuggestion.setRule(indexableRuleSuggestion);
     indexableSuggestion.setOntology(indexableOntologySuggestion);
-    System.out.println(indexableSuggestion);
 
     return indexableSuggestion;
   }

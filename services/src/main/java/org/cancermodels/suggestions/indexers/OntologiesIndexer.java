@@ -19,6 +19,9 @@ import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.springframework.stereotype.Component;
 
+/**
+ * Indexes all the OLS ontologies in the system as lucene documents.
+ */
 @Slf4j
 @Component
 public class OntologiesIndexer {
