@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class InputDataDownloaderService {
+public class InputDataUpdaterService {
 
   private final InputFilesFinder inputFilesFinder;
 
@@ -34,7 +34,7 @@ public class InputDataDownloaderService {
 
   private final ProcessReportService processReportService;
 
-  public InputDataDownloaderService(InputFilesFinder inputFilesFinder,
+  public InputDataUpdaterService(InputFilesFinder inputFilesFinder,
       ProcessReportService processReportService) {
     this.inputFilesFinder = inputFilesFinder;
     this.processReportService = processReportService;
@@ -44,7 +44,7 @@ public class InputDataDownloaderService {
    * Downloads the files that PDCM Admin needs to work: mapping rules and treatment and sample
    * data.
    */
-  public void downloadInputData() {
+  public void updateInputData() {
     log.info("Downloading input data");
     try {
       deleteData();
