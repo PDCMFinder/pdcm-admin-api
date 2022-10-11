@@ -78,7 +78,6 @@ public class SuggestionsSearcher {
     // Get the helper document that represents the doc with a perfect score
     Suggestion helperDocSuggestion = getHelperDocumentByMappingEntity(mappingEntity);
     double maxScore = helperDocSuggestion.getScore();
-    System.out.println("maxScore: " + maxScore);
     suggestions.forEach(x -> {
       double relativeScore = x.getScore() * 100 / maxScore;
       x.setRelativeScore(relativeScore);
@@ -139,6 +138,7 @@ public class SuggestionsSearcher {
     }
     IndexableOntologySuggestion indexableOntologySuggestion
         = indexableSuggestion.getOntology();
+
     if (indexableOntologySuggestion != null)
     {
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +

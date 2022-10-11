@@ -2,7 +2,7 @@ package org.cancermodels.types;
 
 public enum Source {
   RULE("Rule"),
-  ONTOLOGY("NCIt"),
+  ONTOLOGY("Ontology"),
   LEGACY("Legacy");
 
   private final String label;

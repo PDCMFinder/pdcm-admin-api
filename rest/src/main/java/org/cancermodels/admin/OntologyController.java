@@ -3,6 +3,7 @@ package org.cancermodels.admin;
 import org.cancermodels.persistance.OntologyLoadReport;
 import org.cancermodels.ontologies.OntologyService;
 import org.cancermodels.ontologies.OntologySummary;
+import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class OntologyController {
    * @return {@link OntologyLoadReport} object with a report of the process
    */
   @GetMapping("loadOntologies")
-  public OntologyLoadReport loadOntologies() {
+  public ProcessResponse loadOntologies() {
     return ontologyService.loadOntologies();
   }
 

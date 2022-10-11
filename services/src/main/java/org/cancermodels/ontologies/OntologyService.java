@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import org.cancermodels.persistance.OntologyLoadReport;
 import org.cancermodels.persistance.OntologyTerm;
+import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,7 +68,7 @@ public class OntologyService {
    * @return A {@link OntologyLoadReport} object with information about number of terms loaded and
    * errors if any
    */
-  public OntologyLoadReport loadOntologies() {
+  public ProcessResponse loadOntologies() {
     return ontologyLoader.loadOntologies();
   }
 
