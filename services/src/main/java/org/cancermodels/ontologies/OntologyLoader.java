@@ -115,7 +115,6 @@ public class OntologyLoader {
   }
 
   private ProcessResponse createProcessResponse(Map<String, String> processResult) {
-
     return new ProcessResponse(processResult);
   }
 

@@ -30,4 +30,11 @@ public class ProcessResponse {
     response.put("message", message);
     this.response = response;
   }
+
+  public ProcessResponse(String key, String value) {
+    this();
+    Map<String, String> response = new HashMap<>();
+    response.put(key, value);
+    this.response = response;
+  }
 }
