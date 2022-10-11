@@ -2,11 +2,14 @@ package org.cancermodels.input_data;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.cancermodels.process_report.ProcessReportService;
+import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.types.ProcessReportModules;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
@@ -44,7 +47,7 @@ public class InputDataUpdaterService {
    * Downloads the files that PDCM Admin needs to work: mapping rules and treatment and sample
    * data.
    */
-  public void updateInputData() {
+  public ProcessResponse updateInputData() {
     log.info("Downloading input data");
     try {
       deleteData();
@@ -56,13 +59,13 @@ public class InputDataUpdaterService {
     } catch (GitLabApiException | IOException e) {
       e.printStackTrace();
     }
+    return new ProcessResponse("Input data updated.");
   }
 
   private void registerProcess() {
-    processReportService.register(
-        ProcessReportModules.INPUT_DATA,
-        "Updated",
-        LocalDateTime.now().toString());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String formatDateTime = LocalDateTime.now().format(formatter);
+    processReportService.register(ProcessReportModules.INPUT_DATA, "Updated", formatDateTime);
   }
 
   private void deleteData() throws IOException {

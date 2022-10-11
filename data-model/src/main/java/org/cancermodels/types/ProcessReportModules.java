@@ -1,7 +1,8 @@
 package org.cancermodels.types;
 
 public enum ProcessReportModules {
-  INPUT_DATA("Input data");
+  INPUT_DATA("Input data"),
+  ONTOLOGIES("Ontologies");
 
   private final String label;
 

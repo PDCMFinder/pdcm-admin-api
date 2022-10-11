@@ -1,6 +1,7 @@
 package org.cancermodels.admin;
 
 import org.cancermodels.input_data.InputDataUpdaterService;
+import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class InputDataUpdaterController {
   }
 
   @PostMapping
-  public void downloadInputData() {
-    inputDataUpdaterService.updateInputData();
+  public ProcessResponse updateInputData() {
+    return inputDataUpdaterService.updateInputData();
   }
 }

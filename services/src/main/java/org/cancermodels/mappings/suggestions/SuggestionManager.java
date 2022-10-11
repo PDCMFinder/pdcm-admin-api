@@ -12,6 +12,7 @@ import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.persistance.SuggestionRepository;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
+import org.cancermodels.types.Source;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -83,6 +84,14 @@ public class SuggestionManager {
 
     return suggestionsByEntity;
 
+  }
+
+  /**
+   * Deletes all suggestions by source type
+   * @param source {@link Source} type.
+   */
+  public void deleteAllBySourceType(Source source) {
+    suggestionRepository.deleteAllBySourceType(source.getLabel());
   }
 
   public void runSuggestionReportForEntity(MappingEntity mappingEntity) throws IOException {
