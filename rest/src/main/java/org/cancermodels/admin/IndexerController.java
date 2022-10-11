@@ -9,6 +9,7 @@ import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
+import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.suggestions.indexers.Indexer;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -44,8 +45,8 @@ public class IndexerController {
   }
 
   @PutMapping("index")
-  public void indexAll() throws IOException {
-    indexer.index();
+  public ProcessResponse indexAll() throws IOException {
+    return indexer.index();
   }
 
   @PutMapping("index/ontologies")
