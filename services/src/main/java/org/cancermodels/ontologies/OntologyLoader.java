@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.persistance.OntologyTerm;
 import org.cancermodels.process_report.ProcessReportService;
 import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.types.ProcessReportModules;
-import org.cancermodels.types.Source;
 import org.cancermodels.util.FileManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +31,6 @@ public class OntologyLoader {
   private final OntologyTermManager ontologyTermService;
   private final OntologyLoaderConfReader ontologyLoaderConfReader;
   private final ProcessReportService processReportService;
-  private final SuggestionManager suggestionManager;
 
   private final Map<String, OntologyTerm> processed = new HashMap<>();
   private final Set<OntologyTerm> termsToSave = new HashSet<>();
@@ -45,18 +42,16 @@ public class OntologyLoader {
   public OntologyLoader(
       OntologyTermManager ontologyTermService,
       OntologyLoaderConfReader ontologyLoaderConfReader,
-      ProcessReportService processReportService,
-      SuggestionManager suggestionManager) {
+      ProcessReportService processReportService) {
     this.ontologyTermService = ontologyTermService;
     this.ontologyLoaderConfReader = ontologyLoaderConfReader;
     this.processReportService = processReportService;
-    this.suggestionManager = suggestionManager;
   }
 
   /**
    * Loads ontology terms from OLS. It does it by going to specific branches and fetching all the
    * descendants.
-   * @return
+   * @return {@link ProcessResponse} object with the result of the process
    */
   public ProcessResponse loadOntologies() {
     Map<String, List<String>> branchUrls = ontologyLoaderConfReader.getBranchesUrlsToLoad();
@@ -66,19 +61,12 @@ public class OntologyLoader {
         processBranchUrl(url, ontologyType);
       }
     }
-    deleteData();
+    ontologyTermService.deleteAll();
     processed.forEach((k,v) -> termsToSave.add(v));
     ontologyTermService.saveOntologyTerms(termsToSave);
     Map<String, String> processResult = getProcessResult();
     registerProcess(processResult);
     return createProcessResponse(processResult);
-  }
-
-  private void deleteData() {
-    // Delete suggestions connected to ontology terms
-    suggestionManager.deleteAllBySourceType(Source.ONTOLOGY);
-    // Now we can delete all the ontology terms
-    ontologyTermService.deleteAll();
   }
 
   private Map<String, String> getProcessResult() {

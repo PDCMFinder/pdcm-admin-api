@@ -32,14 +32,14 @@ public class Suggestion {
   private double score;
   private double relativeScore;
 
-  @ManyToOne
+  @ManyToOne(fetch= FetchType.LAZY)
   @Exclude
   @EqualsAndHashCode.Include
   @JoinColumn(name = "suggested_mapping_entity_id")
   private MappingEntity mappingEntity;
 
   // OntologyTerm does not have a list of suggestions so cascade type must be controlled here
-  @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+  @ManyToOne(fetch= FetchType.LAZY)
   @Exclude
   @EqualsAndHashCode.Include
   @JoinColumn(name = "suggested_ontology_term_id")
