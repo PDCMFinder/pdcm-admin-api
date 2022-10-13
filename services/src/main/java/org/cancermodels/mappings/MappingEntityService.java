@@ -18,16 +18,16 @@ public class MappingEntityService {
   private final MappingEntityRepository mappingEntityRepository;
   private final EntityTypeService entityTypeService;
   private final SuggestionManager suggestionManager;
-  private final Updater updater;
+  private final MappingEntityUpdater mappingEntityUpdater;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
       SuggestionManager suggestionManager,
-      Updater updater) {
+      MappingEntityUpdater mappingEntityUpdater) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
     this.suggestionManager = suggestionManager;
-    this.updater = updater;
+    this.mappingEntityUpdater = mappingEntityUpdater;
   }
 
   /**
@@ -50,14 +50,17 @@ public class MappingEntityService {
 
   /**
    * Updates some values in a mapping entity, if changed: Status, Mapping Term Label, Mapping Term Url
-   * @param mappingEntity Entity with the new information
-   * @return Mapping after it was updated
+   * @param id Identifier of the mapping entity.
+   * @param mappingEntity The {@link MappingEntity} with the changes.
+   * @param mappingType Indicates the way the mapping is being done (in case the mapping entity
+   *                    is being mapped (or the mapped term/url are being updated).
+   * @return {@link MappingEntity} after updated in the db.
    */
   public Optional<MappingEntity> update(int id, MappingEntity mappingEntity, MappingType mappingType) {
     var res = mappingEntityRepository.findById(id);
     if (res.isPresent()) {
       MappingEntity original = res.get();
-      return Optional.of(updater.update(original, mappingEntity, mappingType)) ;
+      return Optional.of(mappingEntityUpdater.update(original, mappingEntity, mappingType)) ;
     } else {
       return Optional.empty();
     }
