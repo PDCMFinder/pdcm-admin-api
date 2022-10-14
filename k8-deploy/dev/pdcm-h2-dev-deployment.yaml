@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: pdcm-h2-dev
-          image: 'oscarfonts/h2:1.4.197'
+          image: 'oscarfonts/h2:1.4.199'
           ports:
           - containerPort: 81
           volumeMounts:

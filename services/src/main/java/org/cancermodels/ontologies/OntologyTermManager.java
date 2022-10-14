@@ -65,6 +65,7 @@ class OntologyTermManager {
   public void saveOntologyTerms(Set<OntologyTerm> ontologyTerms) {
     LOG.info("Saving {} ontology terms to db", ontologyTerms.size());
     ontologyTermRepository.saveAll(ontologyTerms);
+    LOG.info("Terms saved");
   }
 
   public void deleteAll() {

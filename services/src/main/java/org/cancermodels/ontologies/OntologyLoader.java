@@ -1,6 +1,8 @@
 package org.cancermodels.ontologies;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,23 +10,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.cancermodels.persistance.OntologyLoadReport;
 import org.cancermodels.persistance.OntologyTerm;
+import org.cancermodels.process_report.ProcessReportService;
+import org.cancermodels.process_report.ProcessResponse;
+import org.cancermodels.types.ProcessReportModules;
 import org.cancermodels.util.FileManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class downloads ontology terms from specific branches from OLS and stores them in
+ * the internal database.
+ * This ontology terms are used in the mapping process.
+ */
 @Slf4j
 @Component
 public class OntologyLoader {
 
   private final OntologyTermManager ontologyTermService;
   private final OntologyLoaderConfReader ontologyLoaderConfReader;
-  private final OntologyLoadReporter ontologyLoadReportService;
+  private final ProcessReportService processReportService;
+
   private final Map<String, OntologyTerm> processed = new HashMap<>();
   private final Set<OntologyTerm> termsToSave = new HashSet<>();
-  private String error;
 
   public static final String EMBEDDED = "_embedded";
   public static final String TERMS = "terms";
@@ -32,17 +41,18 @@ public class OntologyLoader {
   public OntologyLoader(
       OntologyTermManager ontologyTermService,
       OntologyLoaderConfReader ontologyLoaderConfReader,
-      OntologyLoadReporter ontologyLoadReportService) {
+      ProcessReportService processReportService) {
     this.ontologyTermService = ontologyTermService;
     this.ontologyLoaderConfReader = ontologyLoaderConfReader;
-    this.ontologyLoadReportService = ontologyLoadReportService;
+    this.processReportService = processReportService;
   }
 
   /**
    * Loads ontology terms from OLS. It does it by going to specific branches and fetching all the
    * descendants.
+   * @return {@link ProcessResponse} object with the result of the process
    */
-  public OntologyLoadReport loadOntologies() {
+  public ProcessResponse loadOntologies() {
     Map<String, List<String>> branchUrls = ontologyLoaderConfReader.getBranchesUrlsToLoad();
     for (String ontologyType : branchUrls.keySet()) {
       List<String> urlsByType = branchUrls.get(ontologyType);
@@ -51,13 +61,15 @@ public class OntologyLoader {
       }
     }
     ontologyTermService.deleteAll();
-    System.out.println(processed.size());
     processed.forEach((k,v) -> termsToSave.add(v));
     ontologyTermService.saveOntologyTerms(termsToSave);
-    return createReport();
+    Map<String, String> processResult = getProcessResult();
+    registerProcess(processResult);
+    return createProcessResponse(processResult);
   }
 
-  private OntologyLoadReport createReport() {
+  private Map<String, String> getProcessResult() {
+
     int diagnosisCount = 0;
     int treatmentCount = 0;
     int regimenCount = 0;
@@ -70,11 +82,27 @@ public class OntologyLoader {
         regimenCount++;
       }
     }
-    return ontologyLoadReportService.createReport(
-        diagnosisCount,
-        treatmentCount,
-        regimenCount,
-        error);
+
+    Map<String, String> result = new HashMap<>();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String formatDateTime = LocalDateTime.now().format(formatter);
+    result.put("Update date", formatDateTime);
+    result.put("Number of diagnosis terms", diagnosisCount + "");
+    result.put("Number of treatment terms", treatmentCount + "");
+    result.put("Number of regimen terms", regimenCount + "");
+
+    return result;
+  }
+
+  private void registerProcess(Map<String, String> processResult) {
+    for (String key : processResult.keySet()) {
+      processReportService.register(ProcessReportModules.ONTOLOGIES, key, processResult.get(key));
+    }
+  }
+
+  private ProcessResponse createProcessResponse(Map<String, String> processResult) {
+    return new ProcessResponse(processResult);
   }
 
   private void processBranchUrl(String url, String ontologyType) {
@@ -140,7 +168,7 @@ public class OntologyLoader {
         JSONObject nextUrlObject = links.getJSONObject("next");
         nextUrl = nextUrlObject.getString("href");
       } catch (IOException e) {
-        error = e.getClass().getCanonicalName() + ": " + e.getMessage();
+        String error = e.getClass().getCanonicalName() + ": " + e.getMessage();
         log.error(error);
       }
     }

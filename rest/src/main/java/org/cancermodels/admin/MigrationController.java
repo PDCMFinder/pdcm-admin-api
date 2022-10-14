@@ -1,6 +1,5 @@
 package org.cancermodels.admin;
 
-import org.cancermodels.persistance.OntologyLoadReport;
 import org.cancermodels.migration.RulesMigratorService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ public class MigrationController {
 
   /**
    * Reloads the ontologies tables in the h2 database using OLS as a source
-   * @return {@link OntologyLoadReport} object with a report of the process
    */
   @GetMapping("loadOldRules")
   public void loadOldRules() {

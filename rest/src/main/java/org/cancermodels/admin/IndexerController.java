@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
+import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.suggestions.indexers.Indexer;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -44,8 +46,8 @@ public class IndexerController {
   }
 
   @PutMapping("index")
-  public void indexAll() throws IOException {
-    indexer.index();
+  public ProcessResponse indexAll() throws IOException {
+    return indexer.index();
   }
 
   @PutMapping("index/ontologies")
@@ -90,7 +92,7 @@ public class IndexerController {
   }
 
   @GetMapping("getHelperSuggestion/{id}")
-  public Suggestion getHelperDoc(@PathVariable int id) throws IOException {
+  public Suggestion getHelperDoc(@PathVariable int id) throws SearchException {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
     return suggestionsSearcher.getHelperSuggestion(mappingEntity);

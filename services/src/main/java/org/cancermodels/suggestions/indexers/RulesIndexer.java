@@ -11,6 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.types.Source;
 import org.cancermodels.types.Status;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.cancermodels.suggestions.search_engine.IndexableRuleSuggestion;
@@ -20,6 +21,9 @@ import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.springframework.stereotype.Component;
 
+/**
+ * Indexes all mapped mapping entities in the system as lucene documents.
+ */
 @Slf4j
 @Component
 public class RulesIndexer {
@@ -66,7 +70,7 @@ public class RulesIndexer {
   private IndexableSuggestion mappingEntityToIndexableSuggestion(MappingEntity mappingEntity) {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
     indexableSuggestion.setId(mappingEntity.getMappingKey());
-    indexableSuggestion.setSourceType("Rule");
+    indexableSuggestion.setSourceType(Source.RULE.getLabel());
     IndexableRuleSuggestion rule = new IndexableRuleSuggestion();
     rule.setEntityTypeName(mappingEntity.getEntityType().getName());
     rule.setData(mappingEntity.getValuesAsMap());

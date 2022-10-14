@@ -3,10 +3,13 @@ package org.cancermodels.input_data;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.cancermodels.input_data.exceptions.InputFileDownloadException;
 import org.cancermodels.process_report.ProcessReportService;
+import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.types.ProcessReportModules;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
@@ -19,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class InputDataDownloaderService {
+public class InputDataUpdaterService {
 
   private final InputFilesFinder inputFilesFinder;
 
@@ -34,7 +37,7 @@ public class InputDataDownloaderService {
 
   private final ProcessReportService processReportService;
 
-  public InputDataDownloaderService(InputFilesFinder inputFilesFinder,
+  public InputDataUpdaterService(InputFilesFinder inputFilesFinder,
       ProcessReportService processReportService) {
     this.inputFilesFinder = inputFilesFinder;
     this.processReportService = processReportService;
@@ -44,7 +47,7 @@ public class InputDataDownloaderService {
    * Downloads the files that PDCM Admin needs to work: mapping rules and treatment and sample
    * data.
    */
-  public void downloadInputData() {
+  public ProcessResponse updateInputData() {
     log.info("Downloading input data");
     try {
       deleteData();
@@ -54,15 +57,16 @@ public class InputDataDownloaderService {
       log.info("End download input data.");
 
     } catch (GitLabApiException | IOException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
+      throw new InputFileDownloadException("Could not update input data. Exception: " + e.getMessage());
     }
+    return new ProcessResponse("Input data updated.");
   }
 
   private void registerProcess() {
-    processReportService.register(
-        ProcessReportModules.INPUT_DATA,
-        "Updated",
-        LocalDateTime.now().toString());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String formatDateTime = LocalDateTime.now().format(formatter);
+    processReportService.register(ProcessReportModules.INPUT_DATA, "Update date", formatDateTime);
   }
 
   private void deleteData() throws IOException {

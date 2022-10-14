@@ -7,17 +7,28 @@ import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.springframework.stereotype.Component;
 
+/**
+ * Manages the changes in a Mapping entity, like for example the transition between status.
+ */
 @Component
-public class Updater {
+public class MappingEntityUpdater {
 
   private final MappingEntityRepository mappingEntityRepository;
 
-  public Updater(MappingEntityRepository mappingEntityRepository) {
+  public MappingEntityUpdater(MappingEntityRepository mappingEntityRepository) {
     this.mappingEntityRepository = mappingEntityRepository;
   }
 
-
-  public MappingEntity update(MappingEntity original, MappingEntity withChanges, MappingType mappingType) {
+  /**
+   * Updates a Mapping Entity ({@code original}).
+   * @param original The original {@link MappingEntity} to be updated (db version).
+   * @param withChanges The {@link MappingEntity} with the changes.
+   * @param mappingType The way the mapping is done (automatic, manual) in case
+   *                    we are updating mapping term/url.
+   * @return The {@link MappingEntity} object after being saved into the db.
+   */
+  public MappingEntity update(
+      MappingEntity original, MappingEntity withChanges, MappingType mappingType) {
     boolean mappedTermChanged = processMappedTermChange(original, withChanges, mappingType);
     boolean statusChanged = processStatusChange(original, withChanges);
 

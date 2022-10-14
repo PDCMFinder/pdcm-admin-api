@@ -13,7 +13,7 @@ import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.persistance.OntologyTermRepository;
 import org.cancermodels.persistance.Suggestion;
-import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.suggestions.search_engine.query_builder.MappingEntityQueryBuilder;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +54,7 @@ public class SuggestionsSearcher {
    *  example, sampleDiagnosis for a diagnosis or treatmentName for a treatment) is similar enough
    *  to the label, definition or synonym in the ontology.
    */
-  public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity) throws IOException {
+  public List<Suggestion> searchTopSuggestions(MappingEntity mappingEntity)  {
     Objects.requireNonNull(mappingEntity);
     List<Suggestion> topSuggestions;
     log.info("Searching suggestions for {}", mappingEntity.getId());
@@ -69,16 +69,15 @@ public class SuggestionsSearcher {
     return topSuggestions;
   }
 
-  public Suggestion getHelperSuggestion(MappingEntity mappingEntity) throws IOException {
+  public Suggestion getHelperSuggestion(MappingEntity mappingEntity) throws SearchException {
     return getHelperDocumentByMappingEntity(mappingEntity);
   }
 
   private void setRelativeScoreValues(List<Suggestion> suggestions, MappingEntity mappingEntity)
-      throws IOException {
+ {
     // Get the helper document that represents the doc with a perfect score
     Suggestion helperDocSuggestion = getHelperDocumentByMappingEntity(mappingEntity);
     double maxScore = helperDocSuggestion.getScore();
-    System.out.println("maxScore: " + maxScore);
     suggestions.forEach(x -> {
       double relativeScore = x.getScore() * 100 / maxScore;
       x.setRelativeScore(relativeScore);
@@ -86,7 +85,7 @@ public class SuggestionsSearcher {
   }
 
   private Suggestion getHelperDocumentByMappingEntity(MappingEntity mappingEntity)
-      throws IOException {
+      throws SearchException {
     Query query = mappingEntityQueryBuilder.buildHelperDocumentQuery(mappingEntity);
     List<Suggestion> results = retrieveDocsByQuery(query);
     // We expect only one document
@@ -99,7 +98,7 @@ public class SuggestionsSearcher {
       TopDocs topDocs = luceneIndexReader.search(query);
       topSuggestions = processTopDocs(topDocs);
     } catch (Exception exception) {
-      throw new SuggestionCalculationException(exception);
+      throw new SearchException(exception);
     }
     return topSuggestions;
   }
@@ -139,6 +138,7 @@ public class SuggestionsSearcher {
     }
     IndexableOntologySuggestion indexableOntologySuggestion
         = indexableSuggestion.getOntology();
+
     if (indexableOntologySuggestion != null)
     {
       suggestion.setSuggestedTermUrl("http://purl.obolibrary.org/obo/" +

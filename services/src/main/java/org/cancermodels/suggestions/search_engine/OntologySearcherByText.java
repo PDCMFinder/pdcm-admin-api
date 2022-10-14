@@ -6,6 +6,7 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.Query;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.suggestions.FieldsNames;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
@@ -40,7 +41,7 @@ public class OntologySearcherByText {
     this.queryHelper = queryHelper;
   }
 
-  public List<Suggestion> searchWithDefaultParameters(String input) throws IOException {
+  public List<Suggestion> searchWithDefaultParameters(String input) throws SearchException {
     SearchInput searchInput = ontologySearchInputBuilder.build(input, null, defaultCommonParameters);
     Query ontologyQuery = searchInputQueryBuilder.buildQuery(searchInput);
 

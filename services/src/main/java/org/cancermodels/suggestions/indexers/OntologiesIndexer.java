@@ -17,8 +17,12 @@ import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
 import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
+import org.cancermodels.types.Source;
 import org.springframework.stereotype.Component;
 
+/**
+ * Indexes all the OLS ontologies in the system as lucene documents.
+ */
 @Slf4j
 @Component
 public class OntologiesIndexer {
@@ -63,7 +67,7 @@ public class OntologiesIndexer {
   private IndexableSuggestion ncitTermToIndexableSuggestion(OntologyTerm ontologyTerm) {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
     indexableSuggestion.setId(ontologyTerm.getId()+"");
-    indexableSuggestion.setSourceType("Ontology");
+    indexableSuggestion.setSourceType(Source.ONTOLOGY.getLabel());
     IndexableOntologySuggestion ontology = new IndexableOntologySuggestion();
     ontology.setNcit(getNcitIdFromUrl(ontologyTerm.getUrl()));
     String definition = StringUtils.abbreviate(ontologyTerm.getDescription(), Constants.MAX_TEXT_LENGTH);

@@ -114,7 +114,7 @@ public class InputFilesFinder {
   }
 
   private List<RepositoryFile> processProviderFolders(List<TreeItem> providerFolders)
-      throws GitLabApiException, IOException {
+      throws GitLabApiException {
     List<RepositoryFile> files = new ArrayList<>();
     for (TreeItem item : providerFolders) {
 
