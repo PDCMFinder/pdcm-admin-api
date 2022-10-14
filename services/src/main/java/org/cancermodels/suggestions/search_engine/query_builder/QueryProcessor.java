@@ -10,7 +10,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.cancermodels.persistance.OntologyTermRepository;
 import org.cancermodels.persistance.Suggestion;
-import org.cancermodels.suggestions.exceptions.SuggestionCalculationException;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.suggestions.search_engine.IndexableOntologySuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
@@ -43,7 +43,7 @@ public class QueryProcessor {
       TopDocs topDocs = luceneIndexReader.search(query);
       topSuggestions = processTopDocs(topDocs);
     } catch (Exception exception) {
-      throw new SuggestionCalculationException(exception);
+      throw new SearchException(exception);
     }
     return topSuggestions;
   }

@@ -11,9 +11,10 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
+import org.cancermodels.exceptions.IndexerException;
 import org.cancermodels.suggestions.FieldsNames;
-import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
 import org.cancermodels.suggestions.search_engine.util.Constants;
+import org.cancermodels.types.Source;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,26 +43,26 @@ public class IndexableSuggestionMapper {
 
   private void validateIndexableSuggestion(IndexableSuggestion indexableSuggestion) {
     if (indexableSuggestion.getId() == null) {
-      throw new NonIndexableDocumentException("Id cannot be null.");
+      throw new IndexerException("Error in document creation: Id cannot be null.");
     }
     if (indexableSuggestion.getSourceType() == null) {
-      throw new NonIndexableDocumentException("Source type cannot be null.");
+      throw new IndexerException("Error in document creation: Source type cannot be null.");
     }
 
-    if (indexableSuggestion.getSourceType().equalsIgnoreCase("Rule")
+    if (indexableSuggestion.getSourceType().equalsIgnoreCase(Source.RULE.getLabel())
         && indexableSuggestion.getRule() == null) {
-      throw new NonIndexableDocumentException("Rule cannot be null.");
+      throw new IndexerException("Error in document creation: Rule cannot be null.");
     }
 
-    if (indexableSuggestion.getSourceType().equalsIgnoreCase("Rule")
+    if (indexableSuggestion.getSourceType().equalsIgnoreCase(Source.RULE.getLabel())
         && indexableSuggestion.getRule() != null
         && indexableSuggestion.getRule().getData() == null) {
-      throw new NonIndexableDocumentException("Rule data cannot be null.");
+      throw new IndexerException("Error in document creation: Rule data cannot be null.");
     }
 
-    if (indexableSuggestion.getSourceType().equalsIgnoreCase("Ontology")
+    if (indexableSuggestion.getSourceType().equalsIgnoreCase(Source.ONTOLOGY.getLabel())
         && indexableSuggestion.getOntology() == null) {
-      throw new NonIndexableDocumentException("Ontology cannot be null.");
+      throw new IndexerException("Error in document creation: Ontology cannot be null.");
     }
 
   }
@@ -137,10 +138,9 @@ public class IndexableSuggestionMapper {
     indexableSuggestion.setId(id);
     indexableSuggestion.setSourceType(sourceType);
 
-    if (sourceType.equalsIgnoreCase("Rule")) {
+    if (sourceType.equalsIgnoreCase(Source.RULE.getLabel())) {
       addRuleData(indexableSuggestion, document);
-    }
-    else if (sourceType.equalsIgnoreCase("Ontology")) {
+    } else if (sourceType.equalsIgnoreCase(Source.ONTOLOGY.getLabel())) {
       addOntologyData(indexableSuggestion, document, id);
     } else if (sourceType.equalsIgnoreCase(Constants.HELPER_DOCUMENT_TYPE)) {
       addRuleData(indexableSuggestion, document);

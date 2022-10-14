@@ -34,7 +34,6 @@ public class OntologyLoader {
 
   private final Map<String, OntologyTerm> processed = new HashMap<>();
   private final Set<OntologyTerm> termsToSave = new HashSet<>();
-  private String error;
 
   public static final String EMBEDDED = "_embedded";
   public static final String TERMS = "terms";
@@ -169,7 +168,7 @@ public class OntologyLoader {
         JSONObject nextUrlObject = links.getJSONObject("next");
         nextUrl = nextUrlObject.getString("href");
       } catch (IOException e) {
-        error = e.getClass().getCanonicalName() + ": " + e.getMessage();
+        String error = e.getClass().getCanonicalName() + ": " + e.getMessage();
         log.error(error);
       }
     }

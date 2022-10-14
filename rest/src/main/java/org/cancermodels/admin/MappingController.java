@@ -62,6 +62,12 @@ public class MappingController {
     return mappingEntityMapper.convertToDto(mappingEntity);
   }
 
+  /**
+   * Updates a mapping entity.
+   * @param id The id of the {@link MappingEntity}.
+   * @param mappingEntity the {@link MappingEntity} with the changes.
+   * @return {@link MappingEntityDTO} with a DTO representation of the new mapping entity.
+   */
   @PutMapping("/{id}")
   public MappingEntityDTO updateMappingEntity(
       @PathVariable int id, @RequestBody MappingEntity mappingEntity) {
