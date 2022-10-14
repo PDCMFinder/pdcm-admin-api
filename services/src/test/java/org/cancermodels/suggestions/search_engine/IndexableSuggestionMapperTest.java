@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.lucene.document.Document;
-import org.cancermodels.suggestions.exceptions.NonIndexableDocumentException;
+import org.cancermodels.exceptions.IndexerException;
 import org.junit.jupiter.api.Test;
 
 class IndexableSuggestionMapperTest {
@@ -16,10 +16,10 @@ class IndexableSuggestionMapperTest {
   void toDocumentWithEmptyIndexableSuggestionNullId() {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
 
-    Exception exception = assertThrows(NonIndexableDocumentException.class, () -> {
+    Exception exception = assertThrows(IndexerException.class, () -> {
       instance.toDocument(indexableSuggestion);
     });
-    String expectedMessage = "Id cannot be null.";
+    String expectedMessage = "Error in document creation: Id cannot be null.";
     String actualMessage = exception.getMessage();
 
     assertEquals(expectedMessage, actualMessage);
@@ -30,10 +30,10 @@ class IndexableSuggestionMapperTest {
     IndexableSuggestion indexableSuggestion = new IndexableSuggestion();
     indexableSuggestion.setId("id");
 
-    Exception exception = assertThrows(NonIndexableDocumentException.class, () -> {
+    Exception exception = assertThrows(IndexerException.class, () -> {
       instance.toDocument(indexableSuggestion);
     });
-    String expectedMessage = "Source type cannot be null.";
+    String expectedMessage = "Error in document creation: Source type cannot be null.";
     String actualMessage = exception.getMessage();
 
     assertEquals(expectedMessage, actualMessage);
@@ -45,10 +45,10 @@ class IndexableSuggestionMapperTest {
     indexableSuggestion.setId("id");
     indexableSuggestion.setSourceType("Rule");
 
-    Exception exception = assertThrows(NonIndexableDocumentException.class, () -> {
+    Exception exception = assertThrows(IndexerException.class, () -> {
       instance.toDocument(indexableSuggestion);
     });
-    String expectedMessage = "Rule cannot be null.";
+    String expectedMessage = "Error in document creation: Rule cannot be null.";
     String actualMessage = exception.getMessage();
 
     assertEquals(expectedMessage, actualMessage);
@@ -63,10 +63,10 @@ class IndexableSuggestionMapperTest {
     IndexableRuleSuggestion indexableRuleSuggestion = new IndexableRuleSuggestion();
     indexableSuggestion.setRule(indexableRuleSuggestion);
 
-    Exception exception = assertThrows(NonIndexableDocumentException.class, () -> {
+    Exception exception = assertThrows(IndexerException.class, () -> {
       instance.toDocument(indexableSuggestion);
     });
-    String expectedMessage = "Rule data cannot be null.";
+    String expectedMessage = "Error in document creation: Rule data cannot be null.";
     String actualMessage = exception.getMessage();
 
     assertEquals(expectedMessage, actualMessage);
@@ -78,10 +78,10 @@ class IndexableSuggestionMapperTest {
     indexableSuggestion.setId("id");
     indexableSuggestion.setSourceType("Ontology");
 
-    Exception exception = assertThrows(NonIndexableDocumentException.class, () -> {
+    Exception exception = assertThrows(IndexerException.class, () -> {
       instance.toDocument(indexableSuggestion);
     });
-    String expectedMessage = "Ontology cannot be null.";
+    String expectedMessage = "Error in document creation: Ontology cannot be null.";
     String actualMessage = exception.getMessage();
 
     assertEquals(expectedMessage, actualMessage);

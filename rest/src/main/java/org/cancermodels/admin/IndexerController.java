@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
@@ -91,7 +92,7 @@ public class IndexerController {
   }
 
   @GetMapping("getHelperSuggestion/{id}")
-  public Suggestion getHelperDoc(@PathVariable int id) throws IOException {
+  public Suggestion getHelperDoc(@PathVariable int id) throws SearchException {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
         ResourceNotFoundException::new);
     return suggestionsSearcher.getHelperSuggestion(mappingEntity);

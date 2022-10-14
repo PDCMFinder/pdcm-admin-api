@@ -7,6 +7,7 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.Query;
+import org.cancermodels.exceptions.SearchException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,18 +19,24 @@ public class SearchInputQueryBuilder {
     this.queryHelper = queryHelper;
   }
 
-  public Query buildQuery(SearchInput searchInput) throws IOException {
+  public Query buildQuery(SearchInput searchInput) throws SearchException {
     Query finalQuery;
-    Query shouldPart = buildShouldPart(searchInput);
-    Query mustNotPart = buildMustNotPart(searchInput);
+    Query shouldPart = null;
+    try {
+      shouldPart = buildShouldPart(searchInput);
+      Query mustNotPart = buildMustNotPart(searchInput);
 
-    if (mustNotPart == null) {
-      finalQuery = shouldPart;
+      if (mustNotPart == null) {
+        finalQuery = shouldPart;
 
-    } else {
-      BooleanQuery.Builder builder = new Builder();
-      finalQuery = builder.add(shouldPart, Occur.SHOULD).add(mustNotPart, Occur.MUST_NOT).build();
+      } else {
+        BooleanQuery.Builder builder = new Builder();
+        finalQuery = builder.add(shouldPart, Occur.SHOULD).add(mustNotPart, Occur.MUST_NOT).build();
+      }
+    } catch (IOException ioException) {
+      throw new SearchException(ioException);
     }
+
 
     return finalQuery;
   }

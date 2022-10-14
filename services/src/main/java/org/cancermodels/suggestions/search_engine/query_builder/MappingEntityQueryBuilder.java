@@ -9,6 +9,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.Query;
+import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.search_engine.util.Constants;
@@ -39,7 +40,7 @@ public class MappingEntityQueryBuilder {
    * @param mappingEntity Mapping entity.
    * @return Query to be executed on the lucene index.
    */
-  public Query buildSuggestionQuery(MappingEntity mappingEntity) throws IOException {
+  public Query buildSuggestionQuery(MappingEntity mappingEntity)  {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
@@ -59,7 +60,7 @@ public class MappingEntityQueryBuilder {
     return finalQuery;
   }
 
-  public Query buildHelperDocumentQuery(MappingEntity mappingEntity) throws IOException {
+  public Query buildHelperDocumentQuery(MappingEntity mappingEntity) throws SearchException {
 
     List<MappingValue> mappingValues = mappingEntity.getMappingValues();
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
