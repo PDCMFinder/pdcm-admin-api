@@ -58,7 +58,8 @@ public class AutomaticMappingsService {
 
     // Temporal filter to make things faster
     mappingEntities = mappingEntities.stream().filter(x -> x.getEntityType().getName().equalsIgnoreCase(
-        EntityTypeName.Treatment.getLabel())).collect(Collectors.toList());
+        EntityTypeName.Diagnosis.getLabel())).collect(Collectors.toList());
+    mappingEntities = mappingEntities.subList(0, Math.min(mappingEntities.size(), 500));
 
     int total = mappingEntities.size();
 
@@ -73,7 +74,9 @@ public class AutomaticMappingsService {
           report.compute("matching", (key, val) -> (val == null) ? 1 : val + 1);
         } else {
           report.compute("not_matching", (key, val) -> (val == null) ? 1 : val + 1);
-          List<String> details = Arrays.asList(suggestion.getSuggestedTermLabel(),
+          List<String> details = Arrays.asList(
+              mappingEntity.getId().toString(),
+              suggestion.getSuggestedTermLabel(),
               suggestion.getSuggestedTermUrl(),
               mappingEntity.getMappedTermLabel(),
               mappingEntity.getMappedTermUrl(),
@@ -100,7 +103,7 @@ public class AutomaticMappingsService {
 
   private void printReportNotMatching(List<List<String>> details) {
     System.out.println("NOT MATCHING ELEMENTS");
-    System.out.println("Suggested url|Suggested label|Current url|Current label|data");
+    System.out.println("Id|Suggested url|Suggested label|Current url|Current label|data");
     for (List<String> element : details) {
       System.out.println(String.join("|", element));
     }
