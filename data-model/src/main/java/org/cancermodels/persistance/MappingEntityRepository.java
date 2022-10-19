@@ -2,7 +2,6 @@ package org.cancermodels.persistance;
 
 import java.util.List;
 import java.util.Optional;
-import org.cancermodels.persistance.MappingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -35,8 +34,6 @@ public interface MappingEntityRepository extends
   List<MappingEntity> findAllByStatusIgnoreCase(String status);
 
   void deleteAllByStatus(String status);
-
-  void deleteAllByEntityTypeName(String entityTypeName);
 
   Optional<MappingEntity> findByMappingKey(String key);
 }
