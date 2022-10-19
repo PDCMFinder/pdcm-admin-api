@@ -3,10 +3,12 @@ package org.cancermodels.suggestions.search_engine.query_builder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.cancermodels.suggestions.search_engine.AnalyzerProvider;
@@ -114,8 +116,8 @@ class QueryHelperTest {
     Query query = instance.joinQueriesDisjunctionMaxQueryZeroTie(
         Arrays.asList(query1, query2));
 
-    String expected = "(field1:word1 | field2:word2)";
-    assertEquals(expected, query.toString());
+    Query expectedQuery = new DisjunctionMaxQuery(Arrays.asList(query1, query2), 0.0f);
+    assertEquals(expectedQuery, query);
   }
 
 }
