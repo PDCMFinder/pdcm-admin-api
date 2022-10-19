@@ -58,9 +58,9 @@ public class AutomaticMappingsService {
 
 
     // Temporal filter to make things faster
-    mappingEntities = mappingEntities.stream().filter(x -> x.getEntityType().getName().equalsIgnoreCase(
-        EntityTypeName.Diagnosis.getLabel())).collect(Collectors.toList());
-    mappingEntities = mappingEntities.subList(0, Math.min(mappingEntities.size(), 500));
+//    mappingEntities = mappingEntities.stream().filter(x -> x.getEntityType().getName().equalsIgnoreCase(
+//        EntityTypeName.Diagnosis.getLabel())).collect(Collectors.toList());
+//    mappingEntities = mappingEntities.subList(0, Math.min(mappingEntities.size(), 500));
 
     int total = mappingEntities.size();
 
