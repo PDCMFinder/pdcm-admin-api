@@ -91,16 +91,21 @@ public class HelperDocumentsIndexer {
     indexableRuleSuggestion.setKey("N/A");
     return indexableRuleSuggestion;
   }
+
+  // Builds an artificial ontology term that will be the "perfect match". We emulate this
+  // by assigning a label that corresponds to the text of the main value in the entity.
+  // It sounds like a good idea to make the synonym(s) and definition to match this value,
+  // but given how large those fields can be, this artificial document would be "too good" and
+  // would hide good real suggestions
   private IndexableOntologySuggestion buildHelperIndexableOntologySuggestion(MappingEntity mappingEntity) {
     IndexableOntologySuggestion indexableOntologySuggestion = new IndexableOntologySuggestion();
     MappingValue mainValue = mappingValueConfHelper.getMainValue(mappingEntity.getMappingValues());
     String text = mainValue.getValue();
     indexableOntologySuggestion.setOntologyTermLabel(text);
-    String definition = "text containing " + text;
+    String definition = "N/A";
     indexableOntologySuggestion.setDefinition(definition);
     List<String> synonyms = new ArrayList<>();
-    synonyms.add(text);
-    synonyms.add("synonym containing " + text);
+    synonyms.add("N/A");
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setOntologyTermLabel("N/A");
     indexableOntologySuggestion.setNcit("N/A");

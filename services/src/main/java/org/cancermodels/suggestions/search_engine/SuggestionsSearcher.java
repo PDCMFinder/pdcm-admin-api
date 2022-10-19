@@ -59,8 +59,6 @@ public class SuggestionsSearcher {
     List<Suggestion> topSuggestions;
     log.info("Searching suggestions for {}", mappingEntity.getId());
     log.info("Entity values: " + mappingEntity.getValuesAsMap());
-    System.out.println("Searching suggestions for: " + mappingEntity.getMappingKey());
-    System.out.println("Entity values: " + mappingEntity.getValuesAsMap());
 
     Query suggestionQuery = mappingEntityQueryBuilder.buildSuggestionQuery(mappingEntity);
     topSuggestions = retrieveDocsByQuery(suggestionQuery);
@@ -132,8 +130,9 @@ public class SuggestionsSearcher {
     {
       suggestion.setSuggestedTermUrl(indexableRuleSuggestion.getMappedTermUrl());
       suggestion.setSuggestedTermLabel(indexableRuleSuggestion.getMappedTermLabel());
+
       MappingEntity mappingEntity = mappingEntityRepository.findByMappingKey(
-          indexableRuleSuggestion.getKey());
+          indexableRuleSuggestion.getKey()).orElse(null);
       suggestion.setMappingEntity(mappingEntity);
     }
     IndexableOntologySuggestion indexableOntologySuggestion

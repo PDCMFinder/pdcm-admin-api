@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
+import org.cancermodels.mappings.automatic_mappings.AutomaticMappingsService;
 import org.cancermodels.types.MappingType;
 import org.cancermodels.reader.MissingMappingsService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -36,17 +37,20 @@ public class MappingController {
   private final SuggestionManager suggestionManager;
   private final MissingMappingsService missingMappingsService;
   private final SuggestionMapper suggestionMapper;
+  private final AutomaticMappingsService automaticMappingsService;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
       SuggestionManager suggestionManager,
       MissingMappingsService newMappingsDetectorService,
-      SuggestionMapper suggestionMapper) {
+      SuggestionMapper suggestionMapper,
+      AutomaticMappingsService automaticMappingsService) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
     this.suggestionManager = suggestionManager;
     this.missingMappingsService = newMappingsDetectorService;
     this.suggestionMapper = suggestionMapper;
+    this.automaticMappingsService = automaticMappingsService;
   }
 
   /**
@@ -57,6 +61,19 @@ public class MappingController {
   @GetMapping("/{id}")
   MappingEntityDTO getMappingEntity(@PathVariable int id) {
     MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+        ResourceNotFoundException::new);
+
+    return mappingEntityMapper.convertToDto(mappingEntity);
+  }
+
+  /**
+   * Get the DTO representation of a {@link MappingEntity}.
+   * @param key key of the mapping entity.
+   * @return {@link MappingEntityDTO} object.
+   */
+  @GetMapping("/getByKey/{key}")
+  MappingEntityDTO getMappingEntityByKey(@PathVariable String key) {
+    MappingEntity mappingEntity = mappingEntityService.findByKey(key).orElseThrow(
         ResourceNotFoundException::new);
 
     return mappingEntityMapper.convertToDto(mappingEntity);
@@ -114,6 +131,11 @@ public class MappingController {
   @PutMapping("/detectNewMappings")
   public Map<String, Integer> detectNewMappings() {
     return missingMappingsService.detectNewUnmappedTerms();
+  }
+
+  @GetMapping("/testAutomaticMappingsMappedEntities")
+  public Map<String, Integer> testAutomaticMappingsMappedEntities(){
+    return automaticMappingsService.evaluateAutomaticMappingsInMappedEntities();
   }
 
 }
