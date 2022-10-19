@@ -42,13 +42,21 @@ public class SearchInputQueryBuilder {
   }
 
   private Query buildShouldPart(SearchInput searchInput) throws IOException {
+    Query shouldQuery;
     List<Query> queries = new ArrayList<>();
     List<Query> boostFuzzyQueries = buildBoostFuzzyQueryByTerm(searchInput);
     List<Query> boostPhraseQueries = buildBoostPhraseQuery(searchInput);
     queries.addAll(boostFuzzyQueries);
     queries.addAll(boostPhraseQueries);
 
-    return queryHelper.joinQueriesShouldMode(queries);
+    if (searchInput.isDisjunctionMaxQuery()) {
+      shouldQuery = queryHelper.joinQueriesDisjunctionMaxQueryZeroTie(queries);
+    }
+    else {
+      shouldQuery = queryHelper.joinQueriesShouldMode(queries);
+    }
+
+    return shouldQuery;
   }
 
   private Query buildMustNotPart(SearchInput searchInput) {
