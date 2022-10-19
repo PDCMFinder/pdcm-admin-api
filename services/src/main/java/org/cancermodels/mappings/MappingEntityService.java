@@ -40,11 +40,19 @@ public class MappingEntityService {
   }
 
   /**
+   * Get all existing {@link MappingEntity}
+   * @return
+   */
+  public List<MappingEntity> findAll() {
+    return mappingEntityRepository.findAll();
+  }
+
+  /**
    * Find a {@link MappingEntity} using its key.
    * @param key key of the mapping entity.
    * @return Optional with the Mapping entity if found.
    */
-  public MappingEntity findByKey(String key) {
+  public Optional<MappingEntity> findByKey(String key) {
     return mappingEntityRepository.findByMappingKey(key);
   }
 
@@ -96,6 +104,15 @@ public class MappingEntityService {
   public List<MappingEntity> getAllByTypeNameAndStatus(String entityTypeName, String status) {
     return mappingEntityRepository.findAllByEntityTypeNameIgnoreCaseAndStatusOrderByMappingKeyAsc(
         entityTypeName, status);
+  }
+
+  /**
+   * Get all the {@link MappingEntity} objects by status.
+   * @param status Status to use as a filter.
+   * @return List of {@link MappingEntity}.
+   */
+  public List<MappingEntity> getAllByStatus(String status) {
+    return mappingEntityRepository.findAllByStatusIgnoreCase(status);
   }
 
   public void deleteAll() {
