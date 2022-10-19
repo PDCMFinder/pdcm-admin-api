@@ -1,6 +1,5 @@
 package org.cancermodels.suggestions.search_engine.query_builder;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.suggestions.search_engine.IndexableOntologySuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
-import org.cancermodels.suggestions.search_engine.IndexableSuggestionResult;
 import org.cancermodels.suggestions.search_engine.LuceneIndexReader;
 import org.springframework.stereotype.Component;
 
@@ -55,10 +53,6 @@ public class QueryProcessor {
       Document document = luceneIndexReader.getDocument(scoreDoc);
       IndexableSuggestion indexableSuggestion =
           indexableSuggestionMapper.toIndexableSuggestion(document);
-
-      IndexableSuggestionResult result = new IndexableSuggestionResult();
-      result.setIndexableSuggestion(indexableSuggestion);
-      result.setScore(scoreDoc.score);
 
       Suggestion suggestion = resultToSuggestion(indexableSuggestion);
       suggestion.setScore(scoreDoc.score);

@@ -1,10 +1,13 @@
 package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
@@ -70,10 +73,10 @@ public class OntologiesIndexer {
     indexableSuggestion.setSourceType(Source.ONTOLOGY.getLabel());
     IndexableOntologySuggestion ontology = new IndexableOntologySuggestion();
     ontology.setNcit(getNcitIdFromUrl(ontologyTerm.getUrl()));
-    String definition = StringUtils.abbreviate(ontologyTerm.getDescription(), Constants.MAX_TEXT_LENGTH);
+    String definition = getFormattedDescription(ontologyTerm.getDescription());
     ontology.setDefinition(definition);
-    ontology.setOntologyTermLabel(ontologyTerm.getLabel());
-    ontology.setSynonyms(getFormattedSynonyms(ontologyTerm.getSynonyms()));
+    ontology.setOntologyTermLabel(getFormattedLabel(ontologyTerm.getLabel()));
+    ontology.setSynonyms(getFormattedSynonyms(ontologyTerm.getSynonyms(), ontologyTerm.getLabel()));
     ontology.setKey(ontologyTerm.getKey());
     indexableSuggestion.setOntology(ontology);
 
@@ -85,16 +88,43 @@ public class OntologiesIndexer {
     return url.substring(idx);
   }
 
-  private Set<String> getFormattedSynonyms(Set<String> synonyms) {
+  private String getFormattedLabel(String originalLabel) {
+    String formatted = originalLabel;
+    formatted = handlePossibleRegimen(formatted);
+    return formatted;
+  }
+
+  // Allow a definition with only a max number of words
+  private String getFormattedDescription(String originalDescription) {
+    String formatted = originalDescription;
+    List<String> words = Arrays.asList(originalDescription.split(" "));
+    if (words.size() > Constants.MAX_NUMBER_TERMS_BY_QUERY) {
+      formatted = String.join(" ", words.subList(0, Constants.MAX_NUMBER_TERMS_BY_QUERY));
+    }
+    return formatted;
+  }
+
+  private Set<String> getFormattedSynonyms(Set<String> synonyms, String label) {
     Set<String> formattedSynonyms = new HashSet<>();
     for (String element : synonyms) {
 
       if (element.length() < Constants.MAX_WORD_LENGTH) {
         String formatted = element.toLowerCase();
-        formatted = formatted.trim();
-        formattedSynonyms.add(formatted);
+        // No need to add a synonym that is the same as the label.
+        if (!label.equalsIgnoreCase(formatted)) {
+          formatted = handlePossibleRegimen(formatted);
+          formatted = formatted.trim();
+          formattedSynonyms.add(formatted);
+        }
       }
     }
     return formattedSynonyms;
+  }
+
+  private String handlePossibleRegimen(String originalText) {
+    String formattedText = originalText;
+    formattedText = formattedText.replace("/", "_and_");
+    formattedText = formattedText.replace("-", "_and_");
+    return formattedText;
   }
 }

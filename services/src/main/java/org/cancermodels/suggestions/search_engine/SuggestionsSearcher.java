@@ -75,6 +75,7 @@ public class SuggestionsSearcher {
  {
     // Get the helper document that represents the doc with a perfect score
     Suggestion helperDocSuggestion = getHelperDocumentByMappingEntity(mappingEntity);
+//    System.out.println("Perfect score: " + helperDocSuggestion.getScore());
     double maxScore = helperDocSuggestion.getScore();
     suggestions.forEach(x -> {
       double relativeScore = x.getScore() * 100 / maxScore;
@@ -108,10 +109,6 @@ public class SuggestionsSearcher {
       Document document = luceneIndexReader.getDocument(scoreDoc);
       IndexableSuggestion indexableSuggestion =
           indexableSuggestionMapper.toIndexableSuggestion(document);
-
-      IndexableSuggestionResult result = new IndexableSuggestionResult();
-      result.setIndexableSuggestion(indexableSuggestion);
-      result.setScore(scoreDoc.score);
 
       Suggestion suggestion = resultToSuggestion(indexableSuggestion);
       suggestion.setScore(scoreDoc.score);
