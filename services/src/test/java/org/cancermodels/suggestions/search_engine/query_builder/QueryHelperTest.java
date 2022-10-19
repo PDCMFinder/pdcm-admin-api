@@ -118,12 +118,12 @@ class QueryHelperTest {
     assertEquals(expected, query.toString());
   }
 
-  @Test
-  void test() throws IOException {
-    Query query = instance.buildBoostPhraseQuery("field", "Arf-GAP with SH3 Domain Ankyrin Repeat and PH Domain-Containing 1", 0.5f);
-
-    String expected = "(field:word1~2 field:word2~2 field:word3~2)^0.5";
-    assertEquals(expected, query.toString());
-  }
+//  @Test
+//  void test() throws IOException {
+//    Query query = instance.buildBoostPhraseQuery("field", "Arf-GAP with SH3 Domain Ankyrin Repeat and PH Domain-Containing 1", 0.5f);
+//
+//    String expected = "(field:word1~2 field:word2~2 field:word3~2)^0.5";
+//    assertEquals(expected, query.toString());
+//  }
 
 }
