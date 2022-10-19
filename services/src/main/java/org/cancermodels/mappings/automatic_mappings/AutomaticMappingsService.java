@@ -1,5 +1,7 @@
 package org.cancermodels.mappings.automatic_mappings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,8 @@ public class AutomaticMappingsService {
     report.put("matching", 0);
     report.put("not_matching", 0);
     report.put("not_suggestion", 0);
+    List<List<String>> notMatchingDetails = new ArrayList<>();
+    List<List<String>> notSuggestionsDetails = new ArrayList<>();
     List<MappingEntity> mappingEntities =
         mappingEntityService.getAllByStatus(Status.MAPPED.getLabel());
 
@@ -69,17 +73,44 @@ public class AutomaticMappingsService {
           report.compute("matching", (key, val) -> (val == null) ? 1 : val + 1);
         } else {
           report.compute("not_matching", (key, val) -> (val == null) ? 1 : val + 1);
+          List<String> details = Arrays.asList(suggestion.getSuggestedTermLabel(),
+              suggestion.getSuggestedTermUrl(),
+              mappingEntity.getMappedTermLabel(),
+              mappingEntity.getMappedTermUrl(),
+              mappingEntity.getValuesAsMap().toString());
+          notMatchingDetails.add(details);
         }
       } else {
         report.compute("not_suggestion", (key, val) -> (val == null) ? 1 : val + 1);
-        System.out.println( "[" + mappingEntity.getId() + "] " +
-            mappingEntity.getMappingKey() + ": " + mappingEntity.getMappedTermLabel() +
-                " " + mappingEntity.getValuesAsMap());
+        List<String> details = Arrays.asList(
+            mappingEntity.getId().toString(),
+            mappingEntity.getMappedTermLabel(),
+            mappingEntity.getMappedTermUrl(),
+            mappingEntity.getValuesAsMap().toString());
+        notSuggestionsDetails.add(details);
       }
       if (counter % 100 == 0 || counter < 100 || total - counter < 100) {
         System.out.println("Processed " + counter + " from " + mappingEntities.size());
       }
     }
+    printReportNotMatching(notMatchingDetails);
+    printReportNotSuggestion(notSuggestionsDetails);
     return report;
+  }
+
+  private void printReportNotMatching(List<List<String>> details) {
+    System.out.println("NOT MATCHING ELEMENTS");
+    System.out.println("Suggested url|Suggested label|Current url|Current label|data");
+    for (List<String> element : details) {
+      System.out.println(String.join("|", element));
+    }
+  }
+
+  private void printReportNotSuggestion(List<List<String>> details) {
+    System.out.println("NO SUGGESTIONS FOUND");
+    System.out.println("Id|Current url|Current label|data");
+    for (List<String> element : details) {
+      System.out.println(String.join("|", element));
+    }
   }
 }
