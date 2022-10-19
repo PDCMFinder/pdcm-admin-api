@@ -12,6 +12,7 @@ import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.types.Status;
+import org.cancermodels.util.Utilities;
 import org.springframework.stereotype.Service;
 
 /**
@@ -58,7 +59,8 @@ public class AutomaticMappingsService {
 
     // Temporal filter to make things faster
     mappingEntities = mappingEntities.stream().filter(x -> x.getEntityType().getName().equalsIgnoreCase(
-        EntityTypeName.Treatment.getLabel())).collect(Collectors.toList());
+        EntityTypeName.Diagnosis.getLabel())).collect(Collectors.toList());
+    mappingEntities = mappingEntities.subList(0, Math.min(mappingEntities.size(), 500));
 
     int total = mappingEntities.size();
 
@@ -73,10 +75,12 @@ public class AutomaticMappingsService {
           report.compute("matching", (key, val) -> (val == null) ? 1 : val + 1);
         } else {
           report.compute("not_matching", (key, val) -> (val == null) ? 1 : val + 1);
-          List<String> details = Arrays.asList(suggestion.getSuggestedTermLabel(),
-              suggestion.getSuggestedTermUrl(),
+          List<String> details = Arrays.asList(
+              mappingEntity.getId().toString(),
+              suggestion.getSuggestedTermLabel(),
+              Utilities.urlToNCIt(suggestion.getSuggestedTermUrl()),
               mappingEntity.getMappedTermLabel(),
-              mappingEntity.getMappedTermUrl(),
+              Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
               mappingEntity.getValuesAsMap().toString());
           notMatchingDetails.add(details);
         }
@@ -85,7 +89,7 @@ public class AutomaticMappingsService {
         List<String> details = Arrays.asList(
             mappingEntity.getId().toString(),
             mappingEntity.getMappedTermLabel(),
-            mappingEntity.getMappedTermUrl(),
+            Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
             mappingEntity.getValuesAsMap().toString());
         notSuggestionsDetails.add(details);
       }
@@ -100,7 +104,7 @@ public class AutomaticMappingsService {
 
   private void printReportNotMatching(List<List<String>> details) {
     System.out.println("NOT MATCHING ELEMENTS");
-    System.out.println("Suggested url|Suggested label|Current url|Current label|data");
+    System.out.println("Id|Suggested url|Suggested label|Current url|Current label|data");
     for (List<String> element : details) {
       System.out.println(String.join("|", element));
     }
