@@ -107,9 +107,9 @@ public class HelperDocumentsIndexer {
     List<String> synonyms = new ArrayList<>();
     synonyms.add("N/A");
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
-    indexableOntologySuggestion.setOntologyTermLabel("N/A");
     indexableOntologySuggestion.setNcit("N/A");
     indexableOntologySuggestion.setKey("N/A");
     return indexableOntologySuggestion;
   }
+
 }
