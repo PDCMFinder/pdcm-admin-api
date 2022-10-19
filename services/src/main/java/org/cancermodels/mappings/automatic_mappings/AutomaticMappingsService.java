@@ -12,6 +12,7 @@ import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.types.Status;
+import org.cancermodels.util.Utilities;
 import org.springframework.stereotype.Service;
 
 /**
@@ -77,9 +78,9 @@ public class AutomaticMappingsService {
           List<String> details = Arrays.asList(
               mappingEntity.getId().toString(),
               suggestion.getSuggestedTermLabel(),
-              suggestion.getSuggestedTermUrl(),
+              Utilities.urlToNCIt(suggestion.getSuggestedTermUrl()),
               mappingEntity.getMappedTermLabel(),
-              mappingEntity.getMappedTermUrl(),
+              Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
               mappingEntity.getValuesAsMap().toString());
           notMatchingDetails.add(details);
         }
@@ -88,7 +89,7 @@ public class AutomaticMappingsService {
         List<String> details = Arrays.asList(
             mappingEntity.getId().toString(),
             mappingEntity.getMappedTermLabel(),
-            mappingEntity.getMappedTermUrl(),
+            Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
             mappingEntity.getValuesAsMap().toString());
         notSuggestionsDetails.add(details);
       }
