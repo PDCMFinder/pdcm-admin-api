@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import org.cancermodels.EntityTypeName;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
@@ -33,16 +31,16 @@ public class AutomaticMappingsService {
 
   /**
    * This is a test/evaluation method to check how good the automatic mapping process is.
-   * It's done but taking all mapping entities and calculate the best suggestion (the suggestion).
+   * It's done by taking all mapping entities and calculate the best suggestion (the suggestion).
    * There are 3 scenarios:
    * 1) The suggestion's suggested term url is the same as the one in the mapped term.
    *    This is the successful case, showing that the automatic mapping and the actual mapping agree.
    * 2) The suggestion's suggested term url is NOT the same as the one in the mapped term.
-   *    This is a scenario to check, as there is not agreement between the automatic process and the
+   *    This is a scenario to check, as there is no agreement between the automatic process and the
    *    real mapping.
    * 3) There is not a suggestion.
    *    This is another scenario to check, as it indicates that a probably successful mapping was
-   *    done in the past but it cannot be replicated with the current logic.
+   *    done in the past, but it cannot be replicated with the current logic.
    */
   public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities() {
     Map<String, Integer> report = new HashMap<>();
