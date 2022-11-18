@@ -15,9 +15,6 @@ public class SimilarityConfigurationReader {
   @Value( "${similarity_acceptable_match_score}" )
   private int similarityAcceptableMatchScore;
 
-  @Value( "${similarity_algorithm}" )
-  private String similarityAlgorithm;
-
   @Value( "${number_of_suggested_mappings}" )
   private int numberOfSuggestedMappingsPerEntity;
 
