@@ -9,6 +9,7 @@ import java.util.Map;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.mappings.automatic_mappings.AutomaticMappingsService;
+import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.types.MappingType;
 import org.cancermodels.reader.MissingMappingsService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
@@ -136,6 +137,11 @@ public class MappingController {
   @GetMapping("/testAutomaticMappingsMappedEntities")
   public Map<String, Integer> testAutomaticMappingsMappedEntities(){
     return automaticMappingsService.evaluateAutomaticMappingsInMappedEntities();
+  }
+
+  @GetMapping("/assignAutomaticMappings")
+  public ProcessResponse assignAutomaticMappings(){
+    return automaticMappingsService.assignAutomaticMappings();
   }
 
 }
