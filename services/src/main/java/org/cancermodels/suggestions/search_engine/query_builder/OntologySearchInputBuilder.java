@@ -26,6 +26,10 @@ public class OntologySearchInputBuilder {
     }
 
     searchInput.setFieldsToInclude(include);
+    // In ontology query, we want to know what scores more: label, synonym
+    // or definition. The sum here is not useful because it rests flexibility
+    // when trying to assign more relevance to a specific field.
+    searchInput.setDisjunctionMaxQuery(true);
 
     return searchInput;
   }

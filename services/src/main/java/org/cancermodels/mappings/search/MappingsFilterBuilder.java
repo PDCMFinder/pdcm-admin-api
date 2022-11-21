@@ -56,6 +56,12 @@ public class MappingsFilterBuilder {
     return withFilter(FilterTypes.STATUS, status);
   }
 
+  public MappingsFilterBuilder withMappingType(List<String> mappingTypes)
+  {
+    return withFilter(FilterTypes.MAPPING_TYPE, mappingTypes);
+  }
+
+
   private boolean isListValid(List<String> values)
   {
     return values != null && !values.isEmpty();

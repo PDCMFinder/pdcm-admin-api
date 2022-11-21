@@ -1,16 +1,11 @@
 package org.cancermodels.suggestions.search_engine.query_builder;
 
-import java.io.IOException;
 import java.util.List;
 import org.apache.lucene.search.Query;
 import org.cancermodels.exceptions.SearchException;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.MappingValueConfHelper;
-import org.cancermodels.suggestions.search_engine.query_builder.OntologySearchInputBuilder;
-import org.cancermodels.suggestions.search_engine.query_builder.SearchInput;
-import org.cancermodels.suggestions.search_engine.query_builder.SearchInputQueryBuilder;
-import org.cancermodels.suggestions.search_engine.query_builder.SearchParameters;
 import org.springframework.stereotype.Component;
 
 /**

@@ -69,6 +69,21 @@ public class MappingsSpecs {
     return specification;
   }
 
+  public static Specification<MappingEntity> withMappingType(List<String> mappingTypes)
+  {
+    Specification<MappingEntity> specification = Specification.where(null);
+    if (mappingTypes != null)
+    {
+      specification = (Specification<MappingEntity>) (root, query, criteriaBuilder) -> {
+        Path<String> mappingTypePath = root.get(MappingEntity_.mappingType);
+        query.distinct(true);
+        return PredicateBuilder.addLowerInPredicates(
+            criteriaBuilder, mappingTypePath, mappingTypes);
+      };
+    }
+    return specification;
+  }
+
   /**
    * Creates the conditions in the WHERE to filter using a labels(keys) and values.
    * Because those elements are not columns but records, it's a bit more complex to use them in a

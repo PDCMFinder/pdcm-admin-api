@@ -15,6 +15,7 @@ public class MappingEntityBuilder {
   private final EntityType treatmentType = createTreatmentType();
   private final EntityType diagnosisType = createDiagnosisType();
 
+  private int id;
   private EntityType entityType;
   private String mappingKey;
   private List<MappingValue> mappingValues = new ArrayList<>();
@@ -22,6 +23,7 @@ public class MappingEntityBuilder {
 
   public MappingEntity build() {
     MappingEntity mappingEntity = new MappingEntity();
+    mappingEntity.setId(id);
     mappingEntity.setEntityType(entityType);
     mappingEntity.setMappingValues(mappingValues);
     mappingEntity.setMappedTermUrl(mappedTermUrl);

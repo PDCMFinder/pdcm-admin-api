@@ -13,6 +13,7 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.BoostQuery;
+import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
@@ -85,6 +86,10 @@ public class QueryHelper {
       }
     }
     return builder.build();
+  }
+
+  public Query joinQueriesDisjunctionMaxQueryZeroTie(List<Query> queries) {
+    return new DisjunctionMaxQuery(queries, 0);
   }
 
   private String[] tokenize(String text) throws IOException {

@@ -59,8 +59,9 @@ public class SearchService {
   private Specification<MappingEntity> buildSpecifications(MappingsFilter mappingsFilter) {
     return Specification.where(
         MappingsSpecs.withStatus(mappingsFilter.getStatus())
-            .and(
-                MappingsSpecs.withMappingQuery(mappingsFilter.getMappingQuery())
-                    .and(MappingsSpecs.withEntityTypeNames(mappingsFilter.getEntityTypeNames()))));
+            .and(MappingsSpecs.withMappingType(mappingsFilter.getMappingTypes()))
+            .and(MappingsSpecs.withMappingQuery(mappingsFilter.getMappingQuery())
+            .and(MappingsSpecs.withEntityTypeNames(mappingsFilter.getEntityTypeNames())))
+        );
   }
 }

@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.Data;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.KeySearchConfiguration;
 
 @Entity
 @Data
