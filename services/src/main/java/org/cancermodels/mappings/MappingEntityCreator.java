@@ -31,6 +31,9 @@ public class MappingEntityCreator {
       EntityTypeService entityTypeService) {
     this.mappingKeyService = mappingKeyService;
     this.entityTypeService = entityTypeService;
+  }
+
+  private void init() {
     initMapKeys();
     initTypes();
   }
@@ -77,6 +80,9 @@ public class MappingEntityCreator {
   }
 
   public MappingEntity createTreatmentMappingEntity(String treatmentName, String dataSource) {
+    if (treatmentType == null) {
+      init();
+    }
     Map<MappingKey, String> data = new HashMap<>();
     data.put(treatmentNameMappingKey, treatmentName);
     data.put(dataSourceTMappingKey, dataSource);
@@ -89,6 +95,10 @@ public class MappingEntityCreator {
       String originTissue,
       String tumorType,
       String dataSource) {
+
+    if (diagnosisType == null) {
+      init();
+    }
 
     Map<MappingKey, String> data = new HashMap<>();
     data.put(sampleDiagnosisMappingKey, sampleDiagnosis);

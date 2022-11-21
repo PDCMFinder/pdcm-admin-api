@@ -1,5 +1,6 @@
 package org.cancermodels.mappings.automatic_mappings;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,10 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.EntityTypeName;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.process_report.ProcessResponse;
+import org.cancermodels.types.MappingType;
+import org.cancermodels.types.Source;
 import org.cancermodels.types.Status;
 import org.cancermodels.util.Utilities;
 import org.springframework.stereotype.Service;
@@ -19,6 +25,7 @@ import org.springframework.stereotype.Service;
  * A class to manage task related to the automatic mapping of mapping entities.
  */
 @Service
+@Slf4j
 public class AutomaticMappingsService {
 
   private final MappingEntityService mappingEntityService;
@@ -33,16 +40,16 @@ public class AutomaticMappingsService {
 
   /**
    * This is a test/evaluation method to check how good the automatic mapping process is.
-   * It's done but taking all mapping entities and calculate the best suggestion (the suggestion).
+   * It's done by taking all mapping entities and calculate the best suggestion (the suggestion).
    * There are 3 scenarios:
    * 1) The suggestion's suggested term url is the same as the one in the mapped term.
    *    This is the successful case, showing that the automatic mapping and the actual mapping agree.
    * 2) The suggestion's suggested term url is NOT the same as the one in the mapped term.
-   *    This is a scenario to check, as there is not agreement between the automatic process and the
+   *    This is a scenario to check, as there is no agreement between the automatic process and the
    *    real mapping.
    * 3) There is not a suggestion.
    *    This is another scenario to check, as it indicates that a probably successful mapping was
-   *    done in the past but it cannot be replicated with the current logic.
+   *    done in the past, but it cannot be replicated with the current logic.
    */
   public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities() {
     Map<String, Integer> report = new HashMap<>();
@@ -116,5 +123,85 @@ public class AutomaticMappingsService {
     for (List<String> element : details) {
       System.out.println(String.join("|", element));
     }
+  }
+
+  /**
+   * Takes all unmapped entities and calculates the best mapping suggestion for each one. If any is
+   *  found, assigns it as an automatic mapping.
+   * @return {@link ProcessResponse} object with the count of elements that were mapped by type
+   */
+  public ProcessResponse assignAutomaticMappings() {
+    log.info("Init assign Automatic Mappings process");
+    Map<String, String> response = new HashMap<>();
+    int totalUnmappedTreatment;
+    int totalUnmappedDiagnosis;
+    int automaticMappedTreatment;
+    int automaticMappedDiagnosis;
+
+    List<MappingEntity> unmappedEntities = mappingEntityService.getAllByStatus(Status.UNMAPPED.getLabel());
+    log.info("Got all unmapped entities. Count: {}", unmappedEntities.size());
+
+    List<MappingEntity> treatmentEntities =
+        unmappedEntities.stream().filter(
+            x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Treatment.getLabel()))
+            .collect(Collectors.toList());
+    totalUnmappedTreatment = treatmentEntities.size();
+    log.info("Unmapped treatments. Count: {}", unmappedEntities.size());
+
+    automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
+
+    List<MappingEntity> diagnosisEntities =
+        unmappedEntities.stream().filter(
+                x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Diagnosis.getLabel()))
+            .collect(Collectors.toList());
+    totalUnmappedDiagnosis = diagnosisEntities.size();
+    log.info("Unmapped diagnosis. Count: {}", unmappedEntities.size());
+
+    log.info("Starts automatic assignation diagnosis");
+    automaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
+    log.info("Starts automatic assignation treatments");
+    automaticMappedTreatment= assignAutomaticMappingsByType(treatmentEntities);
+
+    // Save in db
+    log.info("Saving into db");
+    mappingEntityService.savAll(diagnosisEntities);
+    mappingEntityService.savAll(treatmentEntities);
+    log.info("Saving into db finished");
+
+    response.put("Treatment", automaticMappedTreatment + " from " + totalUnmappedTreatment);
+    response.put("Diagnosis", automaticMappedDiagnosis + " from " + totalUnmappedDiagnosis);
+
+    return new ProcessResponse(response);
+  }
+
+  public int assignAutomaticMappingsByType(List<MappingEntity> mappingEntities) {
+    int automaticMappingsCount = 0;
+    for (MappingEntity unmapped : mappingEntities) {
+      Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(unmapped);
+      // Check if a suitable suggestion was found
+      if (optionalSuggestion.isPresent()) {
+        Suggestion suggestion = optionalSuggestion.get();
+        assignMapping(unmapped, suggestion);
+        automaticMappingsCount++;
+        log.info("automatic mapped count: {}", automaticMappingsCount);
+      }
+    }
+    return automaticMappingsCount;
+  }
+
+  private void assignMapping(MappingEntity mappingEntity, Suggestion suggestion) {
+    String mappedTermUrl = suggestion.getSuggestedTermUrl();
+    String mappedTermLabel = suggestion.getSuggestedTermLabel();
+    String mappingType = MappingType.AUTOMATIC.getLabel();
+    LocalDateTime updateTime = LocalDateTime.now();
+    String sourceType = suggestion.getSourceType();
+    String status = Status.MAPPED.getLabel();
+
+    mappingEntity.setMappedTermUrl(mappedTermUrl);
+    mappingEntity.setMappedTermLabel(mappedTermLabel);
+    mappingEntity.setSource(sourceType);
+    mappingEntity.setMappingType(mappingType);
+    mappingEntity.setDateUpdated(updateTime);
+    mappingEntity.setStatus(status);
   }
 }

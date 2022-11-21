@@ -64,12 +64,14 @@ public class SearchController {
 
       @RequestParam(value = "mq", required = false) List<String> mappingQuery,
       @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
-      @RequestParam(value = "status", required = false) List<String> status)
+      @RequestParam(value = "status", required = false) List<String> status,
+      @RequestParam(value = "mappingType", required = false) List<String> mappingTypes)
   {
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
         .withEntityTypeNames(entityTypeNames)
         .withMappingQuery(mappingQuery)
         .withStatus(status)
+        .withMappingType(mappingTypes)
         .build();
 
     Page<MappingEntity> mappingEntities = searchService.search(
@@ -82,7 +84,8 @@ public class SearchController {
             mappingEntityDTOS,
             linkTo(methodOn(SearchController.class)
                 .search(
-                    pageable, assembler, mappingQuery, entityTypeNames, status)).withSelfRel());
+                    pageable, assembler, mappingQuery, entityTypeNames, status, mappingTypes))
+                .withSelfRel());
 
     HttpHeaders responseHeaders = new HttpHeaders();
     return new ResponseEntity(pr, responseHeaders, HttpStatus.OK);
@@ -91,10 +94,12 @@ public class SearchController {
   @GetMapping("/statusCounts")
   public Map<String, Long> getCountsByStatus(
       @RequestParam(value = "mq", required = false) List<String> mappingQuery,
-      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames) {
+      @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
+      @RequestParam(value = "mappingType", required = false) List<String> mappingTypes) {
 
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
         .withEntityTypeNames(entityTypeNames)
+        .withMappingType(mappingTypes)
         .withMappingQuery(mappingQuery)
         .build();
 
