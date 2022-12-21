@@ -4,7 +4,8 @@ public enum FilterTypes {
   MAPPING_QUERY("mapping_query"),
   ENTITY_TYPE("entity_type"),
   STATUS("status"),
-  MAPPING_TYPE("mappingType");
+  MAPPING_TYPE("mappingType"),
+  LABEL("label");
 
   private final String name;
 

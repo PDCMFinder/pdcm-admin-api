@@ -36,4 +36,13 @@ public interface MappingEntityRepository extends
   void deleteAllByStatus(String status);
 
   Optional<MappingEntity> findByMappingKey(String key);
+
+  @Query(
+      value =
+          "SELECT DISTINCT value\n" +
+              "FROM mapping_value mv,  mapping_key mk\n" +
+              "WHERE mk.key IN ('SampleDiagnosis', 'TreatmentName')\n" +
+              "AND mv.key_id = mk.id;",
+      nativeQuery = true)
+  List<Object[]> getAllTreatmentsAndDiagnosis();
 }
