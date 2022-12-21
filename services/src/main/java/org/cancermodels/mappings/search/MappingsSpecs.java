@@ -1,9 +1,6 @@
 package org.cancermodels.mappings.search;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -79,6 +76,36 @@ public class MappingsSpecs {
         query.distinct(true);
         return PredicateBuilder.addLowerInPredicates(
             criteriaBuilder, mappingTypePath, mappingTypes);
+      };
+    }
+    return specification;
+  }
+
+  public static Specification<MappingEntity> withLabel(List<String> labels)
+  {
+    Specification<MappingEntity> specification = Specification.where(null);
+    if (labels != null)
+    {
+      specification = (root, query, criteriaBuilder) -> {
+
+        List<Predicate> predicates = new ArrayList<>();
+        ListJoin<MappingEntity, MappingValue> mappingValuesJoin = root.join(MappingEntity_.mappingValues);
+
+        Path<String> mappingValuePath = mappingValuesJoin.get(MappingValue_.value);
+        Path<MappingKey> mappingKeyPath = mappingValuesJoin.get(MappingValue_.mappingKey);
+        Path<String> keyValuePath = mappingKeyPath.get(MappingKey_.key);
+
+        // Apply the conditions to key and value
+        Predicate keyValuePathPredicate = PredicateBuilder.addInPredicates(
+            criteriaBuilder, keyValuePath, Arrays.asList("SampleDiagnosis", "TreatmentName"));
+        Predicate mappingValuePredicate =
+            PredicateBuilder.addLowerLikeOrPredicates(criteriaBuilder, mappingValuePath, labels);
+
+        predicates.add(keyValuePathPredicate);
+        predicates.add(mappingValuePredicate);
+
+        query.distinct(true);
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
       };
     }
     return specification;

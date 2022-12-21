@@ -61,6 +61,10 @@ public class MappingsFilterBuilder {
     return withFilter(FilterTypes.MAPPING_TYPE, mappingTypes);
   }
 
+  public MappingsFilterBuilder withLabel(List<String> labels)
+  {
+    return withFilter(FilterTypes.LABEL, labels);
+  }
 
   private boolean isListValid(List<String> values)
   {
