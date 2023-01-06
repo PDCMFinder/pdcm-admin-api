@@ -12,4 +12,5 @@ class IndexableOntologySuggestion {
   private String ontologyTermLabel;
   private String definition;
   private Set<String> synonyms;
+  private String type;
 }

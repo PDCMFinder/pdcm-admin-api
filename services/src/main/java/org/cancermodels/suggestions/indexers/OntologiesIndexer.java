@@ -78,6 +78,7 @@ public class OntologiesIndexer {
     ontology.setOntologyTermLabel(getFormattedLabel(ontologyTerm.getLabel()));
     ontology.setSynonyms(getFormattedSynonyms(ontologyTerm.getSynonyms(), ontologyTerm.getLabel()));
     ontology.setKey(ontologyTerm.getKey());
+    ontology.setType(ontologyTerm.getType().toLowerCase());
     indexableSuggestion.setOntology(ontology);
 
     return indexableSuggestion;
