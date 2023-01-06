@@ -12,7 +12,6 @@ import org.cancermodels.persistance.MappingEntityRepository;
 import org.cancermodels.persistance.Suggestion;
 import org.cancermodels.persistance.SuggestionRepository;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
-import org.cancermodels.types.Source;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -37,9 +36,6 @@ public class SuggestionManager {
     resetData(mappingEntities);
 
     setSuggestions(mappingEntities);
-
-//    saveMappingEntities(mappingEntities);
-
   }
 
   private void resetData(List<MappingEntity> toProcess) {
@@ -86,15 +82,7 @@ public class SuggestionManager {
 
   }
 
-  /**
-   * Deletes all suggestions by source type
-   * @param source {@link Source} type.
-   */
-  public void deleteAllBySourceType(Source source) {
-    suggestionRepository.deleteAllBySourceType(source.getLabel());
-  }
-
-  public void runSuggestionReportForEntity(MappingEntity mappingEntity) throws IOException {
+  public void runSuggestionReportForEntity(MappingEntity mappingEntity) {
     System.out.println("----------------------------------------------------------");
     System.out.println("Entity id: " + mappingEntity.getId());
     System.out.println("Entity values: " + mappingEntity.getValuesAsMap());

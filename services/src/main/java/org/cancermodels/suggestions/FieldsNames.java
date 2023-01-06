@@ -8,6 +8,7 @@ public enum FieldsNames {
   ONTOLOGY_KEY("ontology.key"),
   ONTOLOGY_DEFINITION("ontology.definition"),
   ONTOLOGY_SYNONYM("ontology.synonym"),
+  ONTOLOGY_TYPE("ontology.type"),
   RULE_MAPPED_TERM_URL("rule.mappedTermUrl"),
   RULE_MAPPED_TERM_LABEL("rule.mappedTermLabel"),
   RULE_KEY("rule.key"),

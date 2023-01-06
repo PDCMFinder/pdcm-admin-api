@@ -41,8 +41,8 @@ public class OntologySearcherByText {
     this.queryHelper = queryHelper;
   }
 
-  public List<Suggestion> searchWithDefaultParameters(String input) throws SearchException {
-    SearchInput searchInput = ontologySearchInputBuilder.build(input, null, defaultCommonParameters);
+  public List<Suggestion> searchWithDefaultParameters(String input, String entityTypeName) throws SearchException {
+    SearchInput searchInput = ontologySearchInputBuilder.build(input, null, defaultCommonParameters, entityTypeName);
     Query ontologyQuery = searchInputQueryBuilder.buildQuery(searchInput);
 
     // Exclude helper documents

@@ -42,29 +42,32 @@ public class MappingEntityQueryBuilder {
    */
   public Query buildSuggestionQuery(MappingEntity mappingEntity)  {
 
-    List<MappingValue> mappingValues = mappingEntity.getMappingValues();
+    // Build the section of the query that search similar rules
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
-    Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
+    System.out.println("ruleQuery:::" + ruleQuery);
+    // Build the section of the query that search similar ontologies
+    Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingEntity);
 
     Query ruleAndOntologyCombinedQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);
 
+    // Query to identify documents that need to be excluded because they are helper ones.
     Query sourceTypeQuery = queryHelper.getTermQuery("sourceType", Constants.HELPER_DOCUMENT_TYPE);
 
     BooleanQuery.Builder builder = new Builder();
 
-    Query finalQuery = builder.add(
-        ruleAndOntologyCombinedQuery, Occur.SHOULD).add(sourceTypeQuery, Occur.MUST_NOT).build();
+    Query finalQuery =
+        builder.add(ruleAndOntologyCombinedQuery, Occur.SHOULD).add(sourceTypeQuery, Occur.MUST_NOT).build();
 
     log.info("Suggestion query: {}", finalQuery.toString());
+    System.out.println("Suggestion query:::" + finalQuery);
 
     return finalQuery;
   }
 
   public Query buildHelperDocumentQuery(MappingEntity mappingEntity) throws SearchException {
 
-    List<MappingValue> mappingValues = mappingEntity.getMappingValues();
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
-    Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingValues);
+    Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingEntity);
     Query finalQuery = combineRuleAndOntologyQuery(ruleQuery, ontologyQuery);
     log.info("Helper query: {}", finalQuery.toString());
     return finalQuery;

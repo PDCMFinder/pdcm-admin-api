@@ -3,6 +3,7 @@ package org.cancermodels.suggestions.search_engine.query_builder;
 import java.util.List;
 import org.apache.lucene.search.Query;
 import org.cancermodels.exceptions.SearchException;
+import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingValue;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.MappingValueConfHelper;
@@ -31,17 +32,17 @@ public class OntologyQueryBuilder {
     this.searchInputQueryBuilder = searchInputQueryBuilder;
   }
 
-  public Query buildOntologiesQuery(List<MappingValue> mappingValues) throws SearchException {
+  public Query buildOntologiesQuery(MappingEntity mappingEntity) throws SearchException {
 
     List<MappingValue> toProcess =
-        mappingValueConfHelper.getSearchOnOntologyValues(mappingValues);
+        mappingValueConfHelper.getSearchOnOntologyValues(mappingEntity.getMappingValues());
 
     MappingValue mainValue = mappingValueConfHelper.getMainValue(toProcess);
     List<MappingValue> secondaryValues = mappingValueConfHelper.getSecondaryValues(toProcess);
 
     String combinedText = mappingValueConfHelper.getTextForMultiFieldQuery(mainValue, secondaryValues);
     SearchInput searchInput = ontologySearchInputBuilder.build(
-        mainValue.getValue(), combinedText, defaultSearchParameters);
+        mainValue.getValue(), combinedText, defaultSearchParameters, mappingEntity.getEntityType().getName().toLowerCase());
     return searchInputQueryBuilder.buildQuery(searchInput);
   }
 

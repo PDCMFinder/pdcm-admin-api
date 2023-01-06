@@ -30,11 +30,11 @@ private final OntologySearcherByText ontologySearcherByText;
   }
 
   @GetMapping("/search")
-  public List<SuggestionDTO> searchWithDefaultParameters(@RequestParam(value = "input") String input)
-      throws IOException {
+  public List<SuggestionDTO> searchWithDefaultParameters(
+      @RequestParam(value = "input") String input, @RequestParam(value = "entityTypeName") String entityTypeName) {
     log.info("Ontology search for: [{}]", input);
     List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
-    List<Suggestion> results = ontologySearcherByText.searchWithDefaultParameters(input);
+    List<Suggestion> results = ontologySearcherByText.searchWithDefaultParameters(input, entityTypeName);
     log.info("Found: {} suggestions", results.size());
     results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
     log.info("Returning: {} results", suggestionDTOS.size());
