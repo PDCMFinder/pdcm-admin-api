@@ -43,8 +43,7 @@ public class MappingEntitySearchInputBuilder {
           buildEntriesForMappingValueWithCustomText(mainValue, composedText, searchParameters);
       include.add(entryForComposedText);
     }
-
-
+    
     searchInput.setFieldsToInclude(include);
 
     exclude.add(buildExcludeEntry(mappingEntity));
