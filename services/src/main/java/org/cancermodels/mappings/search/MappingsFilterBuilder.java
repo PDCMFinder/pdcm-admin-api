@@ -1,9 +1,7 @@
 package org.cancermodels.mappings.search;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MappingsFilterBuilder {
 
@@ -36,7 +34,11 @@ public class MappingsFilterBuilder {
   {
     if (isListValid(values))
     {
-      filters.put(filterType, values);
+      // Use only not null values
+      List<String> notNullValues = values.stream().filter(Objects::nonNull).collect(Collectors.toList());
+      if (!notNullValues.isEmpty()) {
+        filters.put(filterType, values);
+      }
     }
     return this;
   }
