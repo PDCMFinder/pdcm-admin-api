@@ -3,6 +3,7 @@ package org.cancermodels.admin;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
@@ -52,7 +53,7 @@ public class SearchController {
    * @param entityTypeNames Name of the entity type we want to retrieve
    * @param status Status of the mapping entity (created, ...)
    * @param mappingTypes Mapping type (Automatic/Manual)
-   * @param labels Value of the treatment name or diagnosis
+   * @param label Value of the treatment name or diagnosis
    * @return Paginated Mappings that match the search criteria
    */
   @GetMapping("/search")
@@ -64,14 +65,14 @@ public class SearchController {
       @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
       @RequestParam(value = "status", required = false) List<String> status,
       @RequestParam(value = "mappingType", required = false) List<String> mappingTypes,
-      @RequestParam(value = "label", required = false) List<String> labels)
+      @RequestParam(value = "label", required = false) String label)
   {
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
         .withEntityTypeNames(entityTypeNames)
         .withMappingQuery(mappingQuery)
         .withStatus(status)
         .withMappingType(mappingTypes)
-        .withLabel(labels)
+        .withLabel(Collections.singletonList(label))
         .build();
 
     Page<MappingEntity> mappingEntities = searchService.search(
@@ -84,7 +85,7 @@ public class SearchController {
             mappingEntityDTOS,
             linkTo(methodOn(SearchController.class)
                 .search(
-                    pageable, assembler, mappingQuery, entityTypeNames, status, mappingTypes, labels))
+                    pageable, assembler, mappingQuery, entityTypeNames, status, mappingTypes, label))
                 .withSelfRel());
 
     HttpHeaders responseHeaders = new HttpHeaders();
@@ -96,13 +97,13 @@ public class SearchController {
       @RequestParam(value = "mq", required = false) List<String> mappingQuery,
       @RequestParam(value = "entityType", required = false) List<String> entityTypeNames,
       @RequestParam(value = "mappingType", required = false) List<String> mappingTypes,
-      @RequestParam(value = "label", required = false) List<String> labels) {
+      @RequestParam(value = "label", required = false) String label) {
 
     MappingsFilter filter = MappingsFilterBuilder.getInstance()
         .withEntityTypeNames(entityTypeNames)
         .withMappingType(mappingTypes)
         .withMappingQuery(mappingQuery)
-        .withLabel(mappingQuery)
+        .withLabel(Collections.singletonList(label))
         .build();
 
     return searchService.countStatusWithFilter(filter);

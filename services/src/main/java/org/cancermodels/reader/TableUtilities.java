@@ -13,8 +13,8 @@ public final class TableUtilities {
     public static Table readTsvOrReturnEmpty(File file) {
         Table dataTable;
         log.info("Reading tsv file {}", file);
-        System.out.printf("Reading tsv file %s\r", file);
         dataTable = readTsv(file);
+        log.info("Finished reading tsv file {}", file);
         return dataTable;
     }
 
