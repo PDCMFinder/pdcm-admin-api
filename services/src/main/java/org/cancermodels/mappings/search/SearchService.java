@@ -1,8 +1,9 @@
 package org.cancermodels.mappings.search;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Clob;
+import java.sql.SQLException;
+import java.util.*;
+
 import org.cancermodels.types.Status;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingEntityRepository;
@@ -55,11 +56,27 @@ public class SearchService {
 
   }
 
+  public List<String> getAllTreatmentsAndDiagnosis() {
+    List<String> treatmentsAndDiagnosis = new ArrayList<>();
+    List<Object[]> list = mappingEntityRepository.getAllTreatmentsAndDiagnosis();
+    for (Object[] row : list) {
+      Clob clob = (Clob)row[0];
+      try {
+        String value = clob.getSubString(1, (int) clob.length());
+        treatmentsAndDiagnosis.add(value);
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return treatmentsAndDiagnosis;
+  }
+
 
   private Specification<MappingEntity> buildSpecifications(MappingsFilter mappingsFilter) {
     return Specification.where(
         MappingsSpecs.withStatus(mappingsFilter.getStatus())
             .and(MappingsSpecs.withMappingType(mappingsFilter.getMappingTypes()))
+            .and(MappingsSpecs.withLabel(mappingsFilter.getLabels()))
             .and(MappingsSpecs.withMappingQuery(mappingsFilter.getMappingQuery())
             .and(MappingsSpecs.withEntityTypeNames(mappingsFilter.getEntityTypeNames())))
         );

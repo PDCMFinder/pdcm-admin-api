@@ -70,26 +70,19 @@ public class IndexableSuggestionMapper {
   private List<Field> getOntologyFields(IndexableOntologySuggestion ontology) {
     List<Field> fields = new ArrayList<>();
     if (ontology != null) {
-      fields.add(new TextField(
-          FieldsNames.ONTOLOGY_LABEL.getName(),
-          ontology.getOntologyTermLabel(), Field.Store.YES));
+      fields.add(new TextField(FieldsNames.ONTOLOGY_LABEL.getName(), ontology.getOntologyTermLabel(), Field.Store.YES));
 
-      fields.add(new TextField(
-          FieldsNames.ONTOLOGY_DEFINITION.getName(),
-          ontology.getDefinition(), Field.Store.YES));
+      fields.add(new TextField(FieldsNames.ONTOLOGY_DEFINITION.getName(), ontology.getDefinition(), Field.Store.YES));
 
       for (String synonym : ontology.getSynonyms()) {
-        fields.add(
-            new TextField(FieldsNames.ONTOLOGY_SYNONYM.getName(), synonym, Field.Store.YES));
+        fields.add(new TextField(FieldsNames.ONTOLOGY_SYNONYM.getName(), synonym, Field.Store.YES));
       }
 
-      fields.add(new TextField(
-          FieldsNames.ONTOLOGY_NCIT_TERM.getName(),
-          ontology.getNcit(), Field.Store.YES));
+      fields.add(new TextField(FieldsNames.ONTOLOGY_NCIT_TERM.getName(), ontology.getNcit(), Field.Store.YES));
 
-      fields.add(new TextField(
-          FieldsNames.ONTOLOGY_KEY.getName(),
-          ontology.getNcit(), Field.Store.YES));
+      fields.add(new TextField(FieldsNames.ONTOLOGY_KEY.getName(), ontology.getNcit(), Field.Store.YES));
+
+      fields.add(new TextField(FieldsNames.ONTOLOGY_TYPE.getName(), ontology.getType(), Field.Store.YES));
     }
 
     return fields;

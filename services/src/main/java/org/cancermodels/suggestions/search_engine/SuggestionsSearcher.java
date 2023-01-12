@@ -36,6 +36,7 @@ public class SuggestionsSearcher {
       IndexableSuggestionMapper indexableSuggestionMapper,
       OntologyTermRepository ontologyTermRepository,
       MappingEntityRepository mappingEntityRepository) {
+
     this.mappingEntityQueryBuilder = mappingEntityQueryBuilder;
     this.luceneIndexReader = luceneIndexReader;
     this.indexableSuggestionMapper = indexableSuggestionMapper;
@@ -48,9 +49,9 @@ public class SuggestionsSearcher {
    * @param mappingEntity The mapping entity for which the suggestions are going to be searched.
    * @return A list with the top 10 suggestions found in lucene, sorted by their score.
    * A suggestion gets return as a hit if:
-   *  - It is a rule suggestion and its values (example dataSource, sampleDiagnosis, etc) are
-   *  similar enough to the values of the the given {@code MappingEntity}.
-   *  + It is a ontology suggestion and the main value of the {@code MappingEntity}  (for
+   *  - It is a rule suggestion and its values (example dataSource, sampleDiagnosis, etc.) are
+   *  similar enough to the values of the given {@code MappingEntity}.
+   *  + It is an ontology suggestion and the main value of the {@code MappingEntity}  (for
    *  example, sampleDiagnosis for a diagnosis or treatmentName for a treatment) is similar enough
    *  to the label, definition or synonym in the ontology.
    */

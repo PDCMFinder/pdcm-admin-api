@@ -33,6 +33,7 @@ public class MappingEntitySearchInputBuilder {
 
     List<SearchInputEntry> include = new ArrayList<>(simpleInputEntries);
     List<SearchInputEntry> exclude = new ArrayList<>();
+    List<SearchInputEntry> filters = new ArrayList<>();
 
     // Add also a query with the combine text of the main value and secondary values
     // (to simulate cases like a search with origin tissue + sample diagnosis)
@@ -44,11 +45,12 @@ public class MappingEntitySearchInputBuilder {
       include.add(entryForComposedText);
     }
 
-
     searchInput.setFieldsToInclude(include);
 
     exclude.add(buildExcludeEntry(mappingEntity));
     searchInput.setFieldsToExclude(exclude);
+    filters.add(buildFilterEntry(mappingEntity));
+    searchInput.setFilterFields(filters);
 
     return searchInput;
   }
@@ -60,6 +62,12 @@ public class MappingEntitySearchInputBuilder {
     return searchInputEntry;
   }
 
+  private SearchInputEntry buildFilterEntry(MappingEntity mappingEntity) {
+    SearchInputEntry searchInputEntry = new SearchInputEntry();
+    searchInputEntry.setFieldName(FieldsNames.RULE_ENTITY_TYPE_NAME.getName());
+    searchInputEntry.setText(mappingEntity.getEntityType().getName());
+    return searchInputEntry;
+  }
 
   private List<SearchInputEntry> buildEntriesForMappingValues(
       List<MappingValue> toProcess, SearchParameters commonParameters) {

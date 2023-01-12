@@ -46,6 +46,11 @@ public class MappingsFilter {
     return filters.getOrDefault(FilterTypes.MAPPING_TYPE, null);
   }
 
+  public List<String> getLabels()
+  {
+    return filters.getOrDefault(FilterTypes.LABEL, null);
+  }
+
   public Map<String, List<String>> getMappingQuery() {
     Map<String, List<String>> mappingQuery = new HashMap<>();
 

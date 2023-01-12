@@ -25,14 +25,19 @@ public class SearchInputQueryBuilder {
     try {
       shouldPart = buildShouldPart(searchInput);
       Query mustNotPart = buildMustNotPart(searchInput);
+      Query filterPart = buildFilterPart(searchInput);
 
-      if (mustNotPart == null) {
-        finalQuery = shouldPart;
+      BooleanQuery.Builder builder = new Builder();
 
-      } else {
-        BooleanQuery.Builder builder = new Builder();
-        finalQuery = builder.add(shouldPart, Occur.SHOULD).add(mustNotPart, Occur.MUST_NOT).build();
+      builder = builder.add(shouldPart, Occur.SHOULD);
+      if (mustNotPart != null) {
+        builder = builder.add(mustNotPart, Occur.MUST_NOT);
       }
+      if (filterPart != null) {
+        builder = builder.add(filterPart, Occur.MUST);
+      }
+
+      finalQuery = builder.build();
     } catch (IOException ioException) {
       throw new SearchException(ioException);
     }
@@ -68,6 +73,20 @@ public class SearchInputQueryBuilder {
 
     if (!queries.isEmpty()) {
       query = queryHelper.joinQueriesShouldMode(queries);
+    }
+
+    return query;
+  }
+
+  private Query buildFilterPart(SearchInput searchInput) {
+    List<Query> queries = new ArrayList<>();
+    Query query = null;
+    for (SearchInputEntry searchInputEntry : searchInput.getFilterFields()) {
+      queries.add(buildSimpleTermQuery(searchInputEntry));
+    }
+
+    if (!queries.isEmpty()) {
+      query = queryHelper.joinQueriesMustMode(queries);
     }
 
     return query;

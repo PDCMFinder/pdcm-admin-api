@@ -109,6 +109,7 @@ public class HelperDocumentsIndexer {
     indexableOntologySuggestion.setSynonyms(new HashSet<>(synonyms));
     indexableOntologySuggestion.setNcit("N/A");
     indexableOntologySuggestion.setKey("N/A");
+    indexableOntologySuggestion.setType(mappingEntity.getEntityType().getName().toLowerCase());
     return indexableOntologySuggestion;
   }
 

@@ -139,7 +139,7 @@ public class MappingController {
     return automaticMappingsService.evaluateAutomaticMappingsInMappedEntities();
   }
 
-  @GetMapping("/assignAutomaticMappings")
+  @PutMapping("/assignAutomaticMappings")
   public ProcessResponse assignAutomaticMappings(){
     return automaticMappingsService.assignAutomaticMappings();
   }
