@@ -20,7 +20,12 @@ spec:
             - --data_repo_gitlab_branch=dev
             - --data_repo_gitlab_token=DATA_REPO_GITLAB_TOKEN
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: debug-port
+              containerPort: 5005
+              protocol: TCP
 #          envFrom:
 #            - configMapRef:
 #                name: pdx-admin-api-config
