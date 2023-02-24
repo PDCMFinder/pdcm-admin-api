@@ -73,6 +73,7 @@ public class MappingEntityUpdater {
    *  - Unmapped -> Review (only if automatic)
    *  - Mapped -> Review
    *  - Review -> Mapped
+   *  - Review -> Request
    *  - Request -> Unmapped
    *  @param original Mapping Entity it is in the database.
    * @param withChanges Edited Mapping entity.
@@ -105,6 +106,10 @@ public class MappingEntityUpdater {
       }
       else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
           && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
+        valid = true;
+      }
+      else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
+          && Status.REQUEST.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
       else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
