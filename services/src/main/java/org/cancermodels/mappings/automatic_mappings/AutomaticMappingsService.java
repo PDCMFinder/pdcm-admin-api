@@ -195,7 +195,7 @@ public class AutomaticMappingsService {
     String mappingType = MappingType.AUTOMATIC.getLabel();
     LocalDateTime updateTime = LocalDateTime.now();
     String sourceType = suggestion.getSourceType();
-    String status = Status.MAPPED.getLabel();
+    String status = Status.REVIEW.getLabel();
 
     mappingEntity.setMappedTermUrl(mappedTermUrl);
     mappingEntity.setMappedTermLabel(mappedTermLabel);

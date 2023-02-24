@@ -30,7 +30,7 @@ public class MappingEntityUpdater {
   public MappingEntity update(
       MappingEntity original, MappingEntity withChanges, MappingType mappingType) {
     boolean mappedTermChanged = processMappedTermChange(original, withChanges, mappingType);
-    boolean statusChanged = processStatusChange(original, withChanges);
+    boolean statusChanged = processStatusChange(original, withChanges, mappingType);
 
     if (mappedTermChanged || statusChanged) {
       original.setDateUpdated(LocalDateTime.now());
@@ -70,13 +70,14 @@ public class MappingEntityUpdater {
    * Checks that if status changed the transitions are valid:
    *  - Unmapped -> Mapped
    *  - Unmapped -> Request
-   *  - Mapped -> Revise
-   *  - Revise -> Mapped
+   *  - Unmapped -> Review (only if automatic)
+   *  - Mapped -> Review
+   *  - Review -> Mapped
    *  - Request -> Unmapped
    *  @param original Mapping Entity it is in the database.
    * @param withChanges Edited Mapping entity.
    */
-  private boolean processStatusChange(MappingEntity original, MappingEntity withChanges) {
+  private boolean processStatusChange(MappingEntity original, MappingEntity withChanges, MappingType mappingType) {
     boolean changed = false;
     String originalStatus = original.getStatus();
     String newStatus = withChanges.getStatus();
@@ -93,12 +94,21 @@ public class MappingEntityUpdater {
           && Status.REQUEST.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
-      else if (Status.MAPPED.getLabel().equalsIgnoreCase(originalStatus)
-          && Status.REVISE.getLabel().equalsIgnoreCase(newStatus)) {
+      else if (Status.UNMAPPED.getLabel().equalsIgnoreCase(originalStatus)
+          && Status.REVIEW.getLabel().equalsIgnoreCase(newStatus)
+          && mappingType.equals(MappingType.AUTOMATIC)) {
         valid = true;
       }
-      else if (Status.REVISE.getLabel().equalsIgnoreCase(originalStatus)
+      else if (Status.MAPPED.getLabel().equalsIgnoreCase(originalStatus)
+          && Status.REVIEW.getLabel().equalsIgnoreCase(newStatus)) {
+        valid = true;
+      }
+      else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
           && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
+        valid = true;
+      }
+      else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
+          && Status.UNMAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
       else if (Status.REQUEST.getLabel().equalsIgnoreCase(originalStatus)
@@ -119,7 +129,8 @@ public class MappingEntityUpdater {
     if (!valid) {
       // TODO: change to specific exception
       throw new IllegalArgumentException(
-          String.format( "Cannot change status from [%s] to [%s]", originalStatus, newStatus));
+          String.format(
+              "Cannot change status from [%s] to [%s] (method: %s)", originalStatus, newStatus, mappingType.getLabel()));
     }
     return changed;
   }

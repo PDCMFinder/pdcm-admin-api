@@ -9,6 +9,7 @@ import org.cancermodels.persistance.EntityType;
 import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.persistance.MappingKey;
 import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.types.Status;
 
 public class MappingEntityBuilder {
 
@@ -21,6 +22,8 @@ public class MappingEntityBuilder {
   private List<MappingValue> mappingValues = new ArrayList<>();
   private String mappedTermUrl;
 
+  private String status;
+
   public MappingEntity build() {
     MappingEntity mappingEntity = new MappingEntity();
     mappingEntity.setId(id);
@@ -28,6 +31,7 @@ public class MappingEntityBuilder {
     mappingEntity.setMappingValues(mappingValues);
     mappingEntity.setMappedTermUrl(mappedTermUrl);
     mappingEntity.setMappingKey(mappingKey);
+    mappingEntity.setStatus(status);
     return mappingEntity;
   }
 
@@ -63,6 +67,11 @@ public class MappingEntityBuilder {
 
   public MappingEntityBuilder setMappedTermUrl(String mappedTermUrl) {
     this.mappedTermUrl = mappedTermUrl;
+    return this;
+  }
+
+  public MappingEntityBuilder setStatus(Status status) {
+    this.status = status.getLabel();
     return this;
   }
 

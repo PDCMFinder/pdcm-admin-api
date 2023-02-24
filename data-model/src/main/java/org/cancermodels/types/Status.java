@@ -3,7 +3,7 @@ package org.cancermodels.types;
 public enum Status {
   UNMAPPED("Unmapped"),
   MAPPED("Mapped"),
-  REVISE("Revise"),
+  REVIEW("Review"),
   REQUEST("Request");
 
   private final String label;
