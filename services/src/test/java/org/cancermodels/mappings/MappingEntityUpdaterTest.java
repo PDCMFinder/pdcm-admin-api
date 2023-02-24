@@ -262,6 +262,32 @@ class MappingEntityUpdaterTest {
     }
 
     @Test
+    void update_statusChangedReviewToRequest_statusAndDateUpdatedAndSaveMethodCalled() {
+        MappingEntity original = mappingEntityBuilder
+            .setEntityType(EntityTypeName.Treatment)
+            .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
+            .setStatus(Status.REVIEW)
+            .build();
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        original.setDateUpdated(yesterday);
+
+        MappingEntity withChanges = mappingEntityBuilder
+            .setEntityType(EntityTypeName.Treatment)
+            .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
+            .setStatus(Status.REQUEST)
+            .build();
+
+        MappingEntity result = instance.update(original, withChanges, MappingType.MANUAL);
+
+        verify(mappingEntityRepository).save(result);
+        assertTrue(result.getDateUpdated().isAfter(yesterday), "Update date didn't change");
+        assertEquals(withChanges.getMappedTermUrl(), result.getMappedTermUrl());
+        assertEquals(withChanges.getSource(), result.getSource());
+        assertEquals(withChanges.getMappedTermLabel(), result.getMappedTermLabel());
+        assertEquals(withChanges.getEntityType(), result.getEntityType());
+    }
+
+    @Test
     void update_statusChangedUnmappedToReviewTypeManual_Exception() {
         MappingEntity original = mappingEntityBuilder
             .setEntityType(EntityTypeName.Treatment)
