@@ -2,6 +2,10 @@ branches:
   Diagnosis:
     # Malignant Neoplasm
     - NCIT_C9305
+    # Neoplasm
+    - NCIT_C3262
+    # Hematopoietic and Lymphoid System Disorder
+    - NCIT_C35814
   Treatment:
     # Chemical Modifier
     - NCIT_C1932
