@@ -1,13 +1,9 @@
-package org.cancermodels.persistance;
+package org.cancermodels.pdcm_admin.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +27,7 @@ public class KeySearchConfiguration {
   private Double weight;
 
   /**
-   * Indicates whether or not this key is going to be used in the process of calculating
+   * Indicates whether this key is going to be used in the process of calculating
    * suggestions based on ontologies.
    */
   private Boolean searchOnOntology;

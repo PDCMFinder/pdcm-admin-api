@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.cancermodels.process_report.ProcessReportService;
 import org.cancermodels.process_report.ProcessResponse;
-import org.cancermodels.types.ProcessReportModules;
+import org.cancermodels.pdcm_admin.types.ProcessReportModules;
 import org.springframework.stereotype.Component;
 
 /**

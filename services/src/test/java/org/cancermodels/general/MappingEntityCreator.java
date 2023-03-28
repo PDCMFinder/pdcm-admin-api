@@ -1,11 +1,11 @@
 package org.cancermodels.general;
 
 import java.util.Arrays;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.KeySearchConfiguration;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingKey;
-import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.KeySearchConfiguration;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingKey;
+import org.cancermodels.pdcm_admin.persistance.MappingValue;
 
 public class MappingEntityCreator {
 

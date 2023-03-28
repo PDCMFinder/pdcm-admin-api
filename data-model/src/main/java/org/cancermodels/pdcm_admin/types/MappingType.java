@@ -1,4 +1,4 @@
-package org.cancermodels.types;
+package org.cancermodels.pdcm_admin.types;
 
 public enum MappingType {
   MANUAL("Manual"),

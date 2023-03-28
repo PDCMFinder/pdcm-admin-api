@@ -1,4 +1,4 @@
-package org.cancermodels.persistance;
+package org.cancermodels.pdcm_admin.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
@@ -6,19 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cancermodels.MappingEntityKeyBuilder;
+import org.cancermodels.pdcm_admin.MappingEntityKeyBuilder;
 
 @Entity
 @Data

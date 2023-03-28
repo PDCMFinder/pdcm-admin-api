@@ -1,12 +1,11 @@
 package org.cancermodels.admin;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.suggestions.search_engine.OntologySearcherByText;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -4,9 +4,9 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.*;
 
-import org.cancermodels.types.Status;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.Status;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

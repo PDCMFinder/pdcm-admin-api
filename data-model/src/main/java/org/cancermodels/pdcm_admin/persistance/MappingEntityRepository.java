@@ -1,4 +1,4 @@
-package org.cancermodels.persistance;
+package org.cancermodels.pdcm_admin.persistance;
 
 import java.util.List;
 import java.util.Optional;

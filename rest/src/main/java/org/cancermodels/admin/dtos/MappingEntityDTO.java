@@ -3,7 +3,6 @@ package org.cancermodels.admin.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
-import org.cancermodels.persistance.MappingValue;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "mappings")

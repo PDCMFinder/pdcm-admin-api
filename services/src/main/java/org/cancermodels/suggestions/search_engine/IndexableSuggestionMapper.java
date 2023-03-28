@@ -14,7 +14,7 @@ import org.apache.lucene.index.IndexableField;
 import org.cancermodels.exceptions.IndexerException;
 import org.cancermodels.suggestions.FieldsNames;
 import org.cancermodels.suggestions.search_engine.util.Constants;
-import org.cancermodels.types.Source;
+import org.cancermodels.pdcm_admin.types.Source;
 import org.springframework.stereotype.Component;
 
 @Component

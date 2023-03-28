@@ -10,14 +10,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cancermodels.EntityTypeName;
+import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mappings.MappingEntityService;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.process_report.ProcessResponse;
-import org.cancermodels.types.MappingType;
-import org.cancermodels.types.Source;
-import org.cancermodels.types.Status;
+import org.cancermodels.pdcm_admin.types.MappingType;
+import org.cancermodels.pdcm_admin.types.Status;
 import org.cancermodels.util.Utilities;
 import org.springframework.stereotype.Service;
 

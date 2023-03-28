@@ -1,13 +1,12 @@
 package org.cancermodels.suggestions.search_engine;
 
-import java.io.IOException;
 import java.util.List;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.Query;
 import org.cancermodels.exceptions.SearchException;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.suggestions.FieldsNames;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
 import org.cancermodels.suggestions.search_engine.query_builder.SearchParameters;

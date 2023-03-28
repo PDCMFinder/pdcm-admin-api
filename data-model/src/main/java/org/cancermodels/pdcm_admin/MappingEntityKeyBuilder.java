@@ -1,11 +1,11 @@
-package org.cancermodels;
+package org.cancermodels.pdcm_admin;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 
 /**
  * A class that creates the key for a mapping entity.

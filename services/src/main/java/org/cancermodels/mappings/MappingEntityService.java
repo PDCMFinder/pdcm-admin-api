@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.cancermodels.types.MappingType;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.MappingType;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.springframework.stereotype.Service;
 

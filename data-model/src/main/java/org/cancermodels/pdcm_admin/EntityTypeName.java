@@ -1,4 +1,4 @@
-package org.cancermodels;
+package org.cancermodels.pdcm_admin;
 
 public enum EntityTypeName {
   Treatment("Treatment"),

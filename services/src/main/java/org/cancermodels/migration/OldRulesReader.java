@@ -3,7 +3,7 @@ package org.cancermodels.migration;
 import java.util.HashSet;
 import java.util.Set;
 import org.cancermodels.mappings.EntityTypeService;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.util.ResourceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
