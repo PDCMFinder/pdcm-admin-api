@@ -44,5 +44,5 @@ public interface MappingEntityRepository extends
               "WHERE mk.key IN ('SampleDiagnosis', 'TreatmentName')\n" +
               "AND mv.key_id = mk.id;",
       nativeQuery = true)
-  List<Object[]> getAllTreatmentsAndDiagnosis();
+  List<String> getAllTreatmentsAndDiagnosis();
 }

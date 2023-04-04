@@ -1,7 +1,5 @@
 package org.cancermodels.mappings.search;
 
-import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.*;
 
 import org.cancermodels.pdcm_admin.types.Status;
@@ -57,18 +55,7 @@ public class SearchService {
   }
 
   public List<String> getAllTreatmentsAndDiagnosis() {
-    List<String> treatmentsAndDiagnosis = new ArrayList<>();
-    List<Object[]> list = mappingEntityRepository.getAllTreatmentsAndDiagnosis();
-    for (Object[] row : list) {
-      Clob clob = (Clob)row[0];
-      try {
-        String value = clob.getSubString(1, (int) clob.length());
-        treatmentsAndDiagnosis.add(value);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    return treatmentsAndDiagnosis;
+    return mappingEntityRepository.getAllTreatmentsAndDiagnosis();
   }
 
 

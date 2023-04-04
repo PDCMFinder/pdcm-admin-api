@@ -9,6 +9,7 @@ import org.cancermodels.pdcm_etl.ReleaseInfo;
 import org.cancermodels.pdcm_etl.ReleaseInfoRepository;
 import org.cancermodels.pdcm_etl.SearchIndex;
 import org.cancermodels.pdcm_etl.SearchIndexRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,9 @@ public class ReleaseAnalyserService {
     private final ReleaseRepository releaseRepository;
     private final ReleaseInfoRepository releaseInfoRepository;
     private final SearchIndexRepository searchIndexRepository;
-
     private final ModelSummaryRepository modelSummaryRepository;
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public ReleaseAnalyserService(
         ReleaseRepository releaseRepository,
@@ -96,6 +98,7 @@ public class ReleaseAnalyserService {
     }
 
     private List<ModelSummary> getCurrentReleaseModels(Release release) {
+        var tmp = searchIndexRepository.findAll();
         List<ModelSummary> modelSummaries = searchIndexRepository.findAll().stream()
             .map(this::searchIndexToModelSummary).collect(Collectors.toList());
         modelSummaries.forEach(x -> x.setRelease(release));
@@ -103,11 +106,8 @@ public class ReleaseAnalyserService {
     }
 
     private ModelSummary searchIndexToModelSummary(SearchIndex searchIndex) {
-        ModelSummary modelSummary = new ModelSummary();
-        modelSummary.setExternalModelId(searchIndex.getExternalModelId());
-        modelSummary.setDataSource(searchIndex.getDataSource());
-        modelSummary.setModelType(searchIndex.getModelType());
-
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        ModelSummary modelSummary = modelMapper.map(searchIndex, ModelSummary.class);
         return modelSummary;
     }
 }
