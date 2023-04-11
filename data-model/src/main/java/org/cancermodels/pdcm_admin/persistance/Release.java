@@ -18,9 +18,8 @@ public class Release {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @JsonIgnore
   @ToString.Exclude
-  private Integer id;
+  private Long id;
 
   @NonNull
   private String name;

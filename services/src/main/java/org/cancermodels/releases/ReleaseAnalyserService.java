@@ -1,44 +1,49 @@
 package org.cancermodels.releases;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cancermodels.filters.Facet;
 import org.cancermodels.pdcm_admin.persistance.ModelSummary;
-import org.cancermodels.pdcm_admin.persistance.ModelSummaryRepository;
 import org.cancermodels.pdcm_admin.persistance.Release;
-import org.cancermodels.pdcm_admin.persistance.ReleaseRepository;
 import org.cancermodels.pdcm_etl.ReleaseInfo;
 import org.cancermodels.pdcm_etl.ReleaseInfoRepository;
 import org.cancermodels.pdcm_etl.SearchIndex;
 import org.cancermodels.pdcm_etl.SearchIndexRepository;
+import org.cancermodels.releases.modelSummary.ModelSummaryFilter;
+import org.cancermodels.releases.modelSummary.ModelSummaryService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class ReleaseAnalyserService {
-    private final ReleaseRepository releaseRepository;
+    private final ReleaseService releaseService;
+
+    private final ModelSummaryService modelSummaryService;
     private final ReleaseInfoRepository releaseInfoRepository;
     private final SearchIndexRepository searchIndexRepository;
-    private final ModelSummaryRepository modelSummaryRepository;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
     public ReleaseAnalyserService(
-        ReleaseRepository releaseRepository,
+        ReleaseService releaseService,
+        ModelSummaryService modelSummaryService,
         ReleaseInfoRepository releaseInfoRepository,
-        SearchIndexRepository searchIndexRepository,
-        ModelSummaryRepository modelSummaryRepository) {
+        SearchIndexRepository searchIndexRepository) {
 
-        this.releaseRepository = releaseRepository;
+        this.releaseService = releaseService;
+        this.modelSummaryService = modelSummaryService;
+
         this.releaseInfoRepository = releaseInfoRepository;
         this.searchIndexRepository = searchIndexRepository;
-        this.modelSummaryRepository = modelSummaryRepository;
     }
 
     public List<Release> getAllReleases() {
-        return releaseRepository.findAll();
+        return releaseService.getAllReleases();
     }
 
     /**
@@ -58,7 +63,7 @@ public class ReleaseAnalyserService {
         }
         else {
             currentRelease = new Release(currentEtlRelease.getName(), currentEtlRelease.getDate());
-            currentRelease = releaseRepository.save(currentRelease);
+            currentRelease = releaseService.save(currentRelease);
         }
         saveAllAssociatedReleaseData(currentRelease);
         log.info("Data for current release saved");
@@ -68,14 +73,14 @@ public class ReleaseAnalyserService {
         log.info("Getting all associated data");
         List<ModelSummary> modelSummaries = getCurrentReleaseModels(release);
         log.info("Writing all associated data");
-        modelSummaryRepository.saveAll(modelSummaries);
+        modelSummaryService.saveAll(modelSummaries);
     }
 
     private void deleteAllAssociatedReleaseData(Release release) {
         log.warn("Deleting all associated data for release " + release);
-        List<ModelSummary> modelSummaries = modelSummaryRepository.findAllByRelease(release);
+        List<ModelSummary> modelSummaries = modelSummaryService.findAllByRelease(release);
         log.warn("Deleting {} model summaries", modelSummaries.size());
-        modelSummaryRepository.deleteAll(modelSummaries);
+        modelSummaryService.deleteAll(modelSummaries);
     }
 
     // Get the single record that should exist in release_info, namely the current ETL release.
@@ -94,7 +99,7 @@ public class ReleaseAnalyserService {
     }
 
     private Optional<Release> findExistingReleaseAdminDb(ReleaseInfo releaseInfo) {
-        return releaseRepository.findByNameAndDate(releaseInfo.getName(), releaseInfo.getDate());
+        return releaseService.findByNameAndDate(releaseInfo.getName(), releaseInfo.getDate());
     }
 
     private List<ModelSummary> getCurrentReleaseModels(Release release) {
@@ -109,5 +114,42 @@ public class ReleaseAnalyserService {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         ModelSummary modelSummary = modelMapper.map(searchIndex, ModelSummary.class);
         return modelSummary;
+    }
+
+    public ReleaseSummary getReleaseSummary(long id) {
+        Release release = releaseService.getReleaseByIdOrFail(id);
+        List<ModelSummary> models = modelSummaryService.findAllByRelease(release);
+        long totalNumberOfModels = models.size();
+        long numberOfPdxModels = getCountByType(models, "PDX");
+        long numberOfCellLineModels = getCountByType(models, "cell line");
+        long numberOfOrganoidModels = getCountByType(models, "organoid");
+        ReleaseSummary releaseSummary = new ReleaseSummary();
+        releaseSummary.setName(release.getName());
+        releaseSummary.setDate(release.getDate());
+        releaseSummary.setTotalModelsCount(totalNumberOfModels);
+        releaseSummary.setPdxModelsCount(numberOfPdxModels);
+        releaseSummary.setCellLineModelsCount(numberOfCellLineModels);
+        releaseSummary.setOrganoidModelsCount(numberOfOrganoidModels);
+
+        return releaseSummary;
+    }
+
+    private long getCountByType(List<ModelSummary> models, String modelType) {
+        return models.stream()
+            .filter(model -> modelType.equals(model.getModelType()))
+            .count();
+    }
+
+    public Page<ModelSummary> getModelsByReleasePage(Long releaseId, Pageable pageable) {
+        return modelSummaryService.findByReleaseId(releaseId, pageable);
+    }
+
+    public List<Facet> getFacetsForModels(long releaseId) {
+        Release release = releaseService.getReleaseByIdOrFail(releaseId);
+        return modelSummaryService.getFacetsForModels(release);
+    }
+
+    public Page<ModelSummary> search(Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
+        return modelSummaryService.search(pageable, modelSummaryFilter);
     }
 }

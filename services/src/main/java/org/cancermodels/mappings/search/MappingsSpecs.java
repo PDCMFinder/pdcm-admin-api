@@ -6,6 +6,8 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+
+import org.cancermodels.filters.PredicateBuilder;
 import org.cancermodels.pdcm_admin.persistance.EntityType;
 import org.cancermodels.pdcm_admin.persistance.EntityType_;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;

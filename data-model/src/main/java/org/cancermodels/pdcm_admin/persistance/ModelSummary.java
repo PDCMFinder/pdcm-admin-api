@@ -29,6 +29,7 @@ public class ModelSummary {
   private Integer id;
 
   @Transient
+  @JsonIgnore
   private Long pdcmModelId;
 
   @ManyToOne

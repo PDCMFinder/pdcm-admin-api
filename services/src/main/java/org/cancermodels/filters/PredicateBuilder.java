@@ -1,4 +1,4 @@
-package org.cancermodels.mappings.search;
+package org.cancermodels.filters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,14 @@ public class PredicateBuilder {
         values.stream().map(String::toLowerCase).collect(Collectors.toList());
     List<Predicate> predicates = new ArrayList<>();
     predicates.add(criteriaBuilder.lower(path).in(lowerCaseValues));
+    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+  }
+
+  public static Predicate addLongInPredicates(
+      CriteriaBuilder criteriaBuilder, Path<Long> path, List<Long> values)
+  {
+    List<Predicate> predicates = new ArrayList<>();
+    predicates.add(path.in(values));
     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
   }
 

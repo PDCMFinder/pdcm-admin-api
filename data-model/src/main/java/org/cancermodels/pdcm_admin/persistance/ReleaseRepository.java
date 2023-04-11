@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface ReleaseRepository extends JpaRepository<Release, Long>,
     JpaSpecificationExecutor<Release> {
+    Optional<Release> findById(long id);
     Optional<Release> findByNameAndDate(String name, LocalDateTime dateTime);
 }
