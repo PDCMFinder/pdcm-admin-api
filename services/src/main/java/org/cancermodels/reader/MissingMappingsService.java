@@ -134,9 +134,19 @@ public class MissingMappingsService {
 
       for (Row row : sampleTable) {
 
-        String primarySiteName = row.getString("primary_site");
-        String diagnosis = row.getString("diagnosis");
-        String tumorTypeName = row.getString("tumour_type");
+        // Attributes are expected to be lowercase
+        String primarySiteName = row.getString("primary_site").toLowerCase();
+        String diagnosis = row.getString("diagnosis").toLowerCase();
+        String tumorTypeName = row.getString("tumour_type").toLowerCase();
+
+        // Convert `Not Collected`, 'Not Provided' to `Unknown` as for the mapping process both terms mean
+        // there is no data.
+        if (primarySiteName.equals("not collected") || primarySiteName.equals("not provided")) {
+          primarySiteName = "unknown";
+        }
+        if (tumorTypeName.equals("not collected") || tumorTypeName.equals("not provided")) {
+          tumorTypeName = "unknown";
+        }
 
         String key = MappingEntityKeyBuilder.buildKeyDiagnosisMapping(
             diagnosis, tumorTypeName, primarySiteName, dataSource);
@@ -177,12 +187,17 @@ public class MissingMappingsService {
 
         for(String drug : drugArray) {
 
-          String key = MappingEntityKeyBuilder.buildKeyTreatmentMapping(drug, dataSource);
+          String drugValue = drug.toLowerCase();
+          if (drugValue.equals("not collected") || drugValue.equals("not provided")) {
+            drugValue = "unknown";
+          }
+
+          String key = MappingEntityKeyBuilder.buildKeyTreatmentMapping(drugValue, dataSource);
 
           // Only create the mapping if it doesn't already exist
           if (!existingMappingKeys.containsKey(key)) {
             MappingEntity mappingEntity =
-                mappingEntityCreator.createTreatmentMappingEntity(drug, dataSource);
+                mappingEntityCreator.createTreatmentMappingEntity(drugValue, dataSource);
             newMappingEntities.add(mappingEntity);
           }
         }
