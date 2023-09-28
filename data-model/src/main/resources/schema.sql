@@ -179,7 +179,7 @@ CREATE TABLE admin_app.model_summary (
     xenograft_model_specimens TEXT,
     treatment_list TEXT,
     model_treatment_list TEXT,
-    score NUMERIC,
+    scores TEXT,
     release_id INTEGER NOT NULL
 );
 

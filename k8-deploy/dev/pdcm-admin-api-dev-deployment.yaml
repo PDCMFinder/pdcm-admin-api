@@ -15,10 +15,14 @@ spec:
           image: 'pdxfinder/pdcm-admin-api:dev'
           imagePullPolicy: Always
           args:
-            - --data-base-location=tcp://hh-rke-wp-webadmin-20-worker-1.caas.ebi.ac.uk:30710
             - --data-dir=/opt/pdcm-data
             - --data_repo_gitlab_branch=dev
             - --data_repo_gitlab_token=DATA_REPO_GITLAB_TOKEN
+            - --db_host=DB_DEV_HOST
+            - --db_port=DB_DEV_PORT
+            - --db_name=DB_DEV_NAME
+            - --db_user=DB_DEV_USER
+            - --db_password=DB_DEV_PASSWORD
           ports:
             - name: http
               containerPort: 8080
@@ -29,9 +33,6 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
-#          envFrom:
-#            - configMapRef:
-#                name: pdx-admin-api-config
 
           volumeMounts:
             - name: pv-data

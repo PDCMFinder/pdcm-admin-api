@@ -75,5 +75,5 @@ public class ModelSummary {
   private String xenograftModelSpecimens;
   private String treatmentList;
   private String modelTreatmentList;
-  private double score;
+  private String scores;
 }

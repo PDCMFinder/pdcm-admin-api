@@ -61,5 +61,5 @@ public class SearchIndex {
     private String pdxModelPublications;
     private String treatmentList;
     private String modelTreatmentList;
-    private double score;
+    private String scores;
 }
