@@ -9,7 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.cancermodels.EntityTypeName;
+import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mapping_rules.MappingRulesService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

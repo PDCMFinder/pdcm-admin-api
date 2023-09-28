@@ -9,7 +9,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.input_data.exceptions.InputFileDownloadException;
 import org.cancermodels.mappings.EntityTypeService;
-import org.cancermodels.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;

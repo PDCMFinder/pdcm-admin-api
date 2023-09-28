@@ -5,8 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.stereotype.Component;
 

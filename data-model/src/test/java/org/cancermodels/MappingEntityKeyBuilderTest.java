@@ -2,6 +2,7 @@ package org.cancermodels;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.cancermodels.pdcm_admin.MappingEntityKeyBuilder;
 import org.junit.jupiter.api.Test;
 
 class MappingEntityKeyBuilderTest {

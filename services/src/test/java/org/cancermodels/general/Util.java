@@ -1,7 +1,7 @@
 package org.cancermodels.general;
 
 import java.util.Map;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 
 public class Util {
   public static String prettyPrint(MappingEntity mappingEntity) {

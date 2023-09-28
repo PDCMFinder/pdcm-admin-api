@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.persistance.OntologyTerm;
+import org.cancermodels.pdcm_admin.persistance.OntologyTerm;
 import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.stereotype.Service;
 

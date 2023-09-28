@@ -6,14 +6,16 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.EntityType_;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntity_;
-import org.cancermodels.persistance.MappingKey;
-import org.cancermodels.persistance.MappingKey_;
-import org.cancermodels.persistance.MappingValue;
-import org.cancermodels.persistance.MappingValue_;
+
+import org.cancermodels.filters.PredicateBuilder;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.EntityType_;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity_;
+import org.cancermodels.pdcm_admin.persistance.MappingKey;
+import org.cancermodels.pdcm_admin.persistance.MappingKey_;
+import org.cancermodels.pdcm_admin.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.persistance.MappingValue_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

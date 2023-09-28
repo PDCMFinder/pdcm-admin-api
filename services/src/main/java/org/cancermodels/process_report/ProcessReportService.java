@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.persistance.ProcessReport;
-import org.cancermodels.persistance.ProcessReportRepository;
-import org.cancermodels.types.ProcessReportModules;
+import org.cancermodels.pdcm_admin.persistance.ProcessReport;
+import org.cancermodels.pdcm_admin.persistance.ProcessReportRepository;
+import org.cancermodels.pdcm_admin.types.ProcessReportModules;
 import org.springframework.stereotype.Service;
 
 @Service

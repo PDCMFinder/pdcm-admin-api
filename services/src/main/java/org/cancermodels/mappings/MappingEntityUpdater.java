@@ -1,10 +1,10 @@
 package org.cancermodels.mappings;
 
 import java.time.LocalDateTime;
-import org.cancermodels.types.MappingType;
-import org.cancermodels.types.Status;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.MappingType;
+import org.cancermodels.pdcm_admin.types.Status;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.springframework.stereotype.Component;
 
 /**

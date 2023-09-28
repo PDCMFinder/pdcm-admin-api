@@ -1,12 +1,10 @@
 package org.cancermodels.mappings.search;
 
-import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.*;
 
-import org.cancermodels.types.Status;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.Status;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -57,18 +55,7 @@ public class SearchService {
   }
 
   public List<String> getAllTreatmentsAndDiagnosis() {
-    List<String> treatmentsAndDiagnosis = new ArrayList<>();
-    List<Object[]> list = mappingEntityRepository.getAllTreatmentsAndDiagnosis();
-    for (Object[] row : list) {
-      Clob clob = (Clob)row[0];
-      try {
-        String value = clob.getSubString(1, (int) clob.length());
-        treatmentsAndDiagnosis.add(value);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    return treatmentsAndDiagnosis;
+    return mappingEntityRepository.getAllTreatmentsAndDiagnosis();
   }
 
 

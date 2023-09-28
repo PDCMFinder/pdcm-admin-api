@@ -1,26 +1,24 @@
 package org.cancermodels.suggestions.indexers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.NonNull;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.cancermodels.ontologies.OntologyService;
-import org.cancermodels.persistance.OntologyTerm;
+import org.cancermodels.pdcm_admin.persistance.OntologyTerm;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.cancermodels.suggestions.search_engine.IndexableOntologySuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestionMapper;
 import org.cancermodels.suggestions.search_engine.LuceneIndexWriter;
 import org.cancermodels.suggestions.search_engine.query_builder.QueryHelper;
-import org.cancermodels.types.Source;
+import org.cancermodels.pdcm_admin.types.Source;
 import org.springframework.stereotype.Component;
 
 /**

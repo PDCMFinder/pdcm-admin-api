@@ -11,7 +11,7 @@ import org.cancermodels.admin.mappers.MappingEntityMapper;
 import org.cancermodels.mappings.search.MappingsFilter;
 import org.cancermodels.mappings.search.MappingsFilterBuilder;
 import org.cancermodels.mappings.search.SearchService;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;

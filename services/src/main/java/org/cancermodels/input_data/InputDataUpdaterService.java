@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.cancermodels.input_data.exceptions.InputFileDownloadException;
 import org.cancermodels.process_report.ProcessReportService;
 import org.cancermodels.process_report.ProcessResponse;
-import org.cancermodels.types.ProcessReportModules;
+import org.cancermodels.pdcm_admin.types.ProcessReportModules;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
 import org.springframework.beans.factory.annotation.Value;

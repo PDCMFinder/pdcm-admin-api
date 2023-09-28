@@ -1,7 +1,7 @@
 package org.cancermodels.general;
 
-import org.cancermodels.persistance.Suggestion;
-import org.cancermodels.types.Source;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.types.Source;
 
 public class SuggestionBuilder {
 
