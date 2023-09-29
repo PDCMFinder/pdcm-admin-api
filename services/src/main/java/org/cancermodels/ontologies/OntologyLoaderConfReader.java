@@ -15,7 +15,7 @@ import org.yaml.snakeyaml.Yaml;
 @Component
 public class OntologyLoaderConfReader {
 
-  private static final String OLS_BASE_URL = "https://www.ebi.ac.uk/ols/api/ontologies/ncit/terms/";
+  private static final String OLS_BASE_URL = "https://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/";
   private static final String OBO_LIBRARY_BASE_URL = "http://purl.obolibrary.org/obo/";
 
   public Map<String, List<String>> getBranchesUrlsToLoad() {
@@ -24,7 +24,6 @@ public class OntologyLoaderConfReader {
     for (String key : branches.keySet())
     {
       urlsMap.put(key, new ArrayList<>());
-      List<String> terms = branches.get(key);
       for (String nctiTerm : branches.get(key)) {
         String url;
         String rawTermUrl = OBO_LIBRARY_BASE_URL + nctiTerm;
