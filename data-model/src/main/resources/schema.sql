@@ -75,6 +75,7 @@ ADD CONSTRAINT uc_mapping_value UNIQUE (mapping_entity_id, key_id);
 
 CREATE TABLE admin_app.ontology_term (
     id INTEGER NOT NULL,
+    key TEXT,
     description TEXT,
     label TEXT,
     type TEXT,
