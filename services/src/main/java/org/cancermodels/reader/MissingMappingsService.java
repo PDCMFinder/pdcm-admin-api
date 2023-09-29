@@ -68,7 +68,7 @@ public class MissingMappingsService {
    * corresponding mapping entities (unmapped) so the curator can map them later.
    * @return a map with the counts of the new detected terms.
    */
-  @Transactional
+  @Transactional("pdcmAdminTransactionManager")
   public Map<String, Integer> detectNewUnmappedTerms() {
     // We need to delete Unmapped terms first so we don't end up with orphan values.
     mappingEntityRepository.deleteAllByStatus(Status.UNMAPPED.getLabel());
