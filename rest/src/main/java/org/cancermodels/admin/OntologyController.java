@@ -19,7 +19,7 @@ public class OntologyController {
   }
 
   /**
-   * Reloads the ontologies tables in the h2 database using OLS as a source
+   * Reloads the ontologies tables in the database using OLS as a source
    * @return {@link ProcessResponse} object with a report of the process
    */
   @GetMapping("loadOntologies")

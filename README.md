@@ -17,9 +17,9 @@ A set of JSON files contain the Mapping Rules. A rule defines a relationship bet
 
 Those JSON files are a input for the ETL process that loads the providers data into PDCM Finder.
 
-### H2 Database
+### Postgres Database
 
-An embedded database that contains the representation of the JSON mapping rules (mapped terms) plus the terms that are still unmapped in the system (unmapped terms).
+A database that contains the representation of the JSON mapping rules (mapped terms) plus the terms that are still unmapped in the system (unmapped terms).
 
 Having those values in a database makes it easy to query over the data and make calculations with it.
 
