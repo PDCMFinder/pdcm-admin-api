@@ -18,7 +18,7 @@ public class MigrationController {
   }
 
   /**
-   * Reloads the ontologies tables in the h2 database using OLS as a source
+   * Reloads the ontologies tables in the database using OLS as a source
    */
   @GetMapping("loadOldRules")
   public void loadOldRules() {
