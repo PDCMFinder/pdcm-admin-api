@@ -15,10 +15,14 @@ spec:
           image: 'pdxfinder/pdcm-admin-api:prod'
           imagePullPolicy: Always
           args:
-            - --data-base-location=tcp://hh-rke-wp-webadmin-20-worker-1.caas.ebi.ac.uk:30283
             - --data-dir=/opt/pdcm-data
             - --data_repo_gitlab_branch=master
             - --data_repo_gitlab_token=DATA_REPO_GITLAB_TOKEN
+            - --db_host=DB_PROD_HOST
+            - --db_port=DB_PROD_PORT
+            - --db_name=DB_PROD_NAME
+            - --db_user=DB_PROD_USER
+            - --db_password=DB_PROD_PASSWORD
           ports:
             - name: http
               containerPort: 8080

@@ -1,11 +1,11 @@
 package org.cancermodels.mappings;
 
-import org.cancermodels.EntityTypeName;
+import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.general.MappingEntityBuilder;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.types.MappingType;
-import org.cancermodels.types.Status;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.MappingType;
+import org.cancermodels.pdcm_admin.types.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

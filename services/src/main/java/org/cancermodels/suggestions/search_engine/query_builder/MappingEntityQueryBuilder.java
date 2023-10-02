@@ -1,8 +1,7 @@
 package org.cancermodels.suggestions.search_engine.query_builder;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
@@ -10,8 +9,7 @@ import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.Query;
 import org.cancermodels.exceptions.SearchException;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.suggestions.search_engine.util.Constants;
 import org.springframework.stereotype.Component;
 

@@ -2,7 +2,7 @@ package org.cancermodels.suggestions.search_engine.query_builder;
 
 import org.apache.lucene.search.Query;
 import org.cancermodels.exceptions.SearchException;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.suggestions.search_engine.IndexableSuggestion;
 import org.springframework.stereotype.Component;
 

@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.cancermodels.EntityTypeName;
-import org.cancermodels.MappingEntityKeyBuilder;
+import org.cancermodels.pdcm_admin.EntityTypeName;
+import org.cancermodels.pdcm_admin.MappingEntityKeyBuilder;
 import org.cancermodels.mappings.MappingEntityCreator;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
-import org.cancermodels.types.Status;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.types.Status;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +68,7 @@ public class MissingMappingsService {
    * corresponding mapping entities (unmapped) so the curator can map them later.
    * @return a map with the counts of the new detected terms.
    */
-  @Transactional
+  @Transactional("pdcmAdminTransactionManager")
   public Map<String, Integer> detectNewUnmappedTerms() {
     // We need to delete Unmapped terms first so we don't end up with orphan values.
     mappingEntityRepository.deleteAllByStatus(Status.UNMAPPED.getLabel());

@@ -1,8 +1,8 @@
 package org.cancermodels.mappings;
 
 import java.util.List;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.EntityTypeRepository;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.EntityTypeRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 

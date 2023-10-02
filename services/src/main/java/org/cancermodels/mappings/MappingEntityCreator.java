@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.EntityTypeName;
-import org.cancermodels.persistance.EntityType;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingKey;
-import org.cancermodels.persistance.MappingValue;
-import org.cancermodels.types.MappingKeyName;
-import org.cancermodels.types.Status;
+import org.cancermodels.pdcm_admin.EntityTypeName;
+import org.cancermodels.pdcm_admin.persistance.EntityType;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingKey;
+import org.cancermodels.pdcm_admin.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.types.MappingKeyName;
+import org.cancermodels.pdcm_admin.types.Status;
 import org.springframework.stereotype.Component;
 
 @Component

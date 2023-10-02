@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.cancermodels.types.Status;
+import org.cancermodels.pdcm_admin.types.Status;
 import org.cancermodels.mappings.reports.MappingSummaryByTypeAndProvider.SummaryEntry;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.springframework.stereotype.Service;
 
 @Service

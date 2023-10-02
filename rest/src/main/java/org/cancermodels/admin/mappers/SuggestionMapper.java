@@ -3,9 +3,9 @@ package org.cancermodels.admin.mappers;
 import org.cancermodels.admin.dtos.MappingEntitySuggestionDTO;
 import org.cancermodels.admin.dtos.OntologySuggestionDTO;
 import org.cancermodels.admin.dtos.SuggestionDTO;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.OntologyTerm;
-import org.cancermodels.persistance.Suggestion;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.OntologyTerm;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.springframework.stereotype.Component;
 
 @Component

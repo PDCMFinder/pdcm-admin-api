@@ -3,7 +3,6 @@ package org.cancermodels.suggestions.search_engine.query_builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cancermodels.persistance.MappingEntity;
 import org.cancermodels.suggestions.FieldsNames;
 import org.springframework.stereotype.Component;
 

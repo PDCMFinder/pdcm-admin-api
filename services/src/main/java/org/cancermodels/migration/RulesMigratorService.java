@@ -1,8 +1,8 @@
 package org.cancermodels.migration;
 
 import java.util.Set;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingEntityRepository;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.springframework.stereotype.Service;
 
 // Migrate old rules to new format

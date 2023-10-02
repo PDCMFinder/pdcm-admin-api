@@ -3,9 +3,9 @@ package org.cancermodels.admin.mappers;
 import java.util.stream.Collectors;
 import org.cancermodels.admin.dtos.MappingValueDTO;
 import org.cancermodels.admin.dtos.MappingValueDTO.MappingKeyDTO;
-import org.cancermodels.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.admin.dtos.MappingEntityDTO;
-import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.persistance.MappingValue;
 import org.springframework.stereotype.Component;
 
 @Component

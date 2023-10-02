@@ -2,8 +2,8 @@ package org.cancermodels.suggestions.search_engine.query_builder;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.cancermodels.persistance.MappingEntity;
-import org.cancermodels.persistance.MappingValue;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.MappingValue;
 import org.cancermodels.suggestions.FieldsNames;
 import org.cancermodels.suggestions.search_engine.MappingValueConfHelper;
 import org.springframework.stereotype.Component;

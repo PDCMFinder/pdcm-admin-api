@@ -1,9 +1,8 @@
 package org.cancermodels.admin;
 
-import java.util.List;
 import java.util.Map;
 import org.cancermodels.process_report.ProcessReportService;
-import org.cancermodels.types.ProcessReportModules;
+import org.cancermodels.pdcm_admin.types.ProcessReportModules;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
