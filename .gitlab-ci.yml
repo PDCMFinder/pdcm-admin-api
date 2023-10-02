@@ -68,11 +68,11 @@ deploy-HH-WP-WEBADMIN-master:
     - kubectl version
 
     - sed -i "s|DATA_REPO_GITLAB_TOKEN|${DATA_REPO_GITLAB_TOKEN}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
-    - sed -i "s|DB_PROD_HOST|${DB_PROD_HOST}|g" k8-deploy/dev/pdcm-admin-api-prod-deployment.yaml
-    - sed -i "s|DB_PROD_PORT|${DB_PROD_PORT}|g" k8-deploy/dev/pdcm-admin-api-prod-deployment.yaml
-    - sed -i "s|DB_PROD_NAME|${DB_PROD_NAME}|g" k8-deploy/dev/pdcm-admin-api-prod-deployment.yaml
-    - sed -i "s|DB_PROD_USER|${DB_PROD_USER}|g" k8-deploy/dev/pdcm-admin-api-prod-deployment.yaml
-    - sed -i "s|DB_PROD_PASSWORD|${DB_PROD_PASSWORD}|g" k8-deploy/dev/pdcm-admin-api-prod-deployment.yaml
+    - sed -i "s|DB_PROD_HOST|${DB_PROD_HOST}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
+    - sed -i "s|DB_PROD_PORT|${DB_PROD_PORT}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
+    - sed -i "s|DB_PROD_NAME|${DB_PROD_NAME}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
+    - sed -i "s|DB_PROD_USER|${DB_PROD_USER}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
+    - sed -i "s|DB_PROD_PASSWORD|${DB_PROD_PASSWORD}|g" k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml
 
     - |
       if kubectl apply -f k8-deploy/prod/pdcm-admin-api-prod-deployment.yaml --record | grep -q unchanged; then
