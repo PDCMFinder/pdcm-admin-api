@@ -138,6 +138,7 @@ public class MissingMappingsService {
         String primarySiteName = row.getString("primary_site").toLowerCase();
         String diagnosis = row.getString("diagnosis").toLowerCase();
         String tumorTypeName = row.getString("tumour_type").toLowerCase();
+        dataSource = dataSource.toLowerCase();
 
         // Convert `Not Collected`, 'Not Provided' to `Unknown` as for the mapping process both terms mean
         // there is no data.
@@ -191,6 +192,7 @@ public class MissingMappingsService {
           if (drugValue.equals("not collected") || drugValue.equals("not provided")) {
             drugValue = "unknown";
           }
+          dataSource = dataSource.toLowerCase();
 
           String key = MappingEntityKeyBuilder.buildKeyTreatmentMapping(drugValue, dataSource);
 
