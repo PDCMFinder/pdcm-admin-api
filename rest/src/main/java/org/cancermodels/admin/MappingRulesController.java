@@ -11,10 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mapping_rules.MappingRulesService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Class to manage all endpoints related to the JSON files containing the mapping rules
@@ -59,7 +56,7 @@ public class MappingRulesController {
    * Because the json files contain only Mapped data, any mappings in other status
    * (Review, Unmapped, Request) will be lost.
    */
-  @GetMapping("/restoreMappedMappingEntitiesFromJsons")
+  @PutMapping("/restoreMappedMappingEntitiesFromJsons")
   public void getSimilar() throws IOException {
     mappingRulesService.restoreMappedMappingEntitiesFromJsons();
   }
