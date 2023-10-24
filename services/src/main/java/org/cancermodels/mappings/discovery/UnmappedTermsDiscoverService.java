@@ -122,13 +122,6 @@ public class UnmappedTermsDiscoverService {
   private void readDiagnosisAttributesFromTemplate(Map<String, Table> tables, String dataSource) {
     try {
       Table sampleTable = tables.get("metadata-patient_sample.tsv");
-//      List<String> diagnosisList = new ArrayList<>();
-//      for (Row row : sampleTable) {
-//        String diagnosis = row.getString("diagnosis").toLowerCase();
-//        diagnosisList.add(diagnosis);
-//      }
-//      System.out.println("Total diagnosis: " + diagnosisList.size());
-//      diagnosisList.forEach(System.out::println);
 
       for (Row row : sampleTable) {
 
