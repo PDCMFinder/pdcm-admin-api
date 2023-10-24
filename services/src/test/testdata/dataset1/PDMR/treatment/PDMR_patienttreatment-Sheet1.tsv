@@ -1,0 +1,1291 @@
+Field	patient_id	treatment_name	treatment_type	treatment_dose	treatment_starting_date	treatment_duration	treatment_event	elapsed_time	treatment_response	response_classification	model_id
+#Description	Unique anonymous/de-identified provider ID for the patient	"treatment name, can be surgery, radotherapy,  drug name  or drug combination ( (radiotherapy, chemotherapy, targeted therapy, homorno-therapy))"	"Treatment type categorised as Surgery, Radiation Therapy, Chemotherapy, Immunotherapy, Targeted Therapy, Hormone Therapy"	Treatment dose and unit	treatement starting date in month and year - this data will be transformed in tretamenet event sequences and no dates which are potentially sensitive will appear on the public PDX finder	treatment duration 	"IF DATES ARE ENTERED IN PREVIOUS COLUMN  - DON'T FILL,- treatment event order event 1 correspond to the 1st time a patient was  treated to generate a PDX, subsequent events are incremented by 1 "	"IF TREATMENT DATES ARE ENTERED IN PREVIOUS COLUMNS  - DON'T FILL, if not please provide the time difference between the 1st  event and the current one (in month unit preferably or indicate the units) - treatment event 1 should be 0, treatment event 2 should be 6 if 6 months have elapased between event 1 and  event 2 and treatment event 3 should be 9 if 9 months have elapsed between event 1 and  3 "	reponse of prior treatment treatment	classification used to define response to treatment 	Unique identifier for PDX when treatment was concomitant with PDX creation.
+#Example	CRC0014LM	xenograft	Chemotherapy	7	Jul-09	54			progressive disease	immunohistochemistry	CRL-240
+#Format Requirements	unique for a patient 	list drugs or conpounds or suregry or radiotherapy 	"[Surgery, Radiation Therapy, Chemotherapy, Immunotherapy, Targeted Therapy, Hormone Therapy]"	add the dose and corresponding units	starting date when patient was treated	in months	combination between event and a number	difference between current event and 1st  event- in months	" when possible give response based on RECIST criteria, if not recist explain how response was calculated , NO acronyms"	classification used to define response to treatment based on RECIST or other criteria 	this needs to be unique to represent an aggregated PDX line : combination between a mouse strain and a unique grafted tumour sample
+#Essential?	essential	essential	essential	desirable	essential	desirable	if no dates in treatment starting dates this is essential otherwise desirable	if no dates in treatment starting dates this is essential otherwise desirable	desirable	desirable	essential
+	535342	Anastrozole	Hormone therapy	Not provided	Not provided	4			Not provided		535342-205-R
+	328634	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		328634-206-R
+	328634	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		328634-206-R-V1-organoid
+	328634	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		328634-206-R-J1-PDC
+	163895	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Not provided		163895-298-T
+	163895	Bevacizumab+Carboplatin+Pegylated Liposomal Doxorubicin Hydrochloride	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Not provided		163895-298-T
+	163895	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	6			Not provided		163895-298-T
+	163895	Bevacizumab+Carboplatin+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		163895-298-T
+	163895	Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Not provided		163895-298-T
+	163895	Autologous Dendritic Cells Transduced with Wild-type p53 Adenovirus Vaccine	Immunotherapy	Not provided	Not provided	6			Stable Disease		163895-298-T
+	163895	Cediranib Maleate+Durvalumab	Targeted therapy	Not provided	Not provided	8			Stable Disease		163895-298-T
+	163895	Avelumab+Oncolytic HSV-1 Expressing IL-12 and IL-15/IL-15-receptor Alpha VG2025	Targeted therapy+Immunotherapy	Not provided	Not provided	3			Disease Progression		163895-298-T
+	136153	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		136153-299-R-V2-organoid
+	136153	Tamoxifen	Hormone therapy	Not provided	Not provided	84			Complete Response		136153-299-R-V2-organoid
+	279218	Nivolumab	Targeted therapy	Not provided	Not provided	0			Not provided		279218-305-R
+	279218	Ipilimumab	Targeted therapy	Not provided	Not provided	0			Not provided		279218-305-R
+	279218	Ropeginterferon Alfa-2B	Immunotherapy	Not provided	Not provided	0			Not provided		279218-305-R
+	K22795	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	2			Not provided		K22795-001-R-J1-PDC
+	K22795	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	2			Not provided		K22795-001-R
+	868679	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		868679-213-R
+	868679	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		868679-213-R-J2-PDC
+	234829	Capecitabine	Chemotherapy	Not provided	Not provided	1			Disease Progression		234829-215-T
+	234829	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		234829-215-T
+	234829	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	2			Disease Progression		234829-215-T
+	234829	4-Thio-2-deoxycytidine	Not provided	Not provided	Not provided	5			Disease Progression		234829-215-T
+	234829	Bortezomib+Clofarabine	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Disease Progression		234829-215-T
+	234829	CDK Inhibitor AT7519+Onalespib	Targeted therapy	Not provided	Not provided	8			Disease Progression		234829-215-T
+	234829	Capecitabine	Chemotherapy	Not provided	Not provided	1			Disease Progression		234829-215-T-V1-organoid
+	234829	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		234829-215-T-V1-organoid
+	234829	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	2			Disease Progression		234829-215-T-V1-organoid
+	234829	4-Thio-2-deoxycytidine	Not provided	Not provided	Not provided	5			Disease Progression		234829-215-T-V1-organoid
+	234829	Bortezomib+Clofarabine	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Disease Progression		234829-215-T-V1-organoid
+	234829	CDK Inhibitor AT7519+Onalespib	Targeted therapy	Not provided	Not provided	8			Disease Progression		234829-215-T-V1-organoid
+	712881	Cisplatin+Ifosfamide+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Disease Progression		712881-215-R-J2-PDC
+	955516	Cisplatin	Chemotherapy	Not provided	Not provided	3			Partial Response		955516-236-R2-V1-organoid
+	955516	Nivolumab	Targeted therapy	Not provided	Not provided	3			Disease Progression		955516-236-R2-V1-organoid
+	955516	Carboplatin+Cetuximab+Docetaxel	Chemotherapy+Targeted therapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		955516-236-R2-V1-organoid
+	955516	Cisplatin	Chemotherapy	Not provided	Not provided	3			Partial Response		955516-236-R2
+	955516	Nivolumab	Targeted therapy	Not provided	Not provided	3			Disease Progression		955516-236-R2
+	955516	Carboplatin+Cetuximab+Docetaxel	Chemotherapy+Targeted therapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		955516-236-R2
+	215974	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		215974-263-R-V1-organoid
+	215974	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Not provided		215974-263-R-V1-organoid
+	215974	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		215974-263-R
+	215974	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Not provided		215974-263-R
+	K98450	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		K98450-129-R
+	K98450	Fluorouracil+Leucovorin Calcium+Oxaliplatin+Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Not provided		K98450-129-R
+	K98450	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		K98450-129-R-V1-organoid
+	K98450	Fluorouracil+Leucovorin Calcium+Oxaliplatin+Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Not provided		K98450-129-R-V1-organoid
+	K98450	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		K98450-129-R-J1-PDC
+	K98450	Fluorouracil+Leucovorin Calcium+Oxaliplatin+Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Not provided		K98450-129-R-J1-PDC
+	K06184	Ipilimumab	Targeted therapy	Not provided	Not provided	Not provided			Not provided		K06184-153-R-J1-PDC
+	K06184	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K06184-153-R-J1-PDC
+	K06184	Pembrolizumab	Targeted therapy	Not provided	Not provided	Not provided			Not provided		K06184-153-R-J1-PDC
+	K06184	Pembrolizumab	Targeted therapy	Not provided	Not provided	Not provided			Not provided		K06184-153-R-J1-PDC
+	K06184	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K06184-153-R-J1-PDC
+	577847	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	11			Not provided		577847-279-T
+	577847	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		577847-279-T
+	577847	Floxuridine	Chemotherapy	Not provided	Not provided	11			Not provided		577847-279-T
+	577847	Panitumumab	Targeted therapy	Not provided	Not provided	10			Not provided		577847-279-T
+	577847	Cetuximab+Irinotecan+Panitumumab	Targeted therapy+Chemotherapy+Targeted therapy	Not provided	Not provided	3			Not provided		577847-279-T
+	577847	Regorafenib	Targeted therapy	Not provided	Not provided	5			Disease Progression		577847-279-T
+	577847	Tipiracil Hydrochloride+Trifluridine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		577847-279-T
+	415267	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		415267-285-R
+	415267	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		415267-285-R-V1-organoid
+	415267	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		415267-285-R-J2-PDC
+	264941	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Not provided		264941-293-T
+	264941	Napabucasin+Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		264941-293-T
+	485176	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4
+	485176	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4
+	485176	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4-V1-organoid
+	485176	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4-V1-organoid
+	469464	Pazopanib Hydrochloride	Targeted therapy	Not provided	Not provided	1			Not provided		469464-171-R
+	469464	Amcasertib+Nivolumab	Targeted therapy	Not provided	Not provided	2			Not provided		469464-171-R
+	469464	Cabozantinib	Targeted therapy	Not provided	Not provided	6			Stable Disease		469464-171-R
+	862795	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		862795-172-R
+	862795	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		862795-172-R-V1-organoid
+	367327	Cisplatin	Chemotherapy	Not provided	Not provided	1			Not provided		367327-171-R
+	367327	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		367327-171-R
+	588824	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		588824-173-R-V1-organoid
+	249533	Tamoxifen	Hormone therapy	Not provided	Not provided	Not provided			Not provided		249533-200-R
+	249533	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		249533-200-R
+	616732	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		616732-234-R3
+	616732	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		616732-234-R3
+	616732	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Disease Progression		616732-234-R3
+	616732	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		616732-234-R2
+	616732	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		616732-234-R2
+	616732	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Disease Progression		616732-234-R2
+	616732	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		616732-234-R1
+	616732	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		616732-234-R1
+	616732	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Disease Progression		616732-234-R1
+	616732	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		616732-234-R1-V1-organoid
+	616732	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		616732-234-R1-V1-organoid
+	616732	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Disease Progression		616732-234-R1-V1-organoid
+	979548	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Not provided		979548-314-T
+	979548	Adavosertib	Targeted therapy	Not provided	Not provided	4			Stable Disease		979548-314-T
+	979548	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Disease Progression		979548-314-T
+	979548	Tipiracil Hydrochloride+Trifluridine	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		979548-314-T
+	979548	Celecoxib	Not provided	Not provided	Not provided	1			Not provided		979548-314-T
+	719797	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		719797-321-R
+	719797	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		719797-321-R-J1-PDC
+	514821	Bendamustine+Rituximab	Chemotherapy+Targeted therapy	Not provided	Not provided	5			Not provided		514821-333-R
+	514821	Chlorambucil+Obinutuzumab	Chemotherapy+Targeted therapy	Not provided	Not provided	0			Not provided		514821-333-R
+	514821	Bendamustine+Rituximab	Chemotherapy+Targeted therapy	Not provided	Not provided	5			Not provided		514821-333-R-V2-organoid
+	514821	Chlorambucil+Obinutuzumab	Chemotherapy+Targeted therapy	Not provided	Not provided	0			Not provided		514821-333-R-V2-organoid
+	967376	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		967376-340-R
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R5
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R5
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R3
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R3
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R2-J4-PDC
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R2-J4-PDC
+	658696	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Disease Progression		658696-237-R
+	658696	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		658696-237-R
+	658696	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		658696-237-R
+	658696	Fluorouracil+Bevacizumab	Chemotherapy+Targeted therapy	Not provided	Not provided	3			Partial Response		658696-237-R
+	186277	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		186277-243-T
+	186277	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		186277-243-T-J2-PDC
+	475296	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Stable Disease		475296-252-R
+	633739	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Stable Disease		633739-251-R
+	596521	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Not provided		596521-263-R-J1-PDC
+	596521	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Not provided		596521-263-R
+	672227	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Stable Disease		672227-273-T
+	672227	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		672227-273-T
+	968666	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Stable Disease		968666-278-R-J1-PDC
+	968666	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Stable Disease		968666-278-R-J1-PDC
+	281562	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Stable Disease		281562-285-R
+	974727	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	1			Complete Response		974727-301-T
+	974727	Paclitaxel	Chemotherapy	Not provided	Not provided	3			Complete Response		974727-301-T
+	361957	Temsirolimus	Targeted therapy	Not provided	Not provided	2			Not provided		361957-307-R
+	361957	Sunitinib Malate	Targeted therapy	Not provided	Not provided	3			Not provided		361957-307-R
+	466732	Released at trial closure	Not provided	Not provided	Not provided	Not provided			Not provided		466732-252-T
+	466732	Bevacizumab+Capecitabine+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		466732-252-T
+	466732	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		466732-252-T
+	466732	Released at trial closure	Not provided	Not provided	Not provided	Not provided			Not provided		466732-252-T-J2-PDC
+	466732	Bevacizumab+Capecitabine+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		466732-252-T-J2-PDC
+	466732	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		466732-252-T-J2-PDC
+	466732	Released at trial closure	Not provided	Not provided	Not provided	Not provided			Not provided		466732-252-T-V1-organoid
+	466732	Bevacizumab+Capecitabine+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		466732-252-T-V1-organoid
+	466732	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		466732-252-T-V1-organoid
+	784911	Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Stable Disease		784911-089-T
+	784911	Leucovorin	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T
+	784911	Fluorouracil	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T
+	784911	Cetuximab	Targeted therapy	Not provided	Not provided	1			Not provided		784911-089-T
+	784911	Panitumumab	Targeted therapy	Not provided	Not provided	0			Not provided		784911-089-T
+	784911	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	9			Stable Disease		784911-089-T
+	784911	Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Stable Disease		784911-089-T-V1-organoid
+	784911	Leucovorin	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T-V1-organoid
+	784911	Fluorouracil	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T-V1-organoid
+	784911	Cetuximab	Targeted therapy	Not provided	Not provided	1			Not provided		784911-089-T-V1-organoid
+	784911	Panitumumab	Targeted therapy	Not provided	Not provided	0			Not provided		784911-089-T-V1-organoid
+	784911	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	9			Stable Disease		784911-089-T-V1-organoid
+	784911	Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Stable Disease		784911-089-T-J2-PDC
+	784911	Leucovorin	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T-J2-PDC
+	784911	Fluorouracil	Chemotherapy	Not provided	Not provided	6			Stable Disease		784911-089-T-J2-PDC
+	784911	Cetuximab	Targeted therapy	Not provided	Not provided	1			Not provided		784911-089-T-J2-PDC
+	784911	Panitumumab	Targeted therapy	Not provided	Not provided	0			Not provided		784911-089-T-J2-PDC
+	784911	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	9			Stable Disease		784911-089-T-J2-PDC
+	497265	Gemcitabine	Chemotherapy	Not provided	Not provided	0			Disease Progression		497265-261-R
+	761936	Doxorubicin+Ifosfamide	Chemotherapy	Not provided	Not provided	3			Disease Progression		761936-265-R
+	246569	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		246569-268-R
+	765638	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	0			Disease Progression		765638-272-R
+	765638	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	0			Disease Progression		765638-272-R
+	765638	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		765638-272-R
+	915372	Brachytherapy	Radiation therapy	Not provided	Not provided	0			Complete Response		915372-287-R
+	915372	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		915372-287-R
+	417821	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Partial Response		417821-307-R
+	417821	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Partial Response		417821-307-R-J1-PDC
+	992512	Cisplatin+Doxorubicin+Methotrexate+Vinblastine	Chemotherapy	Not provided	Not provided	3			Partial Response		992512-309-R-J1-PDC
+	223117	Cetuximab	Targeted therapy	Not provided	Not provided	0			Disease Progression		223117-310-R
+	891866	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		891866-317-R
+	891866	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		891866-317-R-J1-PDC
+	297248	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		297248-317-R
+	559244	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		559244-337-R-J2-PDC
+	457572	Fluorouracil+Cisplatin+Epirubicin	Chemotherapy	Not provided	Not provided	2			Partial Response		457572-356-R
+	686893	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		686893-015-R-J1-PDC
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		762968-020-R
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		762968-020-R
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		762968-020-R-J2-PDC
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		762968-020-R-J2-PDC
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		762968-020-R-V1-organoid
+	762968	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		762968-020-R-V1-organoid
+	415371	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Disease Progression		415371-026-R
+	415371	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Disease Progression		415371-026-R-J1-PDC
+	746538	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Partial Response		746538-026-R
+	439126	Leuprolide	Hormone therapy	Not provided	Not provided	0			Not provided		439126-050-R
+	218898	Cisplatin+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Complete Response		218898-057-R
+	218898	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Partial Response		218898-057-R
+	345371	Radiation Exposure	Radiation therapy	Not provided	Not provided	3			Stable Disease		345371-062-R
+	345371	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Stable Disease		345371-062-R
+	266295	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		266295-075-R
+	952719	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	1			Stable Disease		952719-076-R
+	952719	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		952719-076-R
+	237351	Cyclophosphamide+Topotecan+Vincristine	Chemotherapy	Not provided	Not provided	6			Stable Disease		237351-077-R
+	237351	Cyclophosphamide+Doxorubicin+Etoposide+Ifosfamide+Vincristine	Chemotherapy	Not provided	Not provided	13			Complete Response		237351-077-R
+	237351	Bevacizumab	Targeted therapy	Not provided	Not provided	6			Stable Disease		237351-077-R
+	359531	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		359531-246-R
+	359531	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		359531-246-R-J1-PDC
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R1-J3-PDC
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R1-J3-PDC
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R1-V2-organoid
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R1-V2-organoid
+	869283	Carboplatin+Paclitaxel+Temsirolimus	Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	15			Stable Disease		869283-356-T
+	869283	Cabozantinib	Targeted therapy	Not provided	Not provided	9			Disease Progression		869283-356-T
+	869283	Bevacizumab	Targeted therapy	Not provided	Not provided	5			Disease Progression		869283-356-T
+	341922	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		341922-053-R
+	341922	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		341922-053-R-V1-organoid
+	816435	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Stable Disease		816435-061-R
+	463943	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/03/2017	Not provided			Disease Progression		463943-066-T
+	463943	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	10			Stable Disease		463943-066-T
+	463943	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		463943-066-T
+	463943	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	8			Not provided		463943-066-T
+	463943	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/03/2017	Not provided			Disease Progression		463943-066-T-J2-PDC
+	463943	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	10			Stable Disease		463943-066-T-J2-PDC
+	463943	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		463943-066-T-J2-PDC
+	463943	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	8			Not provided		463943-066-T-J2-PDC
+	463943	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/03/2017	Not provided			Disease Progression		463943-066-T-V1-organoid
+	463943	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	10			Stable Disease		463943-066-T-V1-organoid
+	463943	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		463943-066-T-V1-organoid
+	463943	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	8			Not provided		463943-066-T-V1-organoid
+	459226	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Partial Response		459226-011-R
+	594992	Trastuzumab+Vinorelbine	Targeted therapy+Chemotherapy	Not provided	Not provided	0			Not provided		594992-005-R
+	299254	Ipilimumab+Nivolumab	Targeted therapy	Not provided	Not provided	2			Partial Response		299254-011-R
+	299254	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Disease Progression		299254-011-R
+	299254	Ipilimumab+Nivolumab	Targeted therapy	Not provided	Not provided	2			Partial Response		299254-011-R-J1-PDC
+	299254	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Disease Progression		299254-011-R-J1-PDC
+	467112	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Disease Progression		467112-017-R
+	192522	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		192522-019-R-V2-organoid
+	192522	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		192522-019-R
+	981166	Cisplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		981166-024-R
+	981166	Cisplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		981166-024-R-V2-organoid
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Complete Response		655913-031-T
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	2			Stable Disease		655913-031-T
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T
+	655913	Carboplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		655913-031-T
+	655913	Nilotinib+Paclitaxel	Targeted therapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		655913-031-T
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-V2-organoid
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Complete Response		655913-031-T-V2-organoid
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-V2-organoid
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	2			Stable Disease		655913-031-T-V2-organoid
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-V2-organoid
+	655913	Carboplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		655913-031-T-V2-organoid
+	655913	Nilotinib+Paclitaxel	Targeted therapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		655913-031-T-V2-organoid
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-J1-PDC
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Complete Response		655913-031-T-J1-PDC
+	655913	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-J1-PDC
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	2			Stable Disease		655913-031-T-J1-PDC
+	655913	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	4			Stable Disease		655913-031-T-J1-PDC
+	655913	Carboplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		655913-031-T-J1-PDC
+	655913	Nilotinib+Paclitaxel	Targeted therapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		655913-031-T-J1-PDC
+	561559	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin+Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Stable Disease		561559-040-R
+	561559	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin+Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Stable Disease		561559-040-R-J1-PDC
+	695427	Capecitabine	Chemotherapy	Not provided	Not provided	1			Stable Disease		695427-040-R
+	695427	Capecitabine	Chemotherapy	Not provided	Not provided	1			Stable Disease		695427-040-R-V1-organoid
+	695427	Capecitabine	Chemotherapy	Not provided	Not provided	1			Stable Disease		695427-040-R-J1-PDC
+	333512	Tipiracil Hydrochloride+Trifluridine	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		333512-047-T
+	333512	Anti-PD-1 Fusion Protein AMP-224	Targeted therapy	Not provided	Not provided	16			Stable Disease		333512-047-T
+	333512	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	Not provided			Not provided		333512-047-T
+	333512	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	2			Stable Disease		333512-047-T
+	333512	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Partial Response		333512-047-T
+	333512	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Stable Disease		333512-047-T
+	333512	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	5			Stable Disease		333512-047-T
+	333512	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Not provided		333512-047-T
+	333512	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	9			Stable Disease		333512-047-T
+	869496	Capecitabine	Chemotherapy	Not provided	Not provided	2			Not provided		869496-051-R
+	975524	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		975524-054-R-V1-organoid
+	975524	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		975524-054-R
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R5-J5-PDC
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R5-J5-PDC
+	777334	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R2
+	777334	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		777334-354-R2
+	524269	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	5			Not provided		524269-139-T-V2-organoid
+	524269	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		524269-139-T-V2-organoid
+	524269	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Partial Response		524269-139-T-V2-organoid
+	524269	Bevacizumab+Capecitabine+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		524269-139-T-V2-organoid
+	524269	Cetuximab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	4			Stable Disease		524269-139-T-V2-organoid
+	524269	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Stable Disease		524269-139-T-V2-organoid
+	161341	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Partial Response		161341-145-T
+	161341	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Partial Response		161341-145-T-V1-organoid
+	674366	Doxorubicin+Olaratumab	Chemotherapy+Targeted therapy	Not provided	Not provided	2			Disease Progression		674366-145-R
+	987419	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		987419-145-R
+	987419	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		987419-145-R-V1-organoid
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R2
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R2
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R2
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R2-J5-PDC
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R2-J5-PDC
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R2-J5-PDC
+	144126	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Complete Response		144126-210-T
+	144126	Bevacizumab	Targeted therapy	Not provided	Not provided	4			Stable Disease		144126-210-T
+	144126	Nivolumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		144126-210-T
+	422866	Gemcitabine	Chemotherapy	Not provided	Not provided	6			Not provided		422866-222-R5
+	422866	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Not provided		422866-222-R5
+	422866	Gemcitabine	Chemotherapy	Not provided	Not provided	6			Not provided		422866-222-R5-J1-PDC
+	422866	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Not provided		422866-222-R5-J1-PDC
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R2-V5-organoid
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R2-V5-organoid
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R2-V5-organoid
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R3
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R3
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R3
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R3-J6-PDC
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R3-J6-PDC
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R3-J6-PDC
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R5
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R5
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R5
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R6-V4-organoid
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R6-V4-organoid
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R6-V4-organoid
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R6-J3-PDC
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R6-J3-PDC
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R6-J3-PDC
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R4
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R4
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R4
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R4-V3-organoid
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R4-V3-organoid
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R4-V3-organoid
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R7-V1-organoid
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R7-V1-organoid
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R7-V1-organoid
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R6
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R6
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R6
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R7
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R7
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R7
+	521955	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	8			Partial Response		521955-158-R5-V10-organoid
+	521955	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	2			Disease Progression		521955-158-R5-V10-organoid
+	521955	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		521955-158-R5-V10-organoid
+	179942	Eribulin Mesylate	Chemotherapy	Not provided	Not provided	2			Stable Disease		179942-160-R
+	179942	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	4			Not provided		179942-160-R
+	179942	Pazopanib Hydrochloride	Targeted therapy	Not provided	Not provided	6			Disease Progression		179942-160-R
+	179942	Doxorubicin	Chemotherapy	Not provided	Not provided	5			Disease Progression		179942-160-R
+	179942	Dacarbazine	Chemotherapy	Not provided	Not provided	16			Not provided		179942-160-R
+	753774	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Complete Response		753774-173-T
+	753774	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	5			Disease Progression		753774-173-T
+	753774	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	6			Stable Disease		753774-173-T
+	753774	Cetuximab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		753774-173-T
+	753774	Cetuximab	Targeted therapy	Not provided	Not provided	8			Disease Progression		753774-173-T
+	753774	Cetuximab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		753774-173-T
+	753774	Leucovorin+Fluorouracil+Irinotecan+Panitumumab	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	6			Disease Progression		753774-173-T
+	753774	Tipiracil Hydrochloride+Trifluridine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		753774-173-T
+	753774	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Complete Response		753774-173-T-V1-organoid
+	753774	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	5			Disease Progression		753774-173-T-V1-organoid
+	753774	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	6			Stable Disease		753774-173-T-V1-organoid
+	753774	Cetuximab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		753774-173-T-V1-organoid
+	753774	Cetuximab	Targeted therapy	Not provided	Not provided	8			Disease Progression		753774-173-T-V1-organoid
+	753774	Cetuximab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		753774-173-T-V1-organoid
+	753774	Leucovorin+Fluorouracil+Irinotecan+Panitumumab	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	6			Disease Progression		753774-173-T-V1-organoid
+	753774	Tipiracil Hydrochloride+Trifluridine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		753774-173-T-V1-organoid
+	445384	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		445384-181-T
+	445384	Pazopanib Hydrochloride	Targeted therapy	Not provided	Not provided	1			Disease Progression		445384-181-T
+	445384	Doxorubicin+Ifosfamide+Mesna	Chemotherapy+Chemotherapy+Not provided	Not provided	Not provided	1			Disease Progression		445384-181-T
+	445384	Cabozantinib	Targeted therapy	Not provided	Not provided	5			Stable Disease		445384-181-T
+	945468	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Stable Disease		945468-187-T
+	945468	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		945468-187-T
+	945468	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Stable Disease		945468-187-T-J2-PDC
+	945468	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		945468-187-T-J2-PDC
+	945468	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Stable Disease		945468-187-T-V1-organoid
+	945468	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		945468-187-T-V1-organoid
+	429767	Imatinib Mesylate	Targeted therapy	Not provided	Not provided	60			Stable Disease		429767-202-R
+	524269	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	5			Not provided		524269-139-T
+	524269	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Disease Progression		524269-139-T
+	524269	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Partial Response		524269-139-T
+	524269	Bevacizumab+Capecitabine+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		524269-139-T
+	524269	Cetuximab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	4			Stable Disease		524269-139-T
+	524269	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Stable Disease		524269-139-T
+	935938	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		935938-334-R-V1-organoid
+	935938	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		935938-334-R-J1-PDC
+	935938	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		935938-334-R
+	922993	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Not provided		922993-354-T
+	922993	Pegylated Liposomal Doxorubicin Hydrochloride+Topotecan Hydrochloride	Chemotherapy	Not provided	Not provided	1			Not provided		922993-354-T
+	922993	Topotecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		922993-354-T
+	922993	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Not provided		922993-354-T-J2-PDC
+	922993	Pegylated Liposomal Doxorubicin Hydrochloride+Topotecan Hydrochloride	Chemotherapy	Not provided	Not provided	1			Not provided		922993-354-T-J2-PDC
+	922993	Topotecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		922993-354-T-J2-PDC
+	482815	Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Not provided		482815-354-R1
+	914463	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Not provided		914463-074-R
+	576588	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		576588-073-R
+	576588	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		576588-073-R
+	576588	Trastuzumab	Targeted therapy	Not provided	Not provided	0			Not provided		576588-073-R
+	576588	Capecitabine	Chemotherapy	Not provided	Not provided	0			Not provided		576588-073-R
+	K59669	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K59669-250-R1
+	K59669	Diethylstilbestrol	Hormone therapy	Not provided	Not provided	7			Not provided		K59669-250-R1
+	K59669	Docetaxel	Immunotherapy	Not provided	Not provided	8			Not provided		K59669-250-R1
+	K59669	Bicalutamide+Leuprolide	Hormone therapy	Not provided	Not provided	2			Not provided		K59669-250-R1
+	K59669	Leuprolide	Hormone therapy	Not provided	Not provided	89			Not provided		K59669-250-R1
+	K59669	Leuprolide+Nilutamide	Hormone therapy	Not provided	Not provided	9			Not provided		K59669-250-R1
+	K59669	Abiraterone	Hormone therapy	Not provided	Not provided	6			Not provided		K59669-250-R1
+	164165	Cisplatin+Doxorubicin+Etoposide+Mitotane	Chemotherapy	Not provided	Not provided	3			Disease Progression		164165-088-R1
+	164165	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Partial Response		164165-088-R1
+	164165	Mitotane+Streptozocin	Chemotherapy	Not provided	Not provided	28			Disease Progression		164165-088-R1
+	K09457	Bicalutamide	Hormone therapy	Not provided	Not provided	20			Not provided		K09457-251-R
+	K09457	Diethylstilbestrol+Docetaxel	Hormone therapy+Immunotherapy	Not provided	Not provided	1			Not provided		K09457-251-R
+	K09457	Ketoconazole	Hormone therapy	Not provided	Not provided	1			Not provided		K09457-251-R
+	K09457	Leuprolide	Hormone therapy	Not provided	Not provided	20			Not provided		K09457-251-R
+	K09457	Zoledronic Acid	Chemotherapy	Not provided	Not provided	20			Not provided		K09457-251-R
+	K09457	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K09457-251-R
+	846914	Cisplatin	Chemotherapy	Not provided	Not provided	2			Complete Response		846914-101-R-J1-PDC
+	846914	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		846914-101-R-J1-PDC
+	846914	Cisplatin	Chemotherapy	Not provided	Not provided	2			Complete Response		846914-101-R-V1-organoid
+	846914	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		846914-101-R-V1-organoid
+	846914	Cisplatin	Chemotherapy	Not provided	Not provided	2			Complete Response		846914-101-R
+	846914	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		846914-101-R
+	572736	Bevacizumab+Capecitabine+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Not provided		572736-102-R
+	572736	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		572736-102-R
+	572736	Bevacizumab+Capecitabine+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Not provided		572736-102-R-V2-organoid
+	572736	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Disease Progression		572736-102-R-V2-organoid
+	732878	Bevacizumab+Cisplatin+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Complete Response		732878-109-T
+	732878	Bevacizumab	Targeted therapy	Not provided	Not provided	8			Complete Response		732878-109-T
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R3
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3-J6-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3-J6-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R3-J6-PDC
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R5
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5-J5-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5-J5-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R5-J5-PDC
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R7
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7-V3-organoid
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7-V3-organoid
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R7-V3-organoid
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R6
+	K83135	Sipuleucel-T	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R1
+	K83135	Bicalutamide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R1
+	K83135	Leuprolide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R1
+	K83135	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R1
+	K83135	Docetaxel	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R1
+	K83135	Abiraterone	Hormone therapy	Not provided	Not provided	2			Not provided		K83135-075-R1
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	17			Not provided		K83135-075-R1
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	10			Not provided		K83135-075-R1
+	K83135	Sipuleucel-T	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R2
+	K83135	Bicalutamide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R2
+	K83135	Leuprolide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R2
+	K83135	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R2
+	K83135	Docetaxel	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R2
+	K83135	Abiraterone	Hormone therapy	Not provided	Not provided	2			Not provided		K83135-075-R2
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	17			Not provided		K83135-075-R2
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	10			Not provided		K83135-075-R2
+	K83135	Sipuleucel-T	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R3
+	K83135	Bicalutamide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R3
+	K83135	Leuprolide	Hormone therapy	Not provided	Not provided	73			Not provided		K83135-075-R3
+	K83135	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R3
+	K83135	Docetaxel	Immunotherapy	Not provided	Not provided	Not provided			Not provided		K83135-075-R3
+	K83135	Abiraterone	Hormone therapy	Not provided	Not provided	2			Not provided		K83135-075-R3
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	17			Not provided		K83135-075-R3
+	K83135	Enzalutamide	Hormone therapy	Not provided	Not provided	10			Not provided		K83135-075-R3
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6-J3-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6-J3-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R6-J3-PDC
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6-V2-organoid
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R6-V2-organoid
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R6-V2-organoid
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R8
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R8
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R8
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R8-J4-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R8-J4-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R8-J4-PDC
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R4
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R4
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R4
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R4-J2-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R4-J2-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R4-J2-PDC
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3-V4-organoid
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R3-V4-organoid
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R3-V4-organoid
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5-V5-organoid
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R5-V5-organoid
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R5-V5-organoid
+	949359	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Not provided		949359-179-T
+	949359	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	25			Not provided		949359-179-T
+	949359	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Not provided		949359-179-T
+	949359	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	3			Not provided		949359-179-T
+	949359	p97 Inhibitor CB-5083	Targeted therapy	Not provided	Not provided	3			Disease Progression		949359-179-T
+	259776	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Not provided		259776-179-R-V1-organoid
+	899932	Fluorouracil+Leucovorin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7-J1-PDC
+	899932	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	12			Complete Response		899932-113-R7-J1-PDC
+	899932	Tamoxifen	Hormone therapy	Not provided	Not provided	5			Complete Response		899932-113-R7-J1-PDC
+	K68450	Abiraterone	Hormone therapy	Not provided	Not provided	Not provided			Not provided		K68450-031-R2
+	K68450	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Not provided		K68450-031-R2
+	K68450	Docetaxel	Immunotherapy	Not provided	Not provided	11			Not provided		K68450-031-R2
+	K68450	Cabazitaxel	Chemotherapy	Not provided	Not provided	1			Not provided		K68450-031-R2
+	K68450	Bicalutamide	Hormone therapy	Not provided	Not provided	48			Not provided		K68450-031-R2
+	K68450	Leuprolide	Hormone therapy	Not provided	Not provided	48			Not provided		K68450-031-R2
+	K68450	Carboplatin+Etoposide	Chemotherapy	Not provided	Not provided	1			Not provided		K68450-031-R2
+	772245	Irinotecan+Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		772245-204-R
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R2
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R5
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R5-J2-PDC
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R4
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R4-V4-organoid
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R1-V3-organoid
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R3-V2-organoid
+	K14711	Carboplatin	Chemotherapy	Not provided	Not provided	6			Not provided		K14711-072-R
+	K14711	Bicalutamide	Hormone therapy	Not provided	Not provided	68			Not provided		K14711-072-R
+	K14711	Leuprolide	Hormone therapy	Not provided	Not provided	68			Not provided		K14711-072-R
+	K14711	Dutasteride	Hormone therapy	Not provided	Not provided	68			Not provided		K14711-072-R
+	K14711	Nilutamide	Hormone therapy	Not provided	Not provided	68			Not provided		K14711-072-R
+	K14711	Ketoconazole	Hormone therapy	Not provided	Not provided	3			Not provided		K14711-072-R
+	K14711	Docetaxel	Immunotherapy	Not provided	Not provided	8			Not provided		K14711-072-R
+	565232	Fluorouracil+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		565232-114-T-J1-PDC
+	699152	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		699152-130-R
+	619344	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R
+	619344	Fluorouracil	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R
+	619344	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R-V1-organoid
+	619344	Fluorouracil	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R-V1-organoid
+	619344	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R-J1-PDC
+	619344	Fluorouracil	Chemotherapy	Not provided	Not provided	5			Partial Response		619344-162-R-J1-PDC
+	699152	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		699152-130-R-V1-organoid
+	699152	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		699152-130-R-J1-PDC
+	592788	Cisplatin+Doxorubicin+Etoposide	Chemotherapy	Not provided	01/05/2018	Not provided			Not provided		592788-150-R3
+	592788	Cisplatin+Doxorubicin+Etoposide	Chemotherapy	Not provided	Not provided	7			Partial Response		592788-150-R3
+	592788	Cisplatin+Doxorubicin+Etoposide	Chemotherapy	Not provided	01/05/2018	Not provided			Not provided		592788-150-R4
+	592788	Cisplatin+Doxorubicin+Etoposide	Chemotherapy	Not provided	Not provided	7			Partial Response		592788-150-R4
+	K41856	Bicalutamide	Hormone therapy	Not provided	Not provided	48			Not provided		K41856-061-R2
+	K41856	Nilutamide	Hormone therapy	Not provided	Not provided	48			Not provided		K41856-061-R2
+	K41856	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		K41856-061-R2
+	K41856	Ketoconazole	Hormone therapy	Not provided	Not provided	2			Not provided		K41856-061-R2
+	K41856	Docetaxel	Immunotherapy	Not provided	Not provided	5			Not provided		K41856-061-R2
+	K41856	Enzalutamide	Hormone therapy	Not provided	Not provided	0			Not provided		K41856-061-R2
+	K41856	Leuprolide	Hormone therapy	Not provided	Not provided	48			Not provided		K41856-061-R2
+	392184	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		392184-169-R
+	392184	Irinotecan+Trastuzumab	Chemotherapy+Targeted therapy	Not provided	Not provided	4			Stable Disease		392184-169-R
+	392184	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		392184-169-R-J1-PDC
+	392184	Irinotecan+Trastuzumab	Chemotherapy+Targeted therapy	Not provided	Not provided	4			Stable Disease		392184-169-R-J1-PDC
+	K22795	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	2			Not provided		K22795-001-R-V1-organoid
+	564653	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	4			Partial Response		564653-332-T-V2-organoid
+	564653	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	4			Partial Response		564653-332-T
+	482815	Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Not provided		482815-354-R2
+	482815	Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Not provided		482815-354-R2-J2-PDC
+	227483	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		227483-062-R1
+	227483	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		227483-062-R1
+	227483	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		227483-062-R1-J1-PDC
+	227483	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		227483-062-R1-J1-PDC
+	388244	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Not provided		388244-064-R
+	388244	Paclitaxel	Chemotherapy	Not provided	Not provided	2			Partial Response		388244-064-R
+	388244	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Not provided		388244-064-R-V1-organoid
+	388244	Paclitaxel	Chemotherapy	Not provided	Not provided	2			Partial Response		388244-064-R-V1-organoid
+	167148	Fluorouracil	Chemotherapy	Not provided	Not provided	3			Not provided		167148-078-R
+	167148	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Not provided		167148-078-R
+	167148	Fluorouracil	Chemotherapy	Not provided	Not provided	3			Not provided		167148-078-R-V1-organoid
+	167148	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Not provided		167148-078-R-V1-organoid
+	395191	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		395191-088-T
+	395191	Bevacizumab+Carboplatin+Paclitaxel	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Disease Progression		395191-088-T
+	395191	Cisplatin+Topotecan	Chemotherapy	Not provided	Not provided	5			Disease Progression		395191-088-T
+	395191	Bevacizumab+Pegylated Liposomal Doxorubicin Hydrochloride	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		395191-088-T
+	395191	Cemiplimab Regimen	Chemotherapy	Not provided	Not provided	11			Disease Progression		395191-088-T
+	395191	Bevacizumab+Carboplatin+Paclitaxel	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		395191-088-T
+	395191	Bevacizumab	Targeted therapy	Not provided	Not provided	3			Disease Progression		395191-088-T
+	395191	Bevacizumab+Carboplatin+Doxorubicin	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		395191-088-T
+	868763	Carboplatin+Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Partial Response		868763-120-R-V1-organoid
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R10
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R9
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R9
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R9
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R2-J3-PDC
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2-J3-PDC
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2-J3-PDC
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R10-V2-organoid
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10-V2-organoid
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10-V2-organoid
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R10-J2-PDC
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10-J2-PDC
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R10-J2-PDC
+	191243	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Stable Disease		191243-178-R
+	191243	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Stable Disease		191243-178-R
+	191243	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Stable Disease		191243-178-R-V1-organoid
+	191243	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Stable Disease		191243-178-R-V1-organoid
+	279428	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	01/01/2019	Not provided			Stable Disease		279428-182-R
+	279428	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		279428-182-R
+	279428	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	01/01/2019	Not provided			Stable Disease		279428-182-R-V1-organoid
+	279428	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		279428-182-R-V1-organoid
+	589379	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Complete Response		589379-206-R
+	589379	Dacarbazine+Doxorubicin	Chemotherapy	Not provided	Not provided	0			Disease Progression		589379-206-R
+	449892	Doxorubicin	Chemotherapy	Not provided	Not provided	0			Not provided		449892-231-R
+	449892	Carboplatin+Doxorubicin	Chemotherapy	Not provided	Not provided	0			Not provided		449892-231-R
+	449892	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	0			Not provided		449892-231-R
+	449892	Gemcitabine	Chemotherapy	Not provided	Not provided	0			Not provided		449892-231-R
+	449892	Sorafenib	Chemotherapy	Not provided	Not provided	3			Not provided		449892-231-R
+	292632	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	3			Partial Response		292632-238-R
+	292632	Doxorubicin	Chemotherapy	Not provided	Not provided	2			Partial Response		292632-238-R
+	292632	Trabectedin	Chemotherapy	Not provided	Not provided	3			Partial Response		292632-238-R
+	128162	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		128162-247-R-V1-organoid
+	727343	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	01/06/2019	Not provided			Disease Progression		727343-253-R
+	128236	Radiation Exposure	Radiation therapy	Not provided	Not provided	Not provided			Not provided		128236-265-R3-V1-organoid
+	128236	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		128236-265-R3-V1-organoid
+	128236	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		128236-265-R3-V1-organoid
+	128236	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Progressive Disease		128236-265-R3-V1-organoid
+	452449	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		452449-287-R
+	879694	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		879694-015-R
+	879694	Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Not provided		879694-015-R
+	879694	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	1			Not provided		879694-015-R
+	813773	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		813773-016-R
+	144237	Pembrolizumab+Ziv-Aflibercept	Targeted therapy	Not provided	01/02/2019	Not provided			Stable Disease		144237-036-T
+	144237	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Not provided		144237-036-T
+	144237	Doxorubicin+Methotrexate	Chemotherapy	Not provided	Not provided	2			Not provided		144237-036-T
+	144237	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		144237-036-T
+	144237	Etoposide+Ifosfamide	Chemotherapy	Not provided	Not provided	2			Stable Disease		144237-036-T
+	277826	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		277826-050-R-V1-organoid
+	277826	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Not provided		277826-050-R-V1-organoid
+	648538	Cisplatin	Chemotherapy	Not provided	Not provided	1			Stable Disease		648538-100-R
+	648538	Cisplatin	Chemotherapy	Not provided	Not provided	1			Stable Disease		648538-100-R-V1-organoid
+	562452	Paclitaxel	Chemotherapy	Not provided	Not provided	3			Stable Disease		562452-108-R-V1-organoid
+	562452	Doxorubicin	Chemotherapy	Not provided	Not provided	1			Stable Disease		562452-108-R-V1-organoid
+	562452	Paclitaxel	Chemotherapy	Not provided	Not provided	3			Stable Disease		562452-108-R
+	562452	Doxorubicin	Chemotherapy	Not provided	Not provided	1			Stable Disease		562452-108-R
+	862989	Fluorouracil+Cisplatin	Chemotherapy	Not provided	Not provided	2			Partial Response		862989-056-R
+	259776	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Not provided		259776-179-R
+	772245	Irinotecan+Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		772245-204-R-J1-PDC
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R1
+	742791	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		742791-240-R-V1-organoid
+	274332	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		274332-332-R
+	274332	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		274332-332-R
+	274332	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Not provided		274332-332-R
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R
+	958667	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		958667-338-R
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R-V1-organoid
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R-V1-organoid
+	958667	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		958667-338-R-V1-organoid
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R-J2-PDC
+	958667	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		958667-338-R-J2-PDC
+	958667	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		958667-338-R-J2-PDC
+	551195	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		551195-344-R-V1-organoid
+	193832	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Partial Response		193832-021-R
+	193832	Paclitaxel	Chemotherapy	Not provided	Not provided	3			Partial Response		193832-021-R
+	885512	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Partial Response		885512-296-R
+	885512	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Partial Response		885512-296-R-V1-organoid
+	885512	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Partial Response		885512-296-R-J2-PDC
+	993429	Ifosfamide+Paclitaxel	Chemotherapy	Not provided	01/09/2018	Not provided			Disease Progression		993429-296-R
+	993429	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		993429-296-R
+	331888	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Partial Response		331888-031-R
+	331888	Fluorouracil+Cisplatin+Docetaxel	Chemotherapy+Chemotherapy+Immunotherapy	Not provided	Not provided	3			Partial Response		331888-031-R
+	981439	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		981439-253-R
+	981439	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Not provided		981439-253-R
+	981439	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	8			Not provided		981439-253-R
+	981439	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		981439-253-R-V1-organoid
+	981439	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Not provided		981439-253-R-V1-organoid
+	981439	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	8			Not provided		981439-253-R-V1-organoid
+	981439	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		981439-253-R-J1-PDC
+	981439	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Not provided		981439-253-R-J1-PDC
+	981439	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	8			Not provided		981439-253-R-J1-PDC
+	992656	Dabrafenib	Targeted therapy	Not provided	Not provided	0			Disease Progression		992656-260-R
+	992656	Ipilimumab	Targeted therapy	Not provided	Not provided	0			Not provided		992656-260-R
+	988467	Dactinomycin+Melphalan	Chemotherapy	Not provided	Not provided	0			Disease Progression		988467-305-R
+	988467	Doxorubicin+Ifosfamide+Mesna	Chemotherapy+Chemotherapy+Not provided	Not provided	Not provided	0			Disease Progression		988467-305-R
+	446735	Cisplatin	Chemotherapy	Not provided	Not provided	1			Stable Disease		446735-337-T-V1-organoid
+	446735	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	5			Disease Progression		446735-337-T-V1-organoid
+	444589	Gemcitabine	Chemotherapy	Not provided	Not provided	5			Disease Progression		444589-340-R
+	444589	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		444589-340-R
+	444589	Capecitabine+Gemcitabine	Chemotherapy	Not provided	Not provided	10			Stable Disease		444589-340-R
+	523694	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		523694-262-R
+	191741	Denosumab	Targeted therapy	Not provided	Not provided	12			Not provided		191741-267-R
+	421758	Fluorouracil	Chemotherapy	Not provided	Not provided	3			Not provided		421758-270-R
+	421758	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Stable Disease		421758-270-R
+	551195	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		551195-344-R
+	242566	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		242566-281-R
+	242566	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		242566-281-R-J2-PDC
+	242566	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		242566-281-R-V1-organoid
+	362531	Letrozole	Hormone therapy	Not provided	Not provided	Not provided			Not provided		362531-283-R
+	172845	Akt Inhibitor MK2206+Selumetinib	Targeted therapy	Not provided	01/05/2013	Not provided			Stable Disease		172845-121-T
+	172845	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Partial Response		172845-121-T
+	172845	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	15			Not provided		172845-121-T
+	172845	Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		172845-121-T
+	172845	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	4			Not provided		172845-121-T
+	172845	Indimitecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		172845-121-T
+	172845	Onalespib	Targeted therapy	Not provided	Not provided	1			Not provided		172845-121-T
+	172845	Akt Inhibitor MK2206+Selumetinib	Targeted therapy	Not provided	01/05/2013	Not provided			Stable Disease		172845-288-R
+	172845	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Partial Response		172845-288-R
+	172845	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	15			Not provided		172845-288-R
+	172845	Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		172845-288-R
+	172845	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	4			Not provided		172845-288-R
+	172845	Indimitecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		172845-288-R
+	172845	Onalespib	Targeted therapy	Not provided	Not provided	1			Not provided		172845-288-R
+	172845	Akt Inhibitor MK2206+Selumetinib	Targeted therapy	Not provided	01/05/2013	Not provided			Stable Disease		172845-142-T
+	172845	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Partial Response		172845-142-T
+	172845	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	15			Not provided		172845-142-T
+	172845	Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		172845-142-T
+	172845	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	4			Not provided		172845-142-T
+	172845	Indimitecan	Chemotherapy	Not provided	Not provided	1			Disease Progression		172845-142-T
+	172845	Onalespib	Targeted therapy	Not provided	Not provided	1			Not provided		172845-142-T
+	135848	Bevacizumab+Celecoxib+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Not provided+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Partial Response		135848-042-T
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Disease Progression		135848-042-T
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		135848-042-T
+	135848	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		135848-042-T
+	135848	Bevacizumab+Capecitabine+Celecoxib	Targeted therapy+Chemotherapy+Not provided	Not provided	Not provided	1			Disease Progression		135848-042-T
+	135848	Bevacizumab+Celecoxib+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Not provided+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Partial Response		135848-042-T-V1-organoid
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Disease Progression		135848-042-T-V1-organoid
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		135848-042-T-V1-organoid
+	135848	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		135848-042-T-V1-organoid
+	135848	Bevacizumab+Capecitabine+Celecoxib	Targeted therapy+Chemotherapy+Not provided	Not provided	Not provided	1			Disease Progression		135848-042-T-V1-organoid
+	135848	Bevacizumab+Celecoxib+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Not provided+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Partial Response		135848-042-T-J1-PDC
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Disease Progression		135848-042-T-J1-PDC
+	135848	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		135848-042-T-J1-PDC
+	135848	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		135848-042-T-J1-PDC
+	135848	Bevacizumab+Capecitabine+Celecoxib	Targeted therapy+Chemotherapy+Not provided	Not provided	Not provided	1			Disease Progression		135848-042-T-J1-PDC
+	868977	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Stable Disease		868977-042-T
+	868977	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	1			Not provided		868977-042-T
+	868977	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		868977-042-T
+	868977	Gemcitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		868977-042-T
+	868977	Vinorelbine	Chemotherapy	Not provided	Not provided	2			Disease Progression		868977-042-T
+	868977	Methoxyamine+Temozolomide	Chemotherapy	Not provided	Not provided	6			Partial Response		868977-042-T
+	416634	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	5			Disease Progression		416634-122-T
+	416634	Cabazitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		416634-122-T
+	416634	Pemetrexed	Chemotherapy	Not provided	Not provided	11			Partial Response		416634-122-T
+	416634	Cabozantinib	Targeted therapy	Not provided	Not provided	2			Disease Progression		416634-122-T
+	416634	BCG Vaccine	Immunotherapy	Not provided	Not provided	9			Not provided		416634-122-T
+	295223	Carboplatin+Cetuximab+Paclitaxel	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	2			Complete Response		295223-140-R
+	295223	Carboplatin+Cetuximab+Paclitaxel	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		295223-140-R
+	295223	Docetaxel+Sonolisib	Immunotherapy+Targeted therapy	Not provided	Not provided	10			Stable Disease		295223-140-R
+	944381	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Partial Response		944381-210-T
+	944381	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	4			Stable Disease		944381-210-T
+	944381	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Stable Disease		944381-210-T
+	944381	Bevacizumab+Cetuximab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	11			Partial Response		944381-210-T
+	944381	Fluorouracil+Leucovorin Calcium+Oxaliplatin+Panitumumab	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	4			Disease Progression		944381-210-T
+	944381	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		944381-210-T
+	944381	Regorafenib	Targeted therapy	Not provided	Not provided	4			Disease Progression		944381-210-T
+	944381	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		944381-210-T
+	944381	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		944381-210-T
+	197837	Onalespib	Targeted therapy	Not provided	01/08/2013	Not provided			Disease Progression		197837-219-T
+	197837	Epirubicin+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		197837-219-T
+	197837	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	1			Disease Progression		197837-219-T
+	197837	Capecitabine+Irinotecan	Chemotherapy	Not provided	Not provided	0			Disease Progression		197837-219-T
+	197837	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		197837-219-T
+	197837	Onalespib	Targeted therapy	Not provided	01/08/2013	Not provided			Disease Progression		197837-219-T-V1-organoid
+	197837	Epirubicin+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		197837-219-T-V1-organoid
+	197837	Carboplatin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	1			Disease Progression		197837-219-T-V1-organoid
+	197837	Capecitabine+Irinotecan	Chemotherapy	Not provided	Not provided	0			Disease Progression		197837-219-T-V1-organoid
+	197837	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		197837-219-T-V1-organoid
+	683768	Talazoparib	Targeted therapy	Not provided	01/05/2014	Not provided			Partial Response		683768-134-T
+	683768	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	6			Stable Disease		683768-134-T
+	683768	Bevacizumab+Paclitaxel	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Partial Response		683768-134-T
+	683768	Doxorubicin	Chemotherapy	Not provided	Not provided	18			Not provided		683768-134-T
+	683768	Pemetrexed	Chemotherapy	Not provided	Not provided	3			Partial Response		683768-134-T
+	683768	Paclitaxel	Chemotherapy	Not provided	Not provided	4			Disease Progression		683768-134-T
+	683768	Gemcitabine	Chemotherapy	Not provided	Not provided	4			Disease Progression		683768-134-T
+	683768	Topotecan	Chemotherapy	Not provided	Not provided	3			Partial Response		683768-134-T
+	683768	Docetaxel	Immunotherapy	Not provided	Not provided	1			Not provided		683768-134-T
+	683768	Talazoparib	Targeted therapy	Not provided	01/05/2014	Not provided			Partial Response		683768-134-T-V1-organoid
+	683768	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	6			Stable Disease		683768-134-T-V1-organoid
+	683768	Bevacizumab+Paclitaxel	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Partial Response		683768-134-T-V1-organoid
+	683768	Doxorubicin	Chemotherapy	Not provided	Not provided	18			Not provided		683768-134-T-V1-organoid
+	683768	Pemetrexed	Chemotherapy	Not provided	Not provided	3			Partial Response		683768-134-T-V1-organoid
+	683768	Paclitaxel	Chemotherapy	Not provided	Not provided	4			Disease Progression		683768-134-T-V1-organoid
+	683768	Gemcitabine	Chemotherapy	Not provided	Not provided	4			Disease Progression		683768-134-T-V1-organoid
+	683768	Topotecan	Chemotherapy	Not provided	Not provided	3			Partial Response		683768-134-T-V1-organoid
+	683768	Docetaxel	Immunotherapy	Not provided	Not provided	1			Not provided		683768-134-T-V1-organoid
+	394591	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Complete Response		394591-219-R
+	185487	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T
+	185487	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T
+	185487	Cetuximab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		185487-224-T
+	185487	Regorafenib	Targeted therapy	Not provided	Not provided	4			Stable Disease		185487-224-T
+	185487	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T-J1-PDC
+	185487	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T-J1-PDC
+	185487	Cetuximab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		185487-224-T-J1-PDC
+	185487	Regorafenib	Targeted therapy	Not provided	Not provided	4			Stable Disease		185487-224-T-J1-PDC
+	692163	Pazopanib Hydrochloride	Targeted therapy	Not provided	01/11/2013	Not provided			Disease Progression		692163-330-T
+	692163	Doxorubicin	Chemotherapy	Not provided	Not provided	4			Not provided		692163-330-T
+	692163	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	4			Not provided		692163-330-T
+	941425	Onalespib	Targeted therapy	Not provided	01/09/2013	Not provided			Disease Progression		941425-263-T
+	941425	Cisplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	2			Stable Disease		941425-263-T
+	941425	Carboplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	5			Stable Disease		941425-263-T
+	941425	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		941425-263-T
+	941425	Onalespib	Targeted therapy	Not provided	01/09/2013	Not provided			Disease Progression		941425-263-T-J1-PDC
+	941425	Cisplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	2			Stable Disease		941425-263-T-J1-PDC
+	941425	Carboplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	5			Stable Disease		941425-263-T-J1-PDC
+	941425	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		941425-263-T-J1-PDC
+	185487	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T-V1-organoid
+	185487	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Stable Disease		185487-224-T-V1-organoid
+	185487	Cetuximab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		185487-224-T-V1-organoid
+	185487	Regorafenib	Targeted therapy	Not provided	Not provided	4			Stable Disease		185487-224-T-V1-organoid
+	128783	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		128783-104-T
+	128783	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	1			Stable Disease		128783-104-T
+	128783	Fluorouracil	Chemotherapy	Not provided	Not provided	5			Disease Progression		128783-104-T
+	128783	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Stable Disease		128783-104-T
+	128783	Bevacizumab	Targeted therapy	Not provided	Not provided	5			Disease Progression		128783-104-T
+	128783	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		128783-104-T-V2-organoid
+	128783	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	1			Stable Disease		128783-104-T-V2-organoid
+	128783	Fluorouracil	Chemotherapy	Not provided	Not provided	5			Disease Progression		128783-104-T-V2-organoid
+	128783	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Stable Disease		128783-104-T-V2-organoid
+	128783	Bevacizumab	Targeted therapy	Not provided	Not provided	5			Disease Progression		128783-104-T-V2-organoid
+	324944	Gebasaxturev	Immunotherapy	Not provided	01/01/2015	Not provided			Stable Disease		324944-112-T-J3-PDC
+	324944	CVD Regimen+Interferon Alfa-N1+Ribocytokine IL-2 BNT151	Chemotherapy+Immunotherapy+Immunotherapy	Not provided	Not provided	1			Not provided		324944-112-T-J3-PDC
+	324944	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		324944-112-T-J3-PDC
+	413561	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Not provided		413561-133-T
+	413561	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	13			Disease Progression		413561-133-T
+	413561	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		413561-133-T
+	413561	Bevacizumab+Irinotecan	Targeted therapy+Chemotherapy	Not provided	Not provided	11			Disease Progression		413561-133-T
+	413561	Regorafenib	Targeted therapy	Not provided	Not provided	2			Disease Progression		413561-133-T
+	184893	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/12/2013	Not provided			Complete Response		184893-071-T
+	184893	Adavosertib	Targeted therapy	Not provided	Not provided	6			Complete Response		184893-071-T
+	184893	Cetuximab	Targeted therapy	Not provided	Not provided	0			Complete Response		184893-071-T
+	184893	Cisplatin	Chemotherapy	Not provided	Not provided	0			Not provided		184893-071-T
+	184893	Docetaxel	Immunotherapy	Not provided	Not provided	4			Partial Response		184893-071-T
+	184893	Docetaxel	Immunotherapy	Not provided	Not provided	2			Disease Progression		184893-071-T
+	184893	Cetuximab	Targeted therapy	Not provided	Not provided	2			Disease Progression		184893-071-T
+	184893	Capecitabine+Carboplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		184893-071-T
+	184893	Methotrexate	Chemotherapy	Not provided	Not provided	3			Disease Progression		184893-071-T
+	184893	Adavosertib	Targeted therapy	Not provided	Not provided	5			Partial Response		184893-071-T
+	292921	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		292921-168-R
+	292921	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		292921-168-R-V1-organoid
+	633993	Romiplostim+Ipilimumab+Talimogene Laherparepvec	Immunotherapy+Targeted therapy+Immunotherapy	Not provided	Not provided	Not provided			Disease Progression		633993-097-R
+	287954	Radiation Exposure	Radiation therapy	Not provided	Not provided	3			Partial Response		287954-098-R
+	287954	Cyclophosphamide+Doxorubicin+Vincristine	Chemotherapy	Not provided	Not provided	3			Partial Response		287954-098-R
+	287954	Etoposide+Ifosfamide	Chemotherapy	Not provided	Not provided	3			Partial Response		287954-098-R
+	287954	Radiation Exposure	Radiation therapy	Not provided	Not provided	3			Partial Response		287954-098-R-J1-PDC
+	287954	Cyclophosphamide+Doxorubicin+Vincristine	Chemotherapy	Not provided	Not provided	3			Partial Response		287954-098-R-J1-PDC
+	287954	Etoposide+Ifosfamide	Chemotherapy	Not provided	Not provided	3			Partial Response		287954-098-R-J1-PDC
+	431354	Bevacizumab	Targeted therapy	Not provided	Not provided	4			Stable Disease		431354-103-R
+	572874	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Not provided		572874-153-T
+	572874	Bevacizumab+Carboplatin+Paclitaxel	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	22			Complete Response		572874-153-T
+	572874	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	3			Not provided		572874-153-T
+	572874	Docetaxel	Immunotherapy	Not provided	Not provided	5			Partial Response		572874-153-T
+	572874	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		572874-153-T
+	572874	Bevacizumab+Dasatinib	Targeted therapy	Not provided	Not provided	4			Stable Disease		572874-153-T
+	695669	Talimogene Laherparepvec	Immunotherapy	Not provided	Not provided	4			Stable Disease		695669-166-R
+	261386	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	0			Stable Disease		261386-189-R
+	933738	Cisplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	2			Stable Disease		933738-175-T
+	933738	Carboplatin+Pemetrexed	Chemotherapy	Not provided	Not provided	1			Disease Progression		933738-175-T
+	855422	Cisplatin+Doxorubicin+Methotrexate+Vinblastine	Chemotherapy	Not provided	Not provided	0			Not provided		855422-203-R
+	743489	Pazopanib Hydrochloride+Tivantinib	Targeted therapy	Not provided	01/10/2013	Not provided			Stable Disease		743489-274-T
+	743489	Sunitinib Malate	Targeted therapy	Not provided	Not provided	3			Disease Progression		743489-274-T
+	743489	Everolimus	Targeted therapy	Not provided	Not provided	1			Disease Progression		743489-274-T
+	743489	Bevacizumab+Capecitabine+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		743489-274-T
+	743489	Indotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		743489-274-T
+	743489	Pazopanib Hydrochloride+Tivantinib	Targeted therapy	Not provided	01/10/2013	Not provided			Stable Disease		743489-274-T-PDC
+	743489	Sunitinib Malate	Targeted therapy	Not provided	Not provided	3			Disease Progression		743489-274-T-PDC
+	743489	Everolimus	Targeted therapy	Not provided	Not provided	1			Disease Progression		743489-274-T-PDC
+	743489	Bevacizumab+Capecitabine+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		743489-274-T-PDC
+	743489	Indotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		743489-274-T-PDC
+	743489	Pazopanib Hydrochloride+Tivantinib	Targeted therapy	Not provided	01/10/2013	Not provided			Stable Disease		743489-274-T-V1-organoid
+	743489	Sunitinib Malate	Targeted therapy	Not provided	Not provided	3			Disease Progression		743489-274-T-V1-organoid
+	743489	Everolimus	Targeted therapy	Not provided	Not provided	1			Disease Progression		743489-274-T-V1-organoid
+	743489	Bevacizumab+Capecitabine+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		743489-274-T-V1-organoid
+	743489	Indotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		743489-274-T-V1-organoid
+	743489	Pazopanib Hydrochloride+Tivantinib	Targeted therapy	Not provided	01/10/2013	Not provided			Stable Disease		743489-281-T
+	743489	Sunitinib Malate	Targeted therapy	Not provided	Not provided	3			Disease Progression		743489-281-T
+	743489	Everolimus	Targeted therapy	Not provided	Not provided	1			Disease Progression		743489-281-T
+	743489	Bevacizumab+Capecitabine+Gemcitabine	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Stable Disease		743489-281-T
+	743489	Indotecan	Chemotherapy	Not provided	Not provided	3			Stable Disease		743489-281-T
+	625472	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Partial Response		625472-104-R
+	349418	Doxorubicin+Gemcitabine+Vinorelbine	Chemotherapy	Not provided	Not provided	4			Complete Response		349418-098-R
+	156681	Decitabine+Vemurafenib	Chemotherapy+Targeted therapy	Not provided	Not provided	1			Disease Progression		156681-154-R-J1-PDC
+	156681	Talimogene Laherparepvec+Ipilimumab	Immunotherapy+Targeted therapy	Not provided	Not provided	3			Partial Response		156681-154-R-J1-PDC
+	156681	Decitabine+Vemurafenib	Chemotherapy+Targeted therapy	Not provided	Not provided	1			Disease Progression		156681-154-R
+	156681	Talimogene Laherparepvec+Ipilimumab	Immunotherapy+Targeted therapy	Not provided	Not provided	3			Partial Response		156681-154-R
+	519858	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Partial Response		519858-162-T
+	519858	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Partial Response		519858-162-T
+	519858	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	12			Stable Disease		519858-162-T
+	519858	Regorafenib	Targeted therapy	Not provided	Not provided	1			Not provided		519858-162-T
+	519858	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Partial Response		519858-162-T-J1-PDC
+	519858	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	7			Partial Response		519858-162-T-J1-PDC
+	519858	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	12			Stable Disease		519858-162-T-J1-PDC
+	519858	Regorafenib	Targeted therapy	Not provided	Not provided	1			Not provided		519858-162-T-J1-PDC
+	349418	Doxorubicin+Gemcitabine+Vinorelbine	Chemotherapy	Not provided	Not provided	4			Complete Response		349418-098-R-PDC
+	117519	Bicalutamide+Leuprolide	Hormone therapy	Not provided	Not provided	6			Disease Progression		117519-064-T
+	117519	Bevacizumab+Docetaxel+Lenalidomide	Targeted therapy+Immunotherapy+Immunotherapy	Not provided	Not provided	18			Stable Disease		117519-064-T
+	117519	Cabazitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		117519-064-T
+	117519	Carboplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Disease Progression		117519-064-T
+	117519	Flutamide	Hormone therapy	Not provided	Not provided	3			Disease Progression		117519-064-T
+	767577	Pazopanib Hydrochloride	Targeted therapy	Not provided	Not provided	1			Disease Progression		767577-098-T
+	771514	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Stable Disease		771514-170-T
+	771514	Vinorelbine	Chemotherapy	Not provided	Not provided	3			Stable Disease		771514-170-T
+	249823	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Partial Response		249823-099-T
+	249823	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	4			Partial Response		249823-099-T
+	249823	Bevacizumab+Docetaxel	Targeted therapy+Immunotherapy	Not provided	Not provided	2			Partial Response		249823-099-T
+	249823	Bevacizumab+Letrozole	Targeted therapy+Hormone therapy	Not provided	Not provided	48			Partial Response		249823-099-T
+	249823	Docetaxel	Immunotherapy	Not provided	Not provided	2			Partial Response		249823-099-T
+	249823	Exemestane	Hormone therapy	Not provided	Not provided	3			Disease Progression		249823-099-T
+	249823	Pegylated Liposomal Doxorubicin Hydrochloride	Chemotherapy	Not provided	Not provided	2			Disease Progression		249823-099-T
+	249823	Paclitaxel	Chemotherapy	Not provided	Not provided	3			Stable Disease		249823-099-T
+	249823	Topotecan	Chemotherapy	Not provided	Not provided	6			Stable Disease		249823-099-T
+	249823	Bevacizumab+Docetaxel	Targeted therapy+Immunotherapy	Not provided	Not provided	5			Partial Response		249823-099-T
+	249823	Bevacizumab	Targeted therapy	Not provided	Not provided	13			Stable Disease		249823-099-T
+	249823	Fulvestrant	Hormone therapy	Not provided	Not provided	4			Disease Progression		249823-099-T
+	249823	Capecitabine	Chemotherapy	Not provided	Not provided	2			Disease Progression		249823-099-T
+	K24384	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R
+	K24384	Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R
+	K24384	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R-PDC
+	K24384	Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R-PDC
+	K24384	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R-V2-organoid
+	K24384	Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		K24384-001-R-V2-organoid
+	512744	BCG Vaccine	Immunotherapy	Not provided	Not provided	1			Disease Progression		512744-197-R
+	512744	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	4			Partial Response		512744-197-R
+	889142	Mitomycin	Chemotherapy	Not provided	Not provided	Not provided			Stable Disease		889142-216-R
+	889142	BCG Vaccine	Immunotherapy	Not provided	Not provided	Not provided			Stable Disease		889142-216-R
+	889142	Mitomycin	Chemotherapy	Not provided	Not provided	Not provided			Stable Disease		889142-216-R-J1-PDC
+	889142	BCG Vaccine	Immunotherapy	Not provided	Not provided	Not provided			Stable Disease		889142-216-R-J1-PDC
+	174941	Biochemotherapy	Chemotherapy	Not provided	Not provided	2			Stable Disease		174941-126-T
+	779769	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		779769-127-R
+	779769	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		779769-127-R-V2-organoid
+	158883	Doxorubicin+Ifosfamide+Mesna	Chemotherapy+Chemotherapy+Not provided	Not provided	Not provided	8			Partial Response		158883-120-T
+	158883	Docetaxel+Gemcitabine	Immunotherapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		158883-120-T
+	158883	Pazopanib Hydrochloride+Trametinib	Targeted therapy	Not provided	Not provided	3			Disease Progression		158883-120-T
+	158883	Azacitidine+Romidepsin	Chemotherapy+Targeted therapy	Not provided	Not provided	2			Disease Progression		158883-120-T
+	BL0479	Carboplatin+Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		BL0479-F1894
+	BL0479	Carboplatin+Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		BL0479-F1894-V1-organoid
+	BL0479	Carboplatin+Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	Not provided			Not provided		BL0479-F1894-PDC
+	114551	Onalespib	Targeted therapy	Not provided	01/03/2013	Not provided			Disease Progression		114551-080-T
+	114551	Hsp90-targeted Photosensitizer HS-201	Targeted therapy	Not provided	Not provided	2			Disease Progression		114551-080-T
+	114551	Cisplatin+Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Disease Progression		114551-080-T
+	114551	Onalespib	Targeted therapy	Not provided	01/03/2013	Not provided			Disease Progression		114551-080-T-V1-organoid
+	114551	Hsp90-targeted Photosensitizer HS-201	Targeted therapy	Not provided	Not provided	2			Disease Progression		114551-080-T-V1-organoid
+	114551	Cisplatin+Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Disease Progression		114551-080-T-V1-organoid
+	114434	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		114434-197-R
+	114434	Bevacizumab+Temozolomide	Targeted therapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		114434-197-R
+	515677	Gebasaxturev	Immunotherapy	Not provided	Not provided	3			Stable Disease		515677-202-R
+	515677	Ipilimumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		515677-202-R
+	144555	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		144555-231-T
+	144555	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	1			Not provided		144555-231-T
+	144555	Fluorouracil+Bevacizumab	Chemotherapy+Targeted therapy	Not provided	Not provided	16			Stable Disease		144555-231-T
+	324938	Thiotepa	Chemotherapy	Not provided	Not provided	1			Disease Progression		324938-238-R-J1-PDC
+	324938	BCG Vaccine	Immunotherapy	Not provided	Not provided	0			Complete Response		324938-238-R-J1-PDC
+	324938	Thiotepa	Chemotherapy	Not provided	Not provided	1			Disease Progression		324938-238-R
+	324938	BCG Vaccine	Immunotherapy	Not provided	Not provided	0			Complete Response		324938-238-R
+	698357	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		698357-238-R
+	698357	Doxorubicin	Chemotherapy	Not provided	Not provided	0			Disease Progression		698357-238-R
+	698357	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Disease Progression		698357-238-R-J1-PDC
+	698357	Doxorubicin	Chemotherapy	Not provided	Not provided	0			Disease Progression		698357-238-R-J1-PDC
+	235635	Bevacizumab+Cisplatin+Paclitaxel	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		235635-245-T
+	235635	Paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		235635-245-T
+	235635	Cisplatin	Chemotherapy	Not provided	Not provided	1			Not provided		235635-245-T
+	235635	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		235635-245-T
+	931267	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Partial Response		931267-113-T-J1-PDC
+	931267	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Stable Disease		931267-113-T-J1-PDC
+	931267	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	6			Disease Progression		931267-113-T-J1-PDC
+	931267	Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		931267-113-T-J1-PDC
+	931267	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		931267-113-T-J1-PDC
+	931267	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		931267-113-T-J1-PDC
+	931267	Bevacizumab	Targeted therapy	Not provided	Not provided	2			Disease Progression		931267-113-T-J1-PDC
+	931267	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		931267-113-T-J1-PDC
+	931267	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Partial Response		931267-113-T
+	931267	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Stable Disease		931267-113-T
+	931267	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	6			Disease Progression		931267-113-T
+	931267	Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Disease Progression		931267-113-T
+	931267	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		931267-113-T
+	931267	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		931267-113-T
+	931267	Bevacizumab	Targeted therapy	Not provided	Not provided	2			Disease Progression		931267-113-T
+	931267	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		931267-113-T
+	875164	5-Fluoro-2-Deoxycytidine+Tetrahydrouridine	Chemotherapy+Radiation therapy	Not provided	01/06/2017	Not provided			Not provided		875164-322-T-V2-organoid
+	875164	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		875164-322-T-V2-organoid
+	875164	Ipilimumab	Targeted therapy	Not provided	Not provided	2			Disease Progression		875164-322-T-V2-organoid
+	875164	Pembrolizumab	Targeted therapy	Not provided	Not provided	6			Stable Disease		875164-322-T-V2-organoid
+	875164	Interleukin-2	Immunotherapy	Not provided	Not provided	1			Not provided		875164-322-T-V2-organoid
+	875164	5-Fluoro-2-Deoxycytidine+Tetrahydrouridine	Chemotherapy+Radiation therapy	Not provided	01/06/2017	Not provided			Not provided		875164-322-T
+	875164	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		875164-322-T
+	875164	Ipilimumab	Targeted therapy	Not provided	Not provided	2			Disease Progression		875164-322-T
+	875164	Pembrolizumab	Targeted therapy	Not provided	Not provided	6			Stable Disease		875164-322-T
+	875164	Interleukin-2	Immunotherapy	Not provided	Not provided	1			Not provided		875164-322-T
+	875164	5-Fluoro-2-Deoxycytidine+Tetrahydrouridine	Chemotherapy+Radiation therapy	Not provided	01/06/2017	Not provided			Not provided		875164-322-T-J2-PDC
+	875164	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		875164-322-T-J2-PDC
+	875164	Ipilimumab	Targeted therapy	Not provided	Not provided	2			Disease Progression		875164-322-T-J2-PDC
+	875164	Pembrolizumab	Targeted therapy	Not provided	Not provided	6			Stable Disease		875164-322-T-J2-PDC
+	875164	Interleukin-2	Immunotherapy	Not provided	Not provided	1			Not provided		875164-322-T-J2-PDC
+	979744	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		979744-088-R
+	979744	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Partial Response		979744-088-R
+	979744	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		979744-088-R-V1-organoid
+	979744	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Partial Response		979744-088-R-V1-organoid
+	154431	Capecitabine	Chemotherapy	Not provided	Not provided	3			Partial Response		154431-089-R-J1-PDC
+	154431	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Partial Response		154431-089-R-J1-PDC
+	154431	Capecitabine	Chemotherapy	Not provided	Not provided	3			Partial Response		154431-089-R
+	154431	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Partial Response		154431-089-R
+	146476	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		146476-266-R
+	146476	Bicalutamide+Leuprolide	Hormone therapy	Not provided	Not provided	1			Disease Progression		146476-266-R
+	324363	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/10/2015	Not provided			Not provided		324363-279-T
+	324363	Capecitabine	Chemotherapy	Not provided	Not provided	6			Stable Disease		324363-279-T
+	324363	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Disease Progression		324363-279-T
+	324363	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		324363-279-T
+	324363	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Not provided		324363-279-T
+	324363	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/10/2015	Not provided			Not provided		324363-279-T-J1-PDC
+	324363	Capecitabine	Chemotherapy	Not provided	Not provided	6			Stable Disease		324363-279-T-J1-PDC
+	324363	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	9			Disease Progression		324363-279-T-J1-PDC
+	324363	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	4			Disease Progression		324363-279-T-J1-PDC
+	324363	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Not provided		324363-279-T-J1-PDC
+	825997	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Stable Disease		825997-103-R
+	825997	BCG Vaccine	Immunotherapy	Not provided	Not provided	1			Disease Progression		825997-103-R
+	825997	Leuprolide	Hormone therapy	Not provided	Not provided	0			Disease Progression		825997-103-R
+	825997	Bicalutamide	Hormone therapy	Not provided	Not provided	0			Disease Progression		825997-103-R
+	112475	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	9			Partial Response		112475-105-R
+	112475	Bevacizumab+Carboplatin+Paclitaxel	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	1			Partial Response		112475-105-R
+	112475	Bevacizumab	Targeted therapy	Not provided	Not provided	8			Disease Progression		112475-105-R
+	112475	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	5			Disease Progression		112475-105-R
+	112475	Bevacizumab+Pemetrexed	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		112475-105-R
+	112475	Paclitaxel	Chemotherapy	Not provided	Not provided	20			Stable Disease		112475-105-R
+	273541	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		273541-280-R
+	273541	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		273541-280-R-V1-organoid
+	253994	Fluorouracil	Chemotherapy	Not provided	Not provided	Not provided			Disease Progression		253994-281-T
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Disease Progression		253994-281-T
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	8			Disease Progression		253994-281-T
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	3			Disease Progression		253994-281-T
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		253994-281-T
+	253994	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Sorafenib	Chemotherapy	Not provided	Not provided	2			Disease Progression		253994-281-T
+	253994	Capecitabine	Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T
+	253994	Fluorouracil	Chemotherapy	Not provided	Not provided	Not provided			Disease Progression		253994-281-T-J1-PDC
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Disease Progression		253994-281-T-J1-PDC
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	8			Disease Progression		253994-281-T-J1-PDC
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	3			Disease Progression		253994-281-T-J1-PDC
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		253994-281-T-J1-PDC
+	253994	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Sorafenib	Chemotherapy	Not provided	Not provided	2			Disease Progression		253994-281-T-J1-PDC
+	253994	Capecitabine	Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-J1-PDC
+	253994	Fluorouracil	Chemotherapy	Not provided	Not provided	Not provided			Disease Progression		253994-281-T-V2-organoid
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Disease Progression		253994-281-T-V2-organoid
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	8			Disease Progression		253994-281-T-V2-organoid
+	253994	Fluorouracil+Bevacizumab+Leucovorin	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	253994	Leucovorin+Fluorouracil+Irinotecan+Ziv-Aflibercept	Chemotherapy+Chemotherapy+Chemotherapy+Targeted therapy	Not provided	Not provided	3			Disease Progression		253994-281-T-V2-organoid
+	253994	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Disease Progression		253994-281-T-V2-organoid
+	253994	Bevacizumab	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	253994	Bevacizumab+Capecitabine	Targeted therapy+Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	253994	Sorafenib	Chemotherapy	Not provided	Not provided	2			Disease Progression		253994-281-T-V2-organoid
+	253994	Capecitabine	Chemotherapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	253994	Regorafenib	Targeted therapy	Not provided	Not provided	1			Disease Progression		253994-281-T-V2-organoid
+	945586	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Complete Response		945586-337-R
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R
+	945586	Bevacizumab+Temozolomide	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Partial Response		945586-337-R
+	945586	Bevacizumab	Targeted therapy	Not provided	Not provided	12			Disease Progression		945586-337-R
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R
+	945586	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Complete Response		945586-337-R-J1-PDC
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R-J1-PDC
+	945586	Bevacizumab+Temozolomide	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Partial Response		945586-337-R-J1-PDC
+	945586	Bevacizumab	Targeted therapy	Not provided	Not provided	12			Disease Progression		945586-337-R-J1-PDC
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R-J1-PDC
+	945586	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Complete Response		945586-337-R-V1-organoid
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R-V1-organoid
+	945586	Bevacizumab+Temozolomide	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Partial Response		945586-337-R-V1-organoid
+	945586	Bevacizumab	Targeted therapy	Not provided	Not provided	12			Disease Progression		945586-337-R-V1-organoid
+	945586	Temozolomide	Chemotherapy	Not provided	Not provided	2			Disease Progression		945586-337-R-V1-organoid
+	572918	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Stable Disease		572918-348-R
+	572918	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Stable Disease		572918-348-R-V1-organoid
+	114348	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Partial Response		114348-004-R
+	197587	Doxorubicin+Ifosfamide	Chemotherapy	Not provided	Not provided	5			Partial Response		197587-005-T
+	197587	Gemcitabine+Vinorelbine	Chemotherapy	Not provided	Not provided	2			Disease Progression		197587-005-T
+	673867	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Complete Response		673867-039-R-V2-organoid
+	459534	BCG Vaccine	Immunotherapy	Not provided	Not provided	0			Disease Progression		459534-040-R
+	377368	Cediranib Maleate	Targeted therapy	Not provided	01/12/2015	Not provided			Disease Progression		377368-042-T2
+	541839	Carboplatin	Chemotherapy	Not provided	Not provided	0			Not provided		541839-054-R
+	541839	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		541839-054-R
+	541839	Carboplatin	Chemotherapy	Not provided	Not provided	0			Not provided		541839-054-R-V1-organoid
+	541839	Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		541839-054-R-V1-organoid
+	742811	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Stable Disease		742811-063-R
+	742811	Capecitabine+Temozolomide	Chemotherapy	Not provided	Not provided	12			Disease Progression		742811-063-R
+	742811	Everolimus	Targeted therapy	Not provided	Not provided	4			Stable Disease		742811-063-R
+	742811	Sunitinib Malate	Targeted therapy	Not provided	Not provided	7			Disease Progression		742811-063-R
+	742811	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Disease Progression		742811-063-R
+	936977	Radiation Exposure	Radiation therapy	Not provided	Not provided	3			Disease Progression		936977-285-R
+	165257	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Stable Disease		165257-294-R
+	244727	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Not provided		244727-301-R
+	331535	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Not provided		331535-300-R
+	331535	Tamoxifen	Hormone therapy	Not provided	Not provided	60			Not provided		331535-300-R
+	271591	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Partial Response		271591-306-R
+	328469	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		328469-098-R
+	328469	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		328469-098-R-V1-organoid
+	299373	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/03/2016	Not provided			Disease Progression		299373-070-T
+	299373	Capecitabine	Chemotherapy	Not provided	Not provided	6			Not provided		299373-070-T
+	299373	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Stable Disease		299373-070-T
+	299373	Cetuximab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Not provided		299373-070-T
+	299373	Temozolomide+Methoxyamine	Chemotherapy	Not provided	01/03/2016	Not provided			Disease Progression		299373-070-T-V1-organoid
+	299373	Capecitabine	Chemotherapy	Not provided	Not provided	6			Not provided		299373-070-T-V1-organoid
+	299373	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Stable Disease		299373-070-T-V1-organoid
+	299373	Cetuximab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	0			Not provided		299373-070-T-V1-organoid
+	512936	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		512936-074-R-J1-PDC
+	512936	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		512936-074-R
+	623946	Capecitabine	Chemotherapy	Not provided	Not provided	3			Complete Response		623946-074-R
+	623946	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Stable Disease		623946-074-R
+	636974	Imatinib Mesylate	Targeted therapy	Not provided	Not provided	27			Stable Disease		636974-082-R
+	679263	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	2			Stable Disease		679263-084-R-V1-organoid
+	439559	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		439559-082-T-J2-PDC
+	439559	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Not provided		439559-082-T-V1-organoid
+	269647	Bevacizumab+Cisplatin+Pemetrexed	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		269647-328-T
+	269647	Bevacizumab+Carboplatin+Pemetrexed	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		269647-328-T
+	269647	Bevacizumab+Pemetrexed	Targeted therapy+Chemotherapy	Not provided	Not provided	8			Stable Disease		269647-328-T
+	269647	Atezolizumab	Targeted therapy	Not provided	Not provided	9			Stable Disease		269647-328-T
+	269647	Bevacizumab+Cisplatin+Pemetrexed	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	6			Stable Disease		269647-328-T-V1-organoid
+	269647	Bevacizumab+Carboplatin+Pemetrexed	Targeted therapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		269647-328-T-V1-organoid
+	269647	Bevacizumab+Pemetrexed	Targeted therapy+Chemotherapy	Not provided	Not provided	8			Stable Disease		269647-328-T-V1-organoid
+	269647	Atezolizumab	Targeted therapy	Not provided	Not provided	9			Stable Disease		269647-328-T-V1-organoid
+	324938	Thiotepa	Chemotherapy	Not provided	Not provided	1			Disease Progression		324938-238-R-V1-organoid
+	324938	BCG Vaccine	Immunotherapy	Not provided	Not provided	0			Complete Response		324938-238-R-V1-organoid
+	813469	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Partial Response		813469-196-T-J1-PDC
+	813469	Cisplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	1			Partial Response		813469-196-T-J1-PDC
+	195496	Bleomycin+Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	0			Not provided		195496-121-R
+	195496	Cisplatin	Chemotherapy	Not provided	Not provided	0			Not provided		195496-121-R
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R3
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R3
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R3
+	233499	Bevacizumab+XELIRI Regimen	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		233499-124-R
+	233499	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		233499-124-R
+	233499	Nivolumab	Targeted therapy	Not provided	Not provided	7			Stable Disease		233499-124-R
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R3-V3-organoid
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R3-V3-organoid
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R3-V3-organoid
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R4
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R4
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R4
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R8
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R8
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R8
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R8-V2-organoid
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R8-V2-organoid
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R8-V2-organoid
+	233499	Bevacizumab+XELIRI Regimen	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		233499-124-R-V2-organoid
+	233499	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		233499-124-R-V2-organoid
+	233499	Nivolumab	Targeted therapy	Not provided	Not provided	7			Stable Disease		233499-124-R-V2-organoid
+	233499	Bevacizumab+XELIRI Regimen	Targeted therapy+Chemotherapy	Not provided	Not provided	3			Stable Disease		233499-124-R-J2-PDC
+	233499	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		233499-124-R-J2-PDC
+	233499	Nivolumab	Targeted therapy	Not provided	Not provided	7			Stable Disease		233499-124-R-J2-PDC
+	475296	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Stable Disease		475296-252-R-V1-organoid
+	475296	Fluorouracil	Chemotherapy	Not provided	Not provided	2			Stable Disease		475296-252-R-J1-PDC
+	485368	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	3			Disease Progression		485368-065-R4-J2-PDC
+	485368	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	1			Disease Progression		485368-065-R4-J2-PDC
+	485368	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		485368-065-R4-J2-PDC
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R2-J3-PDC
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R1-J2-PDC
+	884544	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R
+	884544	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R
+	884544	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R-V1-organoid
+	884544	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R-V1-organoid
+	522493	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Disease Progression		522493-142-R-J1-PDC
+	522493	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Not provided		522493-142-R-J1-PDC
+	522493	Capecitabine	Chemotherapy	Not provided	Not provided	2			Not provided		522493-142-R-J1-PDC
+	522493	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Disease Progression		522493-142-R-V2-organoid
+	522493	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Not provided		522493-142-R-V2-organoid
+	522493	Capecitabine	Chemotherapy	Not provided	Not provided	2			Not provided		522493-142-R-V2-organoid
+	522493	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Disease Progression		522493-142-R
+	522493	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	3			Not provided		522493-142-R
+	522493	Capecitabine	Chemotherapy	Not provided	Not provided	2			Not provided		522493-142-R
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R2
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R2
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R2
+	192522	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	3			Not provided		192522-019-R-J2-PDC
+	968666	Cisplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Stable Disease		968666-278-R
+	968666	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Stable Disease		968666-278-R
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R2-J1-PDC
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R2-J1-PDC
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R2-J1-PDC
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R5
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R5
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R5
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R5-J2-PDC
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R5-J2-PDC
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R5-J2-PDC
+	377594	Dacarbazine+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Stable Disease		377594-074-R
+	835911	Denosumab+Fulvestrant	Targeted therapy+Hormone therapy	Not provided	01/02/2017	Not provided			Stable Disease		835911-074-R
+	835911	Carboplatin+Paclitaxel	Chemotherapy	Not provided	Not provided	2			Partial Response		835911-074-R
+	835911	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Disease Progression		835911-074-R
+	835911	Denosumab+Fulvestrant+Palbociclib	Targeted therapy+Hormone therapy+Targeted therapy	Not provided	Not provided	9			Stable Disease		835911-074-R
+	778377	Carboplatin+Paclitaxel	Chemotherapy	Not provided	01/03/2017	Not provided			Not provided		778377-087-R-V1-organoid
+	731979	Cyclophosphamide+Doxorubicin	Chemotherapy	Not provided	Not provided	2			Not provided		731979-095-R
+	731979	Paclitaxel	Chemotherapy	Not provided	Not provided	1			Not provided		731979-095-R
+	731979	Eribulin Mesylate	Chemotherapy	Not provided	Not provided	4			Not provided		731979-095-R
+	946996	Doxorubicin+Ifosfamide	Chemotherapy	Not provided	Not provided	0			Not provided		946996-313-R
+	823721	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		823721-103-R
+	884544	Capecitabine	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R-J1-PDC
+	884544	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		884544-143-R-J1-PDC
+	892531	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		892531-110-R
+	892531	Fluorouracil	Chemotherapy	Not provided	Not provided	1			Not provided		892531-110-R
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R3-V2-organoid
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R3-V2-organoid
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R3-V2-organoid
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R3-J5-PDC
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R3-J5-PDC
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R3-J5-PDC
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R4
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R4
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R4
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R2
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R2
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R2
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R3
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R3
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R3
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R1
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R1-V1-organoid
+	454973	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	7			Disease Progression		454973-116-R2-J3-PDC
+	454973	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	6			Disease Progression		454973-116-R2-J3-PDC
+	454973	Fluorouracil	Chemotherapy	Not provided	Not provided	0			Not provided		454973-116-R2-J3-PDC
+	967376	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		967376-340-R-V1-organoid
+	967376	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		967376-340-R-J2-PDC
+	639262	Cisplatin+Doxorubicin+Methotrexate+Vinblastine	Chemotherapy	Not provided	Not provided	2			Stable Disease		639262-121-R
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R4
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R4
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R4
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R1
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R1-J4-PDC
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1-J4-PDC
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1-J4-PDC
+	217524	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	9			Disease Progression		217524-143-R1-V1-organoid
+	217524	Fluorouracil+Leucovorin+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1-V1-organoid
+	217524	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		217524-143-R1-V1-organoid
+	455876	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Not provided		455876-151-R-V1-organoid
+	455876	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Not provided		455876-151-R-J1-PDC
+	388556	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R
+	388556	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R
+	388556	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Partial Response		388556-164-R
+	388556	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Partial Response		388556-164-R
+	388556	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R-V1-organoid
+	388556	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R-V1-organoid
+	388556	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Partial Response		388556-164-R-V1-organoid
+	388556	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Partial Response		388556-164-R-V1-organoid
+	388556	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R-J1-PDC
+	388556	Leucovorin+Fluorouracil+Irinotecan	Chemotherapy	Not provided	Not provided	0			Not provided		388556-164-R-J1-PDC
+	388556	Capecitabine+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Partial Response		388556-164-R-J1-PDC
+	388556	Bevacizumab+Leucovorin+Fluorouracil+Irinotecan	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	5			Partial Response		388556-164-R-J1-PDC
+	244465	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Partial Response		244465-170-R
+	244465	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Partial Response		244465-170-R-V1-organoid
+	244465	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Partial Response		244465-170-R-J1-PDC
+	485176	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4-J1-PDC
+	485176	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		485176-168-R4-J1-PDC
+	588824	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Disease Progression		588824-173-R
+	555411	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	6			Complete Response		555411-135-R
+	128162	Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	0			Not provided		128162-247-R
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R5-V5-organoid
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R3
+	868763	Carboplatin+Cyclophosphamide+Doxorubicin+Paclitaxel	Chemotherapy	Not provided	Not provided	5			Partial Response		868763-120-R
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R2-V3-organoid
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2-V3-organoid
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2-V3-organoid
+	628479	Carboplatin+Pembrolizumab+Pemetrexed	Chemotherapy+Targeted therapy+Chemotherapy	Not provided	01/12/2018	Not provided			Not provided		628479-137-R2
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2
+	628479	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		628479-137-R2
+	K75429	Leuprolide	Hormone therapy	Not provided	Not provided	Not provided			Not provided		K75429-239-R
+	352319	Anastrozole	Hormone therapy	Not provided	Not provided	6			Not provided		352319-331-R
+	712175	Doxorubicin+Ifosfamide	Chemotherapy	Not provided	Not provided	0			Not provided		712175-110-R
+	918122	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Stable Disease		918122-036-R
+	266295	Radiation Exposure	Radiation therapy	Not provided	Not provided	1			Not provided		266295-075-R-J1-PDC
+	592915	Capecitabine+Epirubicin+Oxaliplatin	Chemotherapy	Not provided	Not provided	1			Not provided		592915-224-R
+	218243	Radiation Exposure	Radiation therapy	Not provided	Not provided	3			Stable Disease		218243-119-R
+	994434	Cyclophosphamide+Doxorubicin+Etoposide+Ifosfamide+Vincristine	Chemotherapy	Not provided	01/05/2015	Not provided			Not provided		994434-217-R
+	521389	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	0			Disease Progression		521389-187-R
+	343268	Adavosertib	Targeted therapy	Not provided	Not provided	1			Not provided		343268-274-T
+	516955	Doxorubicin+Ifosfamide	Chemotherapy	Not provided	Not provided	2			Partial Response		516955-315-R
+	377368	Cediranib Maleate	Targeted therapy	Not provided	01/12/2015	Not provided			Disease Progression		377368-042-T1
+	823721	Radiation Exposure	Radiation therapy	Not provided	Not provided	2			Complete Response		823721-103-R-J1-PDC
+	738166	Capecitabine	Chemotherapy	Not provided	Not provided	2			Partial Response		738166-108-R
+	712881	Cisplatin+Ifosfamide+Paclitaxel	Chemotherapy	Not provided	Not provided	4			Disease Progression		712881-215-R-V1-organoid
+	862795	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	5			Disease Progression		862795-172-R-J1-PDC
+	227169	Carboplatin+Etoposide	Chemotherapy	Not provided	Not provided	3			Complete Response		227169-078-T
+	227169	Gemcitabine+Paclitaxel	Chemotherapy	Not provided	Not provided	6			Stable Disease		227169-078-T
+	227169	Cabozantinib	Targeted therapy	Not provided	Not provided	4			Stable Disease		227169-078-T
+	349418	Doxorubicin+Gemcitabine+Vinorelbine	Chemotherapy	Not provided	Not provided	4			Complete Response		349418-098-R-V2-organoid
+	862989	Fluorouracil+Cisplatin	Chemotherapy	Not provided	Not provided	2			Partial Response		862989-056-R-V1-organoid
+	LG0703	Erlotinib	Targeted therapy	Not provided	Not provided	Not provided			Not provided		LG0703-F948-PDC
+	871537	Cisplatin	Chemotherapy	Not provided	Not provided	0			Not provided		871537-170-R
+	855422	Cisplatin+Doxorubicin+Methotrexate+Vinblastine	Chemotherapy	Not provided	Not provided	0			Not provided		855422-203-R-J1-PDC
+	394772	Cisplatin+Gemcitabine	Chemotherapy	Not provided	Not provided	5			Disease Progression		394772-225-R
+	419622	Fluorouracil+Cisplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		419622-098-T
+	926114	Fluorouracil+Irinotecan+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	11			Stable Disease		926114-112-T
+	131542	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Not provided		131542-069-R
+	778377	Carboplatin+Paclitaxel	Chemotherapy	Not provided	01/03/2017	Not provided			Not provided		778377-087-R
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R2
+	385692	Gemcitabine+Nab-paclitaxel	Chemotherapy	Not provided	Not provided	2			Stable Disease		385692-084-R
+	868679	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	2			Not provided		868679-213-R-V1-organoid
+	991263	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	2			Not provided		991263-137-R2-V2-organoid
+	919269	Bevacizumab+Fluorouracil+Leucovorin Calcium+Oxaliplatin	Targeted therapy+Chemotherapy+Chemotherapy+Chemotherapy	Not provided	Not provided	12			Disease Progression		919269-233-R1-J3-PDC
+	LG0703	Erlotinib	Targeted therapy	Not provided	Not provided	Not provided			Not provided		LG0703-F948
+	419622	Fluorouracil+Cisplatin	Chemotherapy	Not provided	Not provided	2			Disease Progression		419622-098-T-V1-organoid
+	136153	Radiation Exposure	Radiation therapy	Not provided	Not provided	0			Complete Response		136153-299-R
+	136153	Tamoxifen	Hormone therapy	Not provided	Not provided	84			Complete Response		136153-299-R
+	673867	Fluorouracil+Leucovorin Calcium+Oxaliplatin	Chemotherapy	Not provided	Not provided	4			Complete Response		673867-039-R

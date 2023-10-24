@@ -1,0 +1,9 @@
+Field	model_id	passage_range	treatment_name	treatment_type	treatment_dose	administration_route	treatment_schedule	treatment_length	treatment_response	response_classification	platform_id
+	EMC0052PM		Dactolisib	Targeted therapy	40.0 mg/kg	oral gavage			stable disease	modified RECIST criteria	drugdosing
+	EMC0052PM		Trabectedin	Chemotherapy	0.15 mg/kg	intravenous			stable disease	modified RECIST criteria	drugdosing
+	EMC0049PM		Dactolisib	Targeted therapy	40.0 mg/kg	oral gavage			progressive disease	modified RECIST criteria	drugdosing
+	EMC0049PM		Trabectedin	Chemotherapy	0.15 mg/kg	intravenous			progressive disease	modified RECIST criteria	drugdosing
+	EMC0047PR		Dactolisib	Targeted therapy	40.0 mg/kg	oral gavage			partial response	modified RECIST criteria	drugdosing
+	EMC0047PR		Trabectedin	Chemotherapy	0.15 mg/kg	intravenous			partial response	modified RECIST criteria	drugdosing
+	EMC0078TM		Dactolisib	Targeted therapy	40.0 mg/kg	oral gavage			partial response	modified RECIST criteria	drugdosing
+	EMC0078TM		Trabectedin	Chemotherapy	0.15 mg/kg	intravenous			partial response	modified RECIST criteria	drugdosing

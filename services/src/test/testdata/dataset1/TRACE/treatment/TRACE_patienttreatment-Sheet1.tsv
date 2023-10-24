@@ -1,0 +1,81 @@
+Field	patient_id	treatment_name	treatment_type	treatment_dose	treatment_starting_date	treatment_duration	treatment_event	elapsed_time	treatment_response	response_classification	model_id
+#Description	Unique anonymous/de-identified provider ID for the patient	"treatment name, can be surgery, radotherapy,  drug name  or drug combination ( (radiotherapy, chemotherapy, targeted therapy, homorno-therapy))"	"Treatment type categorised as Surgery, Radiation Therapy, Chemotherapy, Immunotherapy, Targeted Therapy, Hormone Therapy"	Treatment dose and unit	treatement starting date in month and year - this data will be transformed in tretamenet event sequences and no dates which are potentially sensitive will appear on the public PDX finder	treatment duration 	"IF DATES ARE ENTERED IN PREVIOUS COLUMN  - DON'T FILL,- treatment event order event 1 correspond to the 1st time a patient was  treated to generate a PDX, subsequent events are incremented by 1 "	"IF TREATMENT DATES ARE ENTERED IN PREVIOUS COLUMNS  - DON'T FILL, if not please provide the time difference between the 1st  event and the current one (in month unit preferably or indicate the units) - treatment event 1 should be 0, treatment event 2 should be 6 if 6 months have elapased between event 1 and  event 2 and treatment event 3 should be 9 if 9 months have elapsed between event 1 and  3 "	reponse of prior treatment treatment	classification used to define response to treatment 	Unique identifier for PDX when treatment was concomitant with PDX creation.
+#Example	CRC0014LM	xenograft	Chemotherapy	7	Jul-09	54			progressive disease	immunohistochemistry	CRL-240
+#Format Requirements	unique for a patient 	list drugs or conpounds or suregry or radiotherapy 	"[Surgery, Radiation Therapy, Chemotherapy, Immunotherapy, Targeted Therapy, Hormone Therapy]"	add the dose and corresponding units	starting date when patient was treated	in months	combination between event and a number	difference between current event and 1st  event- in months	" when possible give response based on RECIST criteria, if not recist explain how response was calculated , NO acronyms"	classification used to define response to treatment based on RECIST or other criteria 	this needs to be unique to represent an aggregated PDX line : combination between a mouse strain and a unique grafted tumour sample
+#Essential?	essential	essential	essential	desirable	essential	desirable	if no dates in treatment starting dates this is essential otherwise desirable	if no dates in treatment starting dates this is essential otherwise desirable	desirable	desirable	essential
+	PTX-BRC-002	Radiation Therapy	Radiation therapy	"55,06 Gy in total"	May-13	1			complete response	RECIST 1.1	
+	PTX-BRC-007	Cyclophosphamide	Chemotherapy	Not provided	Not provided	Not provided			Not provided	Not provided	
+	PTX-BRC-007	Epirubicin+Docetaxel	Chemotherapy+Immunotherapy	Not provided	Not provided	Not provided			Not provided	Not provided	
+	PTX-BRC-008	Fluorouracil+Epirubicin+Cyclophosphamide	Chemotherapy	500 mg/m2 + 75 mg/m2 + 500 mg/m2	Oct-12	2			complete response	RECIST 1.1	
+	PTX-BRC-008	Docetaxel	Immunotherapy	Not provided	Dec-12	2			complete response	RECIST 1.1	
+	PTX-BRC-008	Radiation Therapy	Radiation therapy	50 Gy in total	Mar-13	1			complete response	RECIST 1.1	
+	PTX-BRC-008	Tamoxifen	Hormone therapy	20mg/day	Mar-13	Ongoing			Not provided	Not provided	
+	PTX-BRC-008	Goserelin	Hormone therapy	Not provided	Mar-13	33			Not provided	Not provided	
+	PTX-BRC-008	Paclitaxel+Carboplatin	Chemotherapy	175 mg/m2 + AUC=5	Oct-13	4			complete response	RECIST 1.1	
+	PTX-BRC-008	Radiation Therapy	Radiation therapy	50 Gy in total	Feb-14	1			complete response	RECIST 1.1	
+	PTX-BRC-015	Epirubicin+Cyclophosphamide	Chemotherapy	90 mg/m2 + 600 mg/m2	Mar-15	2			complete response	RECIST 1.1	
+	PTX-BRC-015	Paclitaxel	Chemotherapy	80mg/m2	May-15	0.5			complete response	RECIST 1.1	
+	PTX-BRC-015	Docetaxel	Immunotherapy	75 mg/m2	May-15	2			complete response	RECIST 1.1	
+	PTX-BRC-015	Radiation Therapy	Radiation therapy	"57,26 Gy in total"	Aug-15	1			complete response	RECIST 1.1	
+	PTX-BRC-020	Epirubicin+Cyclophosphamide	Chemotherapy	90 mg/m2 + 600 mg/m2	Jun-15	2.5			stable disease	RECIST 1.1	
+	PTX-BRC-020	Paclitaxel	Chemotherapy	80mg/m2	Jun-15	2			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Radiation Therapy	Radiation therapy	50 Gy in total	Nov-15	1			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Letrozole	Hormone therapy	Not provided	Nov-15	Not provided			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Capecitabine	Chemotherapy	500 mg/m2 + 75 mg/m2 + 500 mg/m2	Feb-16	4			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Denosumab	Targeted therapy	Not provided	Apr-16	5			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Jun-16	2			progressive disease	RECIST 1.1	
+	PTX-BRC-020	Carboplatin+Gemcitabine	Chemotherapy	Not provided	Jun-16	2			progressive disease	RECIST 1.1	
+	PTX-PAC-001	Gemcitabine	Chemotherapy	1000 mg/m2 weekly for 3 wk; every 4 wk for six cycles 	Apr-13	6			stable disease	RECIST 1.1	
+	PTX-PAC-001	Gemcitabine+Cisplatin	Chemotherapy	Gemcitabine 1000 mg/m2 on days 1 and 15 plus cisplatin 50 mg/m2 on days 1 and 15; every 28 d	Feb-14	5			progressive disease	RECIST 1.1	
+	PTX-PAC-001	Cisplatin+FU-LV Regimen	Chemotherapy	"Cisplatin, 50 mg/m2 on day 1, then De Gramont schedule on day 1-2: levofolic acid, 100 mg/m2 and 5-FU, 400 mg/m2 (bolus), at day 1 and 600 mg/m2 continuos infusion on day 1-2. All repeated every 2 weeks"	Jul-14	1			progressive disease	RECIST 1.1	
+	PTX-PAC-001	Cisplatin+FU-LV Regimen	Chemotherapy	"Cisplatin, 50 mg/m2 on day 1, then De Gramont schedule on day 1-2: levofolic acid, 100 mg/m2 and 5-FU, 400 mg/m2 (bolus), at day 1 and 600 mg/m2 continuos infusion on day 1-2. All repeated every 2 weeks. Reduced to 75%"	Oct-14	3			progressive disease	RECIST 1.1	
+	PTX-PAC-002	Gemcitabine	Chemotherapy	1000 mg/m2 weekly for 3 wk; every 4 wk for six cycles 	Mar-13	6			progressive disease	RECIST 1.1	
+	PTX-PAC-003	Gemcitabine	Chemotherapy	1000 mg/m2 weekly for 3 wk; every 4 wk for six cycles 	Not provided	Not provided			progressive disease	RECIST 1.1	
+	PTX-PAC-003	Gemcitabine+Cisplatin	Chemotherapy	Gemcitabine 1000 mg/m2 on days 1 and 15 plus cisplatin 50 mg/m2 on days 1 and 15; every 28 d	Not provided	Not provided			progressive disease	RECIST 1.1	
+	PTX-PAC-004	Gemcitabine+Pimasertib	Chemotherapy+Targeted therapy	"Gemcitabine 1000 mg/m2 weekly (7 of 8 wks in cycle 1, then 3 of 4 wks in subsequent cycles) and 60 mg pimasertib or placebo twice a day"	Jun-13	1			stable disease	RECIST 1.1	
+	PTX-PAC-004	Gemcitabine	Chemotherapy	1000 mg/m2 weekly for 3 wk; every 4 wk for six cycles 	Jul-13	4			progressive disease	RECIST 1.1	
+	PTX-PAC-004	Cisplatin+FU-LV Regimen	Chemotherapy	"Cisplatin, 50 mg/m2 on day 1, then De Gramont schedule on day 1-2: levofolic acid, 100 mg/m2 and 5-FU, 400 mg/m2 (bolus), at day 1 and 600 mg/m2 continuos infusion on day 1-2. All repeated every 2 weeks"	Nov-13	2			progressive disease	RECIST 1.1	
+	PTX-PAC-004	Cisplatin+FU-LV Regimen	Chemotherapy	"Cisplatin, 50 mg/m2 on day 1, then De Gramont schedule on day 1-2: levofolic acid, 100 mg/m2 and 5-FU, 400 mg/m2 (bolus), at day 1 and 600 mg/m2 continuos infusion on day 1-2. All repeated every 3 weeks"	Jan-14	2			progressive disease	RECIST 1.1	
+	PTX-PAC-004	Paclitaxel	Chemotherapy	80mg/m2 weekly	Apr-14	3			progressive disease	RECIST 1.1	
+	PTX-PAC-005	Gemcitabine	Chemotherapy	1000 mg/m2 weekly for 3 wk; every 4 wk for six cycles 	Jul-13	7			stable disease	RECIST 1.1	
+	PTX-PAC-005	Leucovorin+Fluorouracil+Oxaliplatin	Chemotherapy	"Oxaliplatin, 85 mg/m2, levofolic acid, 400 mg/m2 and 5-FU, 400 mg/m2 (bolus), at day 1 and 2400 mg/m2 5-FU continuos infusion on day 1-2. All repeated every 2 weeks"	May-14	8			progressive disease	RECIST 1.1	
+	PTX-PAC-005	Leucovorin+Fluorouracil+Oxaliplatin+Irinotecan	Chemotherapy	"Oxaliplatin, 85 mg/m2, levofolic acid, 400 mg/m2, irinotecan, 180 mg/m2, and 5-FU, 400 mg/m2 (bolus), at day 1 and 2400 mg/m2 5-FU continuos infusion on day 1-2. All repeated every 2 weeks"	Jan-15	4			progressive disease	RECIST 1.1	
+	PTX-PAC-005	Paclitaxel	Chemotherapy	80 mg/m2 weekly (3 out of 4)	May-15	4			progressive disease	RECIST 1.1	
+	PTX-PAC-006	Cyclophosphamide+Doxorubicin+Vincristine+Prednisone	Chemotherapy+Chemotherapy+Chemotherapy+Immunotherapy	"cyclophosphamide 750 mg/m2, doxorubicin 50 mg/m2, vincristine 1-2 mg/m2 on day 1,and prednisone 40 mg/m2 on day 1 to 5. All reduced to 80% and repeated evey 3 weeks"	May-07	3			Complete response	RECIST 1.1	
+	PTX-PAC-006	Cyclophosphamide+Doxorubicin+Vincristine+Prednisone	Chemotherapy+Chemotherapy+Chemotherapy+Immunotherapy	"cyclophosphamide 750 mg/m2, doxorubicin 50 mg/m2, vincristine 1,4 mg/m2 on day 1, and prednisone 40 mg/m2 on day 1 to 5. Doxorubicin and cyclophosphamide reduced to 50% and repeated evey 3 weeks"	Aug-07	1			Complete response	RECIST 1.1	
+	PTX-PAC-006	Vincristine+Chlorambucil+Procarbazine+Prednisone	Chemotherapy+Chemotherapy+Chemotherapy+Immunotherapy	"Vincristine 1,4 mg/m2 on day 1 and 8, chlorambucil, 4 mg/m2, procarbazine 70 mg/m2 and prednisone 25 mg/m2 on day 1 to 14. All repeated evey 4 weeks"	May-08	4			complete response	RECIST 1.1	
+	PTX-PAC-007	Radiation Therapy	Radiation therapy	66 Gy in 33 fractions of 2 Gy each	Apr-13	2.5			Not provided	Not provided	
+	PTX-PAC-007	Gemcitabine	Chemotherapy	"Gemcitabine 1000 mg/m2 weekly (7 of 8 wks in cycle 1, then 3 of 4 wks in subsequent cycles)"	Jul-13	2			progressive disease	RECIST 1.1	
+	PTX-PAC-010	Gemcitabine	Chemotherapy	"Gemcitabine 1000 mg/m2 weekly (7 of 8 wks in cycle 1, then 3 of 4 wks in subsequent cycles)"	Sep-13	2			progressive disease	RECIST 1.1	
+	PTX-PAC-011	Gemcitabine+Cisplatin	Chemotherapy	Gemcitabine 1000 mg/m2 plus cisplatin 50 mg/m2 on days 1 and 8 for 2 weeks followed by one week of rest in a 21-day cycle	Oct-13	14			stable disease	RECIST 1.1	
+	PTX-EMC-025	Radiation Therapy	Radiation therapy	50 Gy total in 25 fractions of 2 Gy each + boost of 16 Gy in 8 fractions of 2 Gy	01/02/2014	1.5	event 1	0	complete response	RECIST 1.1	
+	PTX-EMC-025	Doxorubicin	Chemotherapy	"75mg/m2, every 3 weeks"	01/12/2016	3.5	event 2	34	stable disease	RECIST 1.1	
+	PTX-EMC-025	Ifosfamide	Chemotherapy	"3 g/m2 intravenously on days 1, 2 and 3 every 21 days"	01/10/2017	5	event 3	44	progressive disease	RECIST 1.1	
+	PTX-EMC-025	Octreotide	Hormone therapy	Not provided	01/01/2018	2	event 4	47	progressive disease	RECIST 1.1	
+	PTX-EMC-025	Radiation Therapy	Radiation therapy	50 Gy total in 25 fractions of 2 Gy each + boost of 16 Gy in 8 fractions of 2 Gy	01/02/2014	1.5	event 1	0	complete response	RECIST 1.1	
+	PTX-EMC-025	Doxorubicin	Chemotherapy	"75mg/m2, every 3 weeks"	01/12/2016	3.5	event 2	34	stable disease	RECIST 1.1	
+	PTX-EMC-025	Ifosfamide	Chemotherapy	"3 g/m2 on days 1, 2 and 3 every 21 days"	01/10/2017	5	event 3	44	progressive disease	RECIST 1.1	
+	PTX-EMC-025	Octreotide	Hormone therapy	Not provided	01/01/2018	2	event 4	47	progressive disease	RECIST 1.1	
+	PTX-EMC-026	Doxorubicin	Chemotherapy	"75mg/m2, every 3 weeks"	01/09/2009	3.5	event 1	0	Not provided	Not provided	
+	PTX-EMC-036	Doxorubicin+Evofosfamide	Chemotherapy+Targeted therapy	"300 mg/m2 of TH-302 on Days 1 and 8 of a 21-day cycle, doxorubicin 75 mg/m2 on Day 1 of a 21-day cycle"	01/12/2013	3	event 1	0	progressive disease	RECIST 1.1	
+	PTX-EMC-036	Gemcitabine	Chemotherapy	"1000 mg/m2 on days 1, 8, and 15 of a 28-day schedule"	01/03/2014	4	event 2	3	progressive disease	RECIST 1.1	
+	PTX-EMC-036	Doxorubicin+Evofosfamide	Chemotherapy+Targeted therapy	"300 mg/m2 of TH-302 on Days 1 and 8 of a 21-day cycle, doxorubicin 75 mg/m2 on Day 1 of a 21-day cycle"	01/12/2013	3	event 1	0	progressive disease	RECIST 1.1	
+	PTX-EMC-036	Gemcitabine	Chemotherapy	"1000 mg/m2 on days 1, 8, and 15 of a 28-day schedule"	01/03/2014	4	event 2	3	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Medroxyprogesterone Acetate	Chemotherapy	250 mg daily	01/03/2012	3	event 1	0	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Anastrozole	Hormone therapy	1 mg daily	01/06/2012	2	event 2	3	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Doxorubicin	Chemotherapy	"75mg/m2, every 3 weeks"	01/08/2012	1	event 3	5	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Gemcitabine+Docetaxel	Chemotherapy+Immunotherapy	Not provided	01/10/2012	3	event 4	7	stable disease	RECIST 1.1	
+	PTX-EMC-039	Trabectedin	Chemotherapy	.5 mg/m2 administered as a 24-h CIV infusion every 3 weeks	01/03/2013	3	event 5	12	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Medroxyprogesterone Acetate	Chemotherapy	250 mg daily	01/03/2012	3	event 1	0	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Anastrozole	Hormone therapy	1 mg daily	01/06/2012	2	event 2	3	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Doxorubicin	Chemotherapy	"75mg/m2, every 3 weeks"	01/08/2012	1	event 3	5	progressive disease	RECIST 1.1	
+	PTX-EMC-039	Gemcitabine+Docetaxel	Chemotherapy+Immunotherapy	Not provided	01/10/2012	3	event 4	7	stable disease	RECIST 1.1	
+	PTX-EMC-039	Trabectedin	Chemotherapy	.5 mg/m2 administered as a 24-h CIV infusion every 3 weeks	01/03/2013	3	event 5	12	progressive disease	RECIST 1.1	
+	PTX-MEL-009	Surgery	Surgery		Mar-13		event 1	0	Not provided		MEL0056LY
+	PTX-MEL-009	Surgery	Surgery		Oct-13		event 2	7	Not provided		MEL0052CM
+	PTX-MEL-010	Surgery	Surgery		Mar-13		event 1	0	Not provided		MEL0029LY
+	PTX-MEL-012	Surgery	Surgery		May-13		event 1	0	Not provided		MEL0005CM
+	PTX-MEL-014	Surgery	Surgery		Jun-13		event 1	0	Not provided		MEL0002LY
+	PTX-MEL-015	Surgery	Surgery		Jun-13		event 1	0	Not provided		MEL0023CM
+	PTX-MEL-027	Surgery	Surgery		Mar-14		event 1	0	Not provided		MEL0046LY
+	PTX-MEL-034	Surgery	Surgery		Jun-14		event 1	0	Not provided		MEL0062CM
