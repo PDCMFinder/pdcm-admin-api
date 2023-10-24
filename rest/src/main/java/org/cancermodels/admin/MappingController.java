@@ -11,7 +11,7 @@ import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.mappings.automatic_mappings.AutomaticMappingsService;
 import org.cancermodels.process_report.ProcessResponse;
 import org.cancermodels.pdcm_admin.types.MappingType;
-import org.cancermodels.reader.MissingMappingsService;
+import org.cancermodels.mappings.discovery.UnmappedTermsDiscoverService;
 import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.mappings.MappingEntityService;
@@ -36,20 +36,20 @@ public class MappingController {
   private final MappingEntityService mappingEntityService;
   private final MappingEntityMapper mappingEntityMapper;
   private final SuggestionManager suggestionManager;
-  private final MissingMappingsService missingMappingsService;
+  private final UnmappedTermsDiscoverService unmappedTermsDiscoverService;
   private final SuggestionMapper suggestionMapper;
   private final AutomaticMappingsService automaticMappingsService;
 
   public MappingController(MappingEntityService mappingEntityService,
       MappingEntityMapper mappingEntityMapper,
       SuggestionManager suggestionManager,
-      MissingMappingsService newMappingsDetectorService,
+      UnmappedTermsDiscoverService newMappingsDetectorService,
       SuggestionMapper suggestionMapper,
       AutomaticMappingsService automaticMappingsService) {
     this.mappingEntityService = mappingEntityService;
     this.mappingEntityMapper = mappingEntityMapper;
     this.suggestionManager = suggestionManager;
-    this.missingMappingsService = newMappingsDetectorService;
+    this.unmappedTermsDiscoverService = newMappingsDetectorService;
     this.suggestionMapper = suggestionMapper;
     this.automaticMappingsService = automaticMappingsService;
   }
@@ -131,7 +131,7 @@ public class MappingController {
    */
   @PutMapping("/detectNewMappings")
   public Map<String, Integer> detectNewMappings() {
-    return missingMappingsService.detectNewUnmappedTerms();
+    return unmappedTermsDiscoverService.detectNewUnmappedTerms();
   }
 
   @GetMapping("/testAutomaticMappingsMappedEntities")

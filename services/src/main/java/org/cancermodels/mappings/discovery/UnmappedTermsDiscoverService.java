@@ -1,16 +1,9 @@
-package org.cancermodels.reader;
+package org.cancermodels.mappings.discovery;
 
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.pdcm_admin.EntityTypeName;
@@ -19,6 +12,7 @@ import org.cancermodels.mappings.MappingEntityCreator;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
 import org.cancermodels.pdcm_admin.types.Status;
+import org.cancermodels.reader.DataReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +26,10 @@ import tech.tablesaw.api.Table;
  */
 @Slf4j
 @Component
-public class MissingMappingsService {
+public class UnmappedTermsDiscoverService {
 
   @Value("${data-dir}")
   private String rootDir;
-
-  private final DataReader dataReader;
 
   private final MappingEntityRepository mappingEntityRepository;
   private final MappingEntityCreator mappingEntityCreator;
@@ -50,10 +42,9 @@ public class MissingMappingsService {
   // New mappings that need to be saved at the end of the process.
   private Set<MappingEntity> newMappingEntities;
 
-  public MissingMappingsService(DataReader dataReader,
+  public UnmappedTermsDiscoverService(
       MappingEntityRepository mappingEntityRepository,
       MappingEntityCreator mappingEntityCreator) {
-    this.dataReader = dataReader;
     this.mappingEntityRepository = mappingEntityRepository;
     this.mappingEntityCreator = mappingEntityCreator;
   }
@@ -70,7 +61,7 @@ public class MissingMappingsService {
    */
   @Transactional("pdcmAdminTransactionManager")
   public Map<String, Integer> detectNewUnmappedTerms() {
-    // We need to delete Unmapped terms first so we don't end up with orphan values.
+    // We need to delete Unmapped terms first, so we don't end up with orphan values.
     mappingEntityRepository.deleteAllByStatus(Status.UNMAPPED.getLabel());
 
     newMappingEntities = new HashSet<>();
@@ -114,8 +105,8 @@ public class MissingMappingsService {
     log.info("\nSearching diagnosis for " + path.toString());
     String dataSource = path.getFileName().toString();
     log.info("DataSource: " + dataSource);
-    PathMatcher metadataFile = FileSystems.getDefault().getPathMatcher("glob:**{metadata-patient_sample}.tsv");
-    Map<String, Table> metaDataTemplate = dataReader.getTableByFile(path, metadataFile);
+    var diagnosisKeywords = List.of("metadata-patient_sample");
+    Map<String, Table> metaDataTemplate = DataReader.getTableByFile(path, diagnosisKeywords);
     readDiagnosisAttributesFromTemplate(metaDataTemplate, dataSource);
   }
 
@@ -123,8 +114,8 @@ public class MissingMappingsService {
     log.info("\nSearching treatments for " + path.toString());
     String dataSource = path.getFileName().toString();
     log.info("DataSource: " + dataSource);
-    PathMatcher drugDataFile = FileSystems.getDefault().getPathMatcher("glob:**{drug,treatment}*.tsv");
-    Map<String, Table> drugDataTemplate = dataReader.getTableByFile(path, drugDataFile);
+    var treatmentKeywords = List.of("drug", "treatment");
+    Map<String, Table> drugDataTemplate = DataReader.getTableByFile(path, treatmentKeywords);
     readTreatmentAttributesFromTemplate(drugDataTemplate, dataSource);
   }
 
@@ -138,6 +129,7 @@ public class MissingMappingsService {
         String primarySiteName = row.getString("primary_site").toLowerCase();
         String diagnosis = row.getString("diagnosis").toLowerCase();
         String tumorTypeName = row.getString("tumour_type").toLowerCase();
+        dataSource = dataSource.toLowerCase();
 
         // Convert `Not Collected`, 'Not Provided' to `Unknown` as for the mapping process both terms mean
         // there is no data.
@@ -191,6 +183,7 @@ public class MissingMappingsService {
           if (drugValue.equals("not collected") || drugValue.equals("not provided")) {
             drugValue = "unknown";
           }
+          dataSource = dataSource.toLowerCase();
 
           String key = MappingEntityKeyBuilder.buildKeyTreatmentMapping(drugValue, dataSource);
 

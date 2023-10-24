@@ -190,3 +190,32 @@ ALTER TABLE admin_app.model_summary
     ADD CONSTRAINT fk_model_summary_release
         FOREIGN KEY (release_id)
             REFERENCES admin_app.release (id);
+
+-- Views
+CREATE VIEW admin_app.diagnosis_data_vw AS (
+    SELECT
+        mapping_key,
+        (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 1) AS data_source,
+        (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 2) AS diagnosis,
+        (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 3) AS primary_tissue,
+        (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 4) AS tumor_type,
+        mapped_term_label,
+        mapped_term_url,
+        status,
+        source
+    FROM admin_app.MAPPING_ENTITY me
+    WHERE entity_type_id = 1
+);
+
+CREATE VIEW admin_app.treatment_data_vw AS (
+     SELECT
+         mapping_key,
+         (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 5) AS data_source,
+         (SELECT value FROM admin_app.mapping_value WHERE mapping_entity_id=me.id AND key_id = 6) AS treatment_name,
+         mapped_term_label,
+         mapped_term_url,
+         status,
+         source
+     FROM admin_app.MAPPING_ENTITY me
+     WHERE entity_type_id = 2
+);
