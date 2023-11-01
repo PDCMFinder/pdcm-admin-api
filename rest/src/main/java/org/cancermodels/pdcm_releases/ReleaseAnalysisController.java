@@ -29,13 +29,14 @@ import java.util.List;
   }
 
   /**
-   * List all releases that have been executed in the ETL
+   * List all releases that have been executed in the ETL. They are returned sorted by date
+   * (desc)
    * @return List of {@link Release} objects.
    */
   @GetMapping("")
-  public List<Release> listAllReleases()
+  public List<Release> listAllReleasesSortedByDate()
   {
-    return releaseAnalyserService.getAllReleases();
+    return releaseAnalyserService.getAllReleasesSortedByDate();
   }
 
   /**

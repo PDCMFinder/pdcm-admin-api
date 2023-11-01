@@ -42,8 +42,8 @@ public class ReleaseAnalyserService {
         this.searchIndexRepository = searchIndexRepository;
     }
 
-    public List<Release> getAllReleases() {
-        return releaseService.getAllReleases();
+    public List<Release> getAllReleasesSortedByDate() {
+        return releaseService.getAllReleasesSortedByDate();
     }
 
     /**
