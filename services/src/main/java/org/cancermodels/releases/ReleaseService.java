@@ -26,8 +26,8 @@ public class ReleaseService {
         return releaseOpt.get();
     }
 
-    public List<Release> getAllReleases() {
-        return releaseRepository.findAll();
+    public List<Release> getAllReleasesSortedByDate() {
+        return releaseRepository.findAllByOrderByDateDesc();
     }
 
     public Release save(Release release) {

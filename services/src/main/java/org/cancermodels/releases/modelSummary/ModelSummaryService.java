@@ -62,7 +62,8 @@ public class ModelSummaryService {
         return modelSummaryRepository.findByReleaseId(releaseId, pageable);
     }
 
-    public Page<ModelSummary> search(Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
-        return modelSummaryQueryService.search(pageable, modelSummaryFilter);
+    public Page<ModelSummary> search(
+        String viewName, Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
+        return modelSummaryQueryService.search(viewName, pageable, modelSummaryFilter);
     }
 }

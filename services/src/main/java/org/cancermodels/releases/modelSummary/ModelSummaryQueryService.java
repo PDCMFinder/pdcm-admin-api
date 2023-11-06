@@ -16,16 +16,31 @@ public class ModelSummaryQueryService {
         this.modelSummaryRepository = modelSummaryRepository;
     }
 
-    public Page<ModelSummary> search(Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
-        Specification<ModelSummary> specs = buildSpecifications(modelSummaryFilter);
+    /**
+     * Searches for ModelSummary entities based on the provided view name, pagination settings, and filtering criteria.
+     *
+     * @param viewName           An identifier to decide what data to show (not a real view in the db).
+     *                           - "allModels": All models in the release
+     *                           - "paediatricModels": Paediatric models in the release
+     * @param pageable           Pageable object containing pagination settings (page number, page size, sort order).
+     * @param modelSummaryFilter Filter criteria to apply to the search query.
+     * @return A Page of ModelSummary entities that match the specified criteria.
+     */
+    public Page<ModelSummary> search(String viewName, Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
+        Specification<ModelSummary> specs = buildSpecifications(viewName, modelSummaryFilter);
         return modelSummaryRepository.findAll(specs, pageable);
     }
 
-    private Specification<ModelSummary> buildSpecifications(ModelSummaryFilter modelSummaryFilter) {
-        return Specification.where(
+    private Specification<ModelSummary> buildSpecifications(String viewName, ModelSummaryFilter modelSummaryFilter) {
+        Specification<ModelSummary> specification;
+        specification = Specification.where(
             ModelSummarySpecs.withModelType(modelSummaryFilter.getModelTypes()).and(
                 ModelSummarySpecs.withReleaseId(modelSummaryFilter.getReleaseIds())
             )
         );
+        if ("paediatricModels".equals(viewName)) {
+            specification = specification.and(ModelSummarySpecs.paediatricModels());
+        }
+        return specification;
     }
 }

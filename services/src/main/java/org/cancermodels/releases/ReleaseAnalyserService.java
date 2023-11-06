@@ -42,8 +42,8 @@ public class ReleaseAnalyserService {
         this.searchIndexRepository = searchIndexRepository;
     }
 
-    public List<Release> getAllReleases() {
-        return releaseService.getAllReleases();
+    public List<Release> getAllReleasesSortedByDate() {
+        return releaseService.getAllReleasesSortedByDate();
     }
 
     /**
@@ -149,7 +149,8 @@ public class ReleaseAnalyserService {
         return modelSummaryService.getFacetsForModels(release);
     }
 
-    public Page<ModelSummary> search(Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
-        return modelSummaryService.search(pageable, modelSummaryFilter);
+    public Page<ModelSummary> search(
+        String viewName, Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
+        return modelSummaryService.search(viewName, pageable, modelSummaryFilter);
     }
 }
