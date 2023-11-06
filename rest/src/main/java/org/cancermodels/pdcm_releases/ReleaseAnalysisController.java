@@ -65,19 +65,34 @@ import java.util.List;
   public List<Facet> getFiltersForModels(@PathVariable Long releaseId) {
     return releaseAnalyserService.getFacetsForModels(releaseId);
   }
-
+  
+  /**
+   * Retrieves a list of models based on the provided parameters for a specific release.
+   *
+   * @param releaseId The ID of the release for which models should be retrieved.
+   * @param pageable The pageable information for controlling the pagination of the results.
+   * @param viewName The name of the view to be used for filtering the models (default is "allModels").
+   *                 Possible values:
+   *                 - "allModels": All models in the release
+   *                 - "paediatricModels": Paediatric models in the release
+   * @param modelTypes A list of model types to filter the models (optional).
+   * @return A ResponseEntity containing a list of models that match the given criteria.
+   */
   @GetMapping("models/search/{releaseId}")
   public ResponseEntity<?> search(
       @PathVariable Long releaseId,
       Pageable pageable,
-      @RequestParam(value = "model_type", required = false) List<String> modelTypes) {
+      @RequestParam(
+          value = "viewName", required = false, defaultValue = "allModels") String viewName,
+      @RequestParam(
+          value = "modelType", required = false) List<String> modelTypes) {
 
     ModelSummaryFilter filter = ModelSummaryFilterBuilder.getInstance()
         .withModelType(modelTypes)
         .withReleaseId(Collections.singletonList(String.valueOf(releaseId)))
         .build();
 
-    Page<ModelSummary> models = releaseAnalyserService.search(pageable, filter);
+    Page<ModelSummary> models = releaseAnalyserService.search(viewName, pageable, filter);
     return ResponseEntity.ok(models);
   }
 

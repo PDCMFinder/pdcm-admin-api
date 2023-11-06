@@ -181,6 +181,7 @@ CREATE TABLE admin_app.model_summary (
     treatment_list TEXT,
     model_treatment_list TEXT,
     scores TEXT,
+    paediatric BOOLEAN,
     release_id INTEGER NOT NULL
 );
 

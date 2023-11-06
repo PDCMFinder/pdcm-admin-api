@@ -6,6 +6,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,16 +17,33 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ModelSummarySpecs {
+
+    public static Specification<ModelSummary> allModels()
+    {
+        return Specification.where(null);
+    }
+
+    public static Specification<ModelSummary> paediatricModels() {
+        Specification.where(null);
+        Specification<ModelSummary> specification;
+        specification = (root, query, criteriaBuilder) -> {
+            Path<String> paediatricPath = root.get(ModelSummary_.PAEDIATRIC);
+            query.distinct(true);
+            return criteriaBuilder.equal(paediatricPath, true);
+        };
+
+        return specification;
+    }
     public static Specification<ModelSummary> withModelType(List<String> modelType)
     {
         Specification<ModelSummary> specification = Specification.where(null);
         if (modelType != null)
         {
-            specification = (Specification<ModelSummary>) (root, query, criteriaBuilder) -> {
-                Path<String> statusPath = root.get(ModelSummary_.MODEL_TYPE);
+            specification = (root, query, criteriaBuilder) -> {
+                Path<String> modelTypePath = root.get(ModelSummary_.MODEL_TYPE);
                 query.distinct(true);
                 return PredicateBuilder.addLowerInPredicates(
-                    criteriaBuilder, statusPath, modelType);
+                    criteriaBuilder, modelTypePath, modelType);
             };
         }
         return specification;

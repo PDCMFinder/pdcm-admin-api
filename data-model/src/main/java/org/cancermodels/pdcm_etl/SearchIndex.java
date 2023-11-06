@@ -62,4 +62,5 @@ public class SearchIndex {
     private String treatmentList;
     private String modelTreatmentList;
     private String scores;
+    private Boolean paediatric;
 }
