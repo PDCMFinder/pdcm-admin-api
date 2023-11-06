@@ -76,4 +76,5 @@ public class ModelSummary {
   private String treatmentList;
   private String modelTreatmentList;
   private String scores;
+  private Boolean paediatric;
 }
