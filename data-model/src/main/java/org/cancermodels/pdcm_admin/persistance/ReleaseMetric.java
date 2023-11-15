@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class ReleaseCounts {
+public class ReleaseMetric {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,5 +26,5 @@ public class ReleaseCounts {
 
   private String key;
 
-  private Integer value;
+  private Long value;
 }

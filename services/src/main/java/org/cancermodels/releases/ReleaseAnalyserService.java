@@ -4,12 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.filters.Facet;
 import org.cancermodels.pdcm_admin.persistance.ModelSummary;
 import org.cancermodels.pdcm_admin.persistance.Release;
+import org.cancermodels.pdcm_admin.persistance.ReleaseMetric;
 import org.cancermodels.pdcm_etl.ReleaseInfo;
 import org.cancermodels.pdcm_etl.ReleaseInfoRepository;
 import org.cancermodels.pdcm_etl.SearchIndex;
 import org.cancermodels.pdcm_etl.SearchIndexRepository;
 import org.cancermodels.releases.modelSummary.ModelSummaryFilter;
 import org.cancermodels.releases.modelSummary.ModelSummaryService;
+import org.cancermodels.releases.releaseSummary.ReleaseMetricService;
+import org.cancermodels.releases.releaseSummary.ReleaseSummary;
+import org.cancermodels.releases.releaseSummary.ReleaseSummaryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,23 +26,29 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReleaseAnalyserService {
     private final ReleaseService releaseService;
+    private final ReleaseMetricService releaseMetricService;
 
     private final ModelSummaryService modelSummaryService;
     private final ReleaseInfoRepository releaseInfoRepository;
+    private final ReleaseSummaryService releaseSummaryService;
     private final SearchIndexRepository searchIndexRepository;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
     public ReleaseAnalyserService(
         ReleaseService releaseService,
+        ReleaseMetricService releaseMetricService,
         ModelSummaryService modelSummaryService,
         ReleaseInfoRepository releaseInfoRepository,
+        ReleaseSummaryService releaseSummaryService,
         SearchIndexRepository searchIndexRepository) {
 
         this.releaseService = releaseService;
+        this.releaseMetricService = releaseMetricService;
         this.modelSummaryService = modelSummaryService;
 
         this.releaseInfoRepository = releaseInfoRepository;
+        this.releaseSummaryService = releaseSummaryService;
         this.searchIndexRepository = searchIndexRepository;
     }
 
@@ -72,15 +82,21 @@ public class ReleaseAnalyserService {
     private void saveAllAssociatedReleaseData(Release release) {
         log.info("Getting all associated data");
         List<ModelSummary> modelSummaries = getCurrentReleaseModels(release);
+        List<ReleaseMetric> releaseCounts = releaseMetricService.generateCounts(release, modelSummaries);
         log.info("Writing all associated data");
         modelSummaryService.saveAll(modelSummaries);
+        System.out.println("releaseCounts " + releaseCounts);
+        releaseMetricService.saveAll(releaseCounts);
     }
 
     private void deleteAllAssociatedReleaseData(Release release) {
         log.warn("Deleting all associated data for release " + release);
         List<ModelSummary> modelSummaries = modelSummaryService.findAllByRelease(release);
+        List<ReleaseMetric> releaseCounts = releaseMetricService.findAllByRelease(release);
         log.warn("Deleting {} model summaries", modelSummaries.size());
         modelSummaryService.deleteAll(modelSummaries);
+        log.warn("Deleting {} release counts", releaseCounts.size());
+        releaseMetricService.deleteAll(releaseCounts);
     }
 
     // Get the single record that should exist in release_info, namely the current ETL release.
@@ -116,30 +132,6 @@ public class ReleaseAnalyserService {
         return modelSummary;
     }
 
-    public ReleaseSummary getReleaseSummary(long id) {
-        Release release = releaseService.getReleaseByIdOrFail(id);
-        List<ModelSummary> models = modelSummaryService.findAllByRelease(release);
-        long totalNumberOfModels = models.size();
-        long numberOfPdxModels = getCountByType(models, "PDX");
-        long numberOfCellLineModels = getCountByType(models, "cell line");
-        long numberOfOrganoidModels = getCountByType(models, "organoid");
-        ReleaseSummary releaseSummary = new ReleaseSummary();
-        releaseSummary.setName(release.getName());
-        releaseSummary.setDate(release.getDate());
-        releaseSummary.setTotalModelsCount(totalNumberOfModels);
-        releaseSummary.setPdxModelsCount(numberOfPdxModels);
-        releaseSummary.setCellLineModelsCount(numberOfCellLineModels);
-        releaseSummary.setOrganoidModelsCount(numberOfOrganoidModels);
-
-        return releaseSummary;
-    }
-
-    private long getCountByType(List<ModelSummary> models, String modelType) {
-        return models.stream()
-            .filter(model -> modelType.equals(model.getModelType()))
-            .count();
-    }
-
     public Page<ModelSummary> getModelsByReleasePage(Long releaseId, Pageable pageable) {
         return modelSummaryService.findByReleaseId(releaseId, pageable);
     }
@@ -152,5 +144,10 @@ public class ReleaseAnalyserService {
     public Page<ModelSummary> search(
         String viewName, Pageable pageable, ModelSummaryFilter modelSummaryFilter) {
         return modelSummaryService.search(viewName, pageable, modelSummaryFilter);
+    }
+
+    public List<ReleaseSummary> getAllReleasesSummaries() {
+        List<Release> releases = releaseService.getAllReleasesSortedByDate();
+        return releaseSummaryService.getReleasesSummaries(releases);
     }
 }
