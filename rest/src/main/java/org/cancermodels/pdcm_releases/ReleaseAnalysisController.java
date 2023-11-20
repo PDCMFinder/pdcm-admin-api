@@ -1,11 +1,12 @@
 package org.cancermodels.pdcm_releases;
 
 import org.cancermodels.filters.Facet;
-import org.cancermodels.pdcm_admin.persistance.*;
+import org.cancermodels.pdcm_admin.persistance.ModelSummary;
+import org.cancermodels.pdcm_admin.persistance.Release;
 import org.cancermodels.releases.ReleaseAnalyserService;
-import org.cancermodels.releases.ReleaseSummary;
 import org.cancermodels.releases.modelSummary.ModelSummaryFilter;
 import org.cancermodels.releases.modelSummary.ModelSummaryFilterBuilder;
+import org.cancermodels.releases.releaseSummary.ReleaseSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
   public class ReleaseAnalysisController {
 
   private final ReleaseAnalyserService releaseAnalyserService;
+
   public ReleaseAnalysisController(ReleaseAnalyserService releaseAnalyserService) {
     this.releaseAnalyserService = releaseAnalyserService;
   }
@@ -49,10 +51,6 @@ import java.util.List;
   public void loadAllAssociatedDataForCurrentRelease()
   {
     releaseAnalyserService.loadAllAssociatedDataForCurrentRelease();
-  }
-  @GetMapping("summary/{id}")
-  public ReleaseSummary getReleaseSummary(@PathVariable long id) {
-    return releaseAnalyserService.getReleaseSummary(id);
   }
 
   @GetMapping("modelsByReleasePage/{releaseId}")
@@ -96,4 +94,8 @@ import java.util.List;
     return ResponseEntity.ok(models);
   }
 
+  @GetMapping("getAllReleasesSummaries")
+  public List<ReleaseSummary> getAllReleasesSummaries() {
+    return releaseAnalyserService.getAllReleasesSummaries();
+  }
 }

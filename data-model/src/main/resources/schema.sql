@@ -220,3 +220,22 @@ CREATE VIEW admin_app.treatment_data_vw AS (
      FROM admin_app.MAPPING_ENTITY me
      WHERE entity_type_id = 2
 );
+
+CREATE TABLE admin_app.release_metric
+(
+    id         INTEGER NOT NULL,
+    release_id INTEGER NOT NULL,
+    key        TEXT    NOT NULL,
+    value      TEXT    NOT NULL
+);
+
+ALTER TABLE admin_app.release_metric
+    ADD CONSTRAINT pk_release_counts PRIMARY KEY (id);
+
+ALTER TABLE admin_app.release_metric
+    ADD UNIQUE (release_id, key);
+
+ALTER TABLE admin_app.release_metric
+    ADD CONSTRAINT fk_release_counts_release
+        FOREIGN KEY (release_id)
+            REFERENCES admin_app.release (id);
