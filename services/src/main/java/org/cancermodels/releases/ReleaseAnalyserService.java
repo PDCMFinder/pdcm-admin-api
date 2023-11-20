@@ -82,11 +82,15 @@ public class ReleaseAnalyserService {
     private void saveAllAssociatedReleaseData(Release release) {
         log.info("Getting all associated data");
         List<ModelSummary> modelSummaries = getCurrentReleaseModels(release);
+        log.info("Models:" + modelSummaries.size());
         List<ReleaseMetric> releaseCounts = releaseMetricService.generateCounts(release, modelSummaries);
+        log.info("Metrics:" + releaseCounts.size());
         log.info("Writing all associated data");
         modelSummaryService.saveAll(modelSummaries);
-        System.out.println("releaseCounts " + releaseCounts);
+        log.info("Models saved");
         releaseMetricService.saveAll(releaseCounts);
+        log.info("Metrics saved");
+        log.info("Release data saved");
     }
 
     private void deleteAllAssociatedReleaseData(Release release) {
