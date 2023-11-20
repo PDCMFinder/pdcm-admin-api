@@ -6,7 +6,9 @@ import org.cancermodels.pdcm_admin.persistance.ReleaseMetricRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * In charge of formatting the data to create suitable {@link ReleaseSummary} objects
@@ -25,8 +27,16 @@ public class ReleaseSummaryService {
         List<ReleaseMetric> metrics = releaseMetricRepository.findAllByRelease(release);
         releaseSummary.setName(release.getName());
         releaseSummary.setDate(release.getDate());
-        releaseSummary.setMetrics(metrics);
+        releaseSummary.setMetrics(toKeyValueMap(metrics));
         return releaseSummary;
+    }
+
+    private Map<String, Long> toKeyValueMap(List<ReleaseMetric> metrics) {
+        Map<String, Long> keyValueMap = new HashMap<>();
+        metrics.forEach(x -> {
+            keyValueMap.put(x.getKey(), x.getValue());
+        });
+        return keyValueMap;
     }
 
     public List<ReleaseSummary> getReleasesSummaries(List<Release> releases) {
