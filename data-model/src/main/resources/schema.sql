@@ -239,3 +239,8 @@ ALTER TABLE admin_app.release_metric
     ADD CONSTRAINT fk_release_counts_release
         FOREIGN KEY (release_id)
             REFERENCES admin_app.release (id);
+
+-- Permissions
+GRANT ALL
+    ON ALL TABLES
+    IN SCHEMA admin_app TO k8spdcmapiro;
