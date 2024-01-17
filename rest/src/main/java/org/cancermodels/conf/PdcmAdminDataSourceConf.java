@@ -32,8 +32,6 @@ public class PdcmAdminDataSourceConf {
     @Primary
     @Bean
     public DataSource pdcmAdminDataSource() {
-        var x = pdcmAdminDataSourceProperties().initializeDataSourceBuilder().build();
-        System.out.println(x);
         return pdcmAdminDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
