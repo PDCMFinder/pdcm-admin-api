@@ -34,6 +34,11 @@ public class ReleaseService {
         return releaseRepository.save(release);
     }
 
+    public void delete(Release release) {
+        log.warn("Deleting release {}", release);
+        releaseRepository.delete(release);
+    }
+
     public Optional<Release> findByNameAndDate(String name, LocalDateTime date) {
         return releaseRepository.findByNameAndDate(name, date);
     }

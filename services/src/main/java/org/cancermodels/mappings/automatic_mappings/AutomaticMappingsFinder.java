@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
@@ -17,21 +19,12 @@ import org.springframework.stereotype.Component;
 public class AutomaticMappingsFinder {
 
   private final SuggestionsSearcher suggestionsSearcher;
-
-  // To even be considered in the process, a suggestion should have a relative score higher than this.
-  private static final double acceptableThreshold = 75;
-
-  // A suggestion with a relative score equal or higher than this should be considered a perfect
-  // match therefore can be used in an automatic mapping.
-  private static final double perfectThreshold = 95;
-
-  // Number of acceptable suggestions that must agree in their ontology term url to consider that
-  // ontology term the good one for the automatic mapping
-  private static final int requiredConsensusNumber = 3;
+  private final SimilarityConfigurationReader similarityConfigurationReader;
 
   public AutomaticMappingsFinder(
-      SuggestionsSearcher suggestionsSearcher) {
+      SuggestionsSearcher suggestionsSearcher, SimilarityConfigurationReader similarityConfigurationReader) {
     this.suggestionsSearcher = suggestionsSearcher;
+    this.similarityConfigurationReader = similarityConfigurationReader;
   }
 
   /**
@@ -45,12 +38,16 @@ public class AutomaticMappingsFinder {
    */
   public Optional<Suggestion> findBestSuggestion(
       MappingEntity mappingEntity) {
+
     Optional<Suggestion> answer;
     List<Suggestion> suggestions = suggestionsSearcher.searchTopSuggestions(mappingEntity);
     List<Suggestion> processedSuggestions = filterOnlyAcceptableSuggestions(suggestions);
     processedSuggestions = sortDescByRelativeScore(processedSuggestions);
 
+    // Check if there is a suggestion with a good enough score that it can be assigned as automatic
     answer = searchPerfectSuggestion(processedSuggestions);
+
+    // If the score is not that high but several suggestions agree on the ontology term, then one of them is returned
     if (answer.isEmpty()) {
       answer = searchForConsensusAmongAcceptableSuggestions(processedSuggestions);
     }
@@ -60,7 +57,7 @@ public class AutomaticMappingsFinder {
 
   private Optional<Suggestion> searchPerfectSuggestion(List<Suggestion> suggestions) {
     for (Suggestion suggestion : suggestions) {
-      if (suggestion.getRelativeScore() >= perfectThreshold) {
+      if (suggestion.getRelativeScore() >= similarityConfigurationReader.getAutomaticWithRevisionThreshold()) {
         return Optional.of(suggestion);
       }
     }
@@ -71,11 +68,15 @@ public class AutomaticMappingsFinder {
   // suggestedTermUrl value. If true, return any of those acceptable suggestions.
   private Optional<Suggestion> searchForConsensusAmongAcceptableSuggestions(
       List<Suggestion> processedSuggestions) {
-    if (processedSuggestions.size() < requiredConsensusNumber) {
+
+    if (processedSuggestions.isEmpty()) {
+      return Optional.empty();
+    }
+    if (processedSuggestions.size() < similarityConfigurationReader.getRequiredConsensusNumber()) {
       return Optional.empty();
     }
     boolean consensus = true;
-    for (int i = 1; i < requiredConsensusNumber; i++) {
+    for (int i = 1; i < similarityConfigurationReader.getRequiredConsensusNumber(); i++) {
       consensus = consensus &&
           processedSuggestions.get(i).getSuggestedTermUrl()
               .equals(processedSuggestions.get(0).getSuggestedTermUrl());
@@ -92,7 +93,7 @@ public class AutomaticMappingsFinder {
   private List<Suggestion> filterOnlyAcceptableSuggestions(List<Suggestion> suggestions) {
     return suggestions
         .stream()
-        .filter(x -> x.getRelativeScore() >= acceptableThreshold)
+        .filter(x -> x.getRelativeScore() >= similarityConfigurationReader.getCandidateThreshold())
         .collect(Collectors.toList());
   }
 

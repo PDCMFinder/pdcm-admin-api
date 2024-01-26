@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.general.MappingEntityBuilder;
 import org.cancermodels.general.SuggestionBuilder;
@@ -26,6 +28,9 @@ class AutomaticMappingsFinderTest {
   @Mock
   private SuggestionsSearcher suggestionsSearcher;
 
+  @Mock
+  private SimilarityConfigurationReader similarityConfigurationReader;
+
   private AutomaticMappingsFinder instance;
 
   private final MappingEntityBuilder mappingEntityBuilder = new MappingEntityBuilder();
@@ -34,20 +39,18 @@ class AutomaticMappingsFinderTest {
   //Following nomenclature: MethodName_StateUnderTest_ExpectedBehavior
 
   // To even be considered in the process, a suggestion should have a relative score higher than this.
-  private static final double acceptableThreshold = 75;
+  private static final int candidateThreshold = 75;
 
   // A suggestion with a relative score equal or higher than this should be considered a perfect
   // match therefore can be used in an automatic mapping.
-  private static final double perfectThreshold = 95;
+  private static final int automaticWithRevisionThreshold = 95;
 
-  // Number of acceptable suggestions that must agree in their ontology term url to consider that
-  // ontology term the good one for the automatic mapping
   private static final int requiredConsensusNumber = 3;
 
   @BeforeEach
   public void setup()
   {
-    instance = new AutomaticMappingsFinder(suggestionsSearcher);
+    instance = new AutomaticMappingsFinder(suggestionsSearcher, similarityConfigurationReader);
   }
 
   @Test
@@ -89,7 +92,7 @@ class AutomaticMappingsFinderTest {
         .build();
     List<Suggestion> suggestions = new ArrayList<>();
 
-    double relativeScore = acceptableThreshold - 1;
+    double relativeScore = candidateThreshold - 1;
     Suggestion badSuggestion = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
         .setRelativeScore(relativeScore)
@@ -97,6 +100,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(badSuggestion);
 
     when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
         instance.findBestSuggestion(mappingEntity);
@@ -113,8 +117,8 @@ class AutomaticMappingsFinderTest {
 
     List<Suggestion> suggestions = new ArrayList<>();
 
-    double relativeScore1 = acceptableThreshold - 1;
-    double relativeScore2 = acceptableThreshold - 2;
+    double relativeScore1 = candidateThreshold - 1;
+    double relativeScore2 = candidateThreshold - 2;
 
     Suggestion badSuggestion1 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
@@ -128,6 +132,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(badSuggestion2);
 
     when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
         instance.findBestSuggestion(mappingEntity);
@@ -145,7 +150,7 @@ class AutomaticMappingsFinderTest {
 
     Suggestion suggestionEqualsToPerfectThreshold = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(perfectThreshold)
+        .setRelativeScore(automaticWithRevisionThreshold)
         .build();
 
     suggestions.add(suggestionEqualsToPerfectThreshold);
@@ -168,7 +173,7 @@ class AutomaticMappingsFinderTest {
 
     Suggestion suggestionHigherThanPerfectThreshold = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(perfectThreshold + 1)
+        .setRelativeScore(automaticWithRevisionThreshold + 1)
         .build();
 
     suggestions.add(suggestionHigherThanPerfectThreshold);
@@ -191,12 +196,12 @@ class AutomaticMappingsFinderTest {
 
     Suggestion suggestionBadSuggestion = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold-1)
+        .setRelativeScore(candidateThreshold -1)
         .build();
 
     Suggestion suggestionPerfectThreshold = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(perfectThreshold)
+        .setRelativeScore(automaticWithRevisionThreshold)
         .build();
 
     suggestions.add(suggestionBadSuggestion);
@@ -220,12 +225,12 @@ class AutomaticMappingsFinderTest {
 
     Suggestion perfectSuggestion = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(perfectThreshold)
+        .setRelativeScore(automaticWithRevisionThreshold)
         .build();
 
     Suggestion perfectSuggestionHigherRelativeScore = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(perfectThreshold + 1)
+        .setRelativeScore(automaticWithRevisionThreshold + 1)
         .build();
 
     suggestions.add(perfectSuggestion);
@@ -249,17 +254,17 @@ class AutomaticMappingsFinderTest {
 
     Suggestion acceptableSuggestion1 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion2 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url2")
         .build();
     Suggestion acceptableSuggestion3 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url3")
         .build();
 
@@ -268,6 +273,9 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion3);
 
     when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
+    when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
+    when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -284,17 +292,17 @@ class AutomaticMappingsFinderTest {
 
     Suggestion acceptableSuggestion1 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion2 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion3 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
 
@@ -320,22 +328,22 @@ class AutomaticMappingsFinderTest {
 
     Suggestion acceptableSuggestion1 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion2 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion3 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion4 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold + 1)
+        .setRelativeScore(candidateThreshold + 1)
         .setSuggestedTermUrl("url2")
         .build();
 
@@ -345,6 +353,9 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion4);
 
     when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
+    when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
+    when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -361,12 +372,12 @@ class AutomaticMappingsFinderTest {
 
     Suggestion acceptableSuggestion1 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
     Suggestion acceptableSuggestion2 = suggestionBuilder
         .setSourceType(Source.RULE.getLabel())
-        .setRelativeScore(acceptableThreshold)
+        .setRelativeScore(candidateThreshold)
         .setSuggestedTermUrl("url1")
         .build();
 
@@ -374,6 +385,9 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion2);
 
     when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
+    when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
+    when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 

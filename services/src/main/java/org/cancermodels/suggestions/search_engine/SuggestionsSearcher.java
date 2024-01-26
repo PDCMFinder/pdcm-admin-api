@@ -88,6 +88,7 @@ public class SuggestionsSearcher {
       throws SearchException {
     Query query = mappingEntityQueryBuilder.buildHelperDocumentQuery(mappingEntity);
     List<Suggestion> results = retrieveDocsByQuery(query);
+//    explainBestResult(query);
     // We expect only one document
     return results.get(0);
   }
@@ -101,6 +102,23 @@ public class SuggestionsSearcher {
       throw new SearchException(exception);
     }
     return topSuggestions;
+  }
+
+  // Utility method to print the explanation for the best hit
+  private void explainBestResult(Query query) {
+    try {
+      TopDocs topDocs = luceneIndexReader.search(query);
+      for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+        System.out.println("Best was " + scoreDoc);
+        var e = luceneIndexReader.getIndexSearcher().explain(query, scoreDoc.doc);
+        System.out.println(e);
+        break;
+      }
+
+    } catch (Exception exception) {
+      throw new SearchException(exception);
+    }
+
   }
 
   private List<Suggestion> processTopDocs(TopDocs topDocs) throws IOException {
