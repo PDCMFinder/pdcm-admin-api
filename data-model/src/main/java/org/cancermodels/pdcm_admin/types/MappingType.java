@@ -2,7 +2,8 @@ package org.cancermodels.pdcm_admin.types;
 
 public enum MappingType {
   MANUAL("Manual"),
-  AUTOMATIC("Automatic");
+  AUTOMATIC_REVIEW("Automatic-Review"),
+  AUTOMATIC_MAPPED("Automatic-Mapped");
 
   private final String label;
 

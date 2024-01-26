@@ -86,36 +86,45 @@ public class MappingEntityUpdater {
     if (!originalStatus.equalsIgnoreCase(newStatus)) {
       changed = true;
 
-      // Valid transitions
+      /* Valid transitions */
+
+      // Unmapped -> Mapped
       if (Status.UNMAPPED.getLabel().equalsIgnoreCase(originalStatus)
           && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Unmapped -> Request
       else if (Status.UNMAPPED.getLabel().equalsIgnoreCase(originalStatus)
           && Status.REQUEST.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Unmapped -> Review (only if automatic)
       else if (Status.UNMAPPED.getLabel().equalsIgnoreCase(originalStatus)
           && Status.REVIEW.getLabel().equalsIgnoreCase(newStatus)
-          && mappingType.equals(MappingType.AUTOMATIC)) {
+          && mappingType.equals(MappingType.AUTOMATIC_REVIEW)) {
         valid = true;
       }
+      // Mapped -> Review
       else if (Status.MAPPED.getLabel().equalsIgnoreCase(originalStatus)
           && Status.REVIEW.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Review -> Mapped
       else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
           && Status.MAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Review -> Request
       else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
           && Status.REQUEST.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Review -> Unmapped
       else if (Status.REVIEW.getLabel().equalsIgnoreCase(originalStatus)
           && Status.UNMAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;
       }
+      // Request -> Unmapped
       else if (Status.REQUEST.getLabel().equalsIgnoreCase(originalStatus)
           && Status.UNMAPPED.getLabel().equalsIgnoreCase(newStatus)) {
         valid = true;

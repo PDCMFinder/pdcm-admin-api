@@ -132,7 +132,7 @@ class MappingEntityUpdaterTest {
     }
 
     @Test
-    void update_statusChangedUnmappedToReviewTypeAutomatic_statusAndDateUpdatedAndSaveMethodCalled() {
+    void update_statusChangedUnmappedToReviewTypeAutomatic_Review_statusAndDateUpdatedAndSaveMethodCalled() {
         MappingEntity original = mappingEntityBuilder
             .setEntityType(EntityTypeName.Treatment)
             .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -147,7 +147,7 @@ class MappingEntityUpdaterTest {
             .setStatus(Status.REVIEW)
             .build();
 
-        MappingEntity result = instance.update(original, withChanges, MappingType.AUTOMATIC);
+        MappingEntity result = instance.update(original, withChanges, MappingType.AUTOMATIC_REVIEW);
 
         verify(mappingEntityRepository).save(result);
         assertTrue(result.getDateUpdated().isAfter(yesterday), "Update date didn't change");

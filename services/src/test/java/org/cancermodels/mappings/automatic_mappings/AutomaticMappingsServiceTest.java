@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.general.MappingEntityBuilder;
 import org.cancermodels.general.SuggestionBuilder;
@@ -31,13 +33,16 @@ class AutomaticMappingsServiceTest {
   @Mock
   private AutomaticMappingsFinder automaticMappingsFinder;
 
+  @Mock
+  private SimilarityConfigurationReader similarityConfigurationReader;
+
   private final MappingEntityBuilder mappingEntityBuilder = new MappingEntityBuilder();
   private final SuggestionBuilder suggestionBuilder = new SuggestionBuilder();
 
   @BeforeEach
   public void setup()
   {
-    instance = new AutomaticMappingsService(mappingEntityService, automaticMappingsFinder);
+    instance = new AutomaticMappingsService(mappingEntityService, automaticMappingsFinder, similarityConfigurationReader);
   }
 
   @Test
