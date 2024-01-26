@@ -53,6 +53,11 @@ import java.util.List;
     releaseAnalyserService.loadAllAssociatedDataForCurrentRelease();
   }
 
+  @DeleteMapping("/{releaseId}")
+  public void deleteRelease(@PathVariable Long releaseId) {
+    releaseAnalyserService.deleteRelease(releaseId);
+  }
+
   @GetMapping("modelsByReleasePage/{releaseId}")
   public ResponseEntity<?> getModelsByRelease(@PathVariable Long releaseId, Pageable pageable) {
     Page<ModelSummary> models = releaseAnalyserService.getModelsByReleasePage(releaseId, pageable);
