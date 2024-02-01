@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
@@ -27,180 +28,240 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AutomaticMappingsService {
 
-  private final MappingEntityService mappingEntityService;
-  private final AutomaticMappingsFinder automaticMappingsFinder;
+    private final MappingEntityService mappingEntityService;
+    private final AutomaticMappingsFinder automaticMappingsFinder;
 
-  public AutomaticMappingsService(
-      MappingEntityService mappingEntityService,
-      AutomaticMappingsFinder automaticMappingsFinder) {
-    this.mappingEntityService = mappingEntityService;
-    this.automaticMappingsFinder = automaticMappingsFinder;
-  }
+    private final SimilarityConfigurationReader similarityConfigurationReader;
 
-  /**
-   * This is a test/evaluation method to check how good the automatic mapping process is.
-   * It's done by taking all mapping entities and calculate the best suggestion (the suggestion).
-   * There are 3 scenarios:
-   * 1) The suggestion's suggested term url is the same as the one in the mapped term.
-   *    This is the successful case, showing that the automatic mapping and the actual mapping agree.
-   * 2) The suggestion's suggested term url is NOT the same as the one in the mapped term.
-   *    This is a scenario to check, as there is no agreement between the automatic process and the
-   *    real mapping.
-   * 3) There is not a suggestion.
-   *    This is another scenario to check, as it indicates that a probably successful mapping was
-   *    done in the past, but it cannot be replicated with the current logic.
-   */
-  public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities() {
-    Map<String, Integer> report = new HashMap<>();
-    report.put("matching", 0);
-    report.put("not_matching", 0);
-    report.put("not_suggestion", 0);
-    List<List<String>> notMatchingDetails = new ArrayList<>();
-    List<List<String>> notSuggestionsDetails = new ArrayList<>();
-    List<MappingEntity> mappingEntities =
-        mappingEntityService.getAllByStatus(Status.MAPPED.getLabel());
+    public AutomaticMappingsService(
+        MappingEntityService mappingEntityService,
+        AutomaticMappingsFinder automaticMappingsFinder,
+        SimilarityConfigurationReader similarityConfigurationReader) {
+        this.mappingEntityService = mappingEntityService;
+        this.automaticMappingsFinder = automaticMappingsFinder;
+        this.similarityConfigurationReader = similarityConfigurationReader;
+    }
 
-    int counter = 0;
+    /**
+     * This is a test/evaluation method to check how good the automatic mapping process is.
+     * It's done by taking all mapping entities and calculate the best suggestion (the suggestion).
+     * There are 3 scenarios:
+     * 1) The suggestion's suggested term url is the same as the one in the mapped term.
+     * This is the successful case, showing that the automatic mapping and the actual mapping agree.
+     * 2) The suggestion's suggested term url is NOT the same as the one in the mapped term.
+     * This is a scenario to check, as there is no agreement between the automatic process and the
+     * real mapping.
+     * 3) There is not a suggestion.
+     * This is another scenario to check, as it indicates that a probably successful mapping was
+     * done in the past, but it cannot be replicated with the current logic.
+     */
+    public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities() {
+        Map<String, Integer> report = new HashMap<>();
+        report.put("matching", 0);
+        report.put("not_matching", 0);
+        report.put("not_suggestion", 0);
+        List<List<String>> notMatchingDetails = new ArrayList<>();
+        List<List<String>> notSuggestionsDetails = new ArrayList<>();
+        List<MappingEntity> mappingEntities =
+            mappingEntityService.getAllByStatus(Status.MAPPED.getLabel());
+
+        int counter = 0;
 
 
-    // Temporal filter to make things faster
+        // Temporal filter to make things faster
 //    mappingEntities = mappingEntities.stream().filter(x -> x.getEntityType().getName().equalsIgnoreCase(
 //        EntityTypeName.Diagnosis.getLabel())).collect(Collectors.toList());
 //    mappingEntities = mappingEntities.subList(0, Math.min(mappingEntities.size(), 500));
 
-    int total = mappingEntities.size();
+        int total = mappingEntities.size();
 
-    for (MappingEntity mappingEntity : mappingEntities) {
-      counter++;
-      Optional<Suggestion> optionalSuggestion =
-          automaticMappingsFinder.findBestSuggestion(mappingEntity);
+        for (MappingEntity mappingEntity : mappingEntities) {
+            counter++;
+            Optional<Suggestion> optionalSuggestion =
+                automaticMappingsFinder.findBestSuggestion(mappingEntity);
 
-      if (optionalSuggestion.isPresent()) {
-        Suggestion suggestion = optionalSuggestion.get();
-        if (suggestion.getSuggestedTermUrl().equalsIgnoreCase(mappingEntity.getMappedTermUrl())) {
-          report.compute("matching", (key, val) -> (val == null) ? 1 : val + 1);
-        } else {
-          report.compute("not_matching", (key, val) -> (val == null) ? 1 : val + 1);
-          List<String> details = Arrays.asList(
-              mappingEntity.getId().toString(),
-              suggestion.getSuggestedTermLabel(),
-              Utilities.urlToNCIt(suggestion.getSuggestedTermUrl()),
-              mappingEntity.getMappedTermLabel(),
-              Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
-              mappingEntity.getValuesAsMap().toString());
-          notMatchingDetails.add(details);
+            if (optionalSuggestion.isPresent()) {
+                Suggestion suggestion = optionalSuggestion.get();
+                if (suggestion.getSuggestedTermUrl().equalsIgnoreCase(mappingEntity.getMappedTermUrl())) {
+                    report.compute("matching", (key, val) -> (val == null) ? 1 : val + 1);
+                } else {
+                    report.compute("not_matching", (key, val) -> (val == null) ? 1 : val + 1);
+                    List<String> details = Arrays.asList(
+                        mappingEntity.getId().toString(),
+                        suggestion.getSuggestedTermLabel(),
+                        Utilities.urlToNCIt(suggestion.getSuggestedTermUrl()),
+                        mappingEntity.getMappedTermLabel(),
+                        Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
+                        mappingEntity.getValuesAsMap().toString());
+                    notMatchingDetails.add(details);
+                }
+            } else {
+                report.compute("not_suggestion", (key, val) -> (val == null) ? 1 : val + 1);
+                List<String> details = Arrays.asList(
+                    mappingEntity.getId().toString(),
+                    mappingEntity.getMappedTermLabel(),
+                    Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
+                    mappingEntity.getValuesAsMap().toString());
+                notSuggestionsDetails.add(details);
+            }
+            if (counter % 100 == 0 || counter < 100 || total - counter < 100) {
+                System.out.println("Processed " + counter + " from " + mappingEntities.size());
+            }
         }
-      } else {
-        report.compute("not_suggestion", (key, val) -> (val == null) ? 1 : val + 1);
-        List<String> details = Arrays.asList(
-            mappingEntity.getId().toString(),
-            mappingEntity.getMappedTermLabel(),
-            Utilities.urlToNCIt(mappingEntity.getMappedTermUrl()),
-            mappingEntity.getValuesAsMap().toString());
-        notSuggestionsDetails.add(details);
-      }
-      if (counter % 100 == 0 || counter < 100 || total - counter < 100) {
-        System.out.println("Processed " + counter + " from " + mappingEntities.size());
-      }
+        printReportNotMatching(notMatchingDetails);
+        printReportNotSuggestion(notSuggestionsDetails);
+        return report;
     }
-    printReportNotMatching(notMatchingDetails);
-    printReportNotSuggestion(notSuggestionsDetails);
-    return report;
-  }
 
-  private void printReportNotMatching(List<List<String>> details) {
-    System.out.println("NOT MATCHING ELEMENTS");
-    System.out.println("Id|Suggested url|Suggested label|Current url|Current label|data");
-    for (List<String> element : details) {
-      System.out.println(String.join("|", element));
+    private void printReportNotMatching(List<List<String>> details) {
+        System.out.println("NOT MATCHING ELEMENTS");
+        System.out.println("Id|Suggested url|Suggested label|Current url|Current label|data");
+        for (List<String> element : details) {
+            System.out.println(String.join("|", element));
+        }
     }
-  }
 
-  private void printReportNotSuggestion(List<List<String>> details) {
-    System.out.println("NO SUGGESTIONS FOUND");
-    System.out.println("Id|Current url|Current label|data");
-    for (List<String> element : details) {
-      System.out.println(String.join("|", element));
+    private void printReportNotSuggestion(List<List<String>> details) {
+        System.out.println("NO SUGGESTIONS FOUND");
+        System.out.println("Id|Current url|Current label|data");
+        for (List<String> element : details) {
+            System.out.println(String.join("|", element));
+        }
     }
-  }
 
-  /**
-   * Takes all unmapped entities and calculates the best mapping suggestion for each one. If any is
-   *  found, assigns it as an automatic mapping.
-   * @return {@link ProcessResponse} object with the count of elements that were mapped by type
-   */
-  public ProcessResponse assignAutomaticMappings() {
-    log.info("Init assign Automatic Mappings process");
-    Map<String, String> response = new HashMap<>();
-    int totalUnmappedTreatment;
-    int totalUnmappedDiagnosis;
-    int automaticMappedTreatment;
-    int automaticMappedDiagnosis;
+    /**
+     * Takes all unmapped entities and calculates the best mapping suggestion for each one. If any is
+     * found, assigns it as an automatic mapping.
+     *
+     * @return {@link ProcessResponse} object with the count of elements that were mapped by type
+     */
+    public ProcessResponse assignAutomaticMappings() {
+        log.info("Init assign Automatic Mappings process");
+        Map<String, String> response = new HashMap<>();
+        int totalUnmappedTreatment;
+        int totalUnmappedDiagnosis;
+        int automaticMappedTreatment;
+        int automaticMappedDiagnosis;
 
-    List<MappingEntity> unmappedEntities = mappingEntityService.getAllByStatus(Status.UNMAPPED.getLabel());
-    log.info("Got all unmapped entities. Count: {}", unmappedEntities.size());
+        List<MappingEntity> unmappedEntities = mappingEntityService.getAllByStatus(Status.UNMAPPED.getLabel());
+        log.info("Got all unmapped entities. Count: {}", unmappedEntities.size());
 
-    List<MappingEntity> treatmentEntities =
-        unmappedEntities.stream().filter(
-            x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Treatment.getLabel()))
-            .collect(Collectors.toList());
-    totalUnmappedTreatment = treatmentEntities.size();
-    log.info("Unmapped treatments. Count: {}", unmappedEntities.size());
+        List<MappingEntity> treatmentEntities =
+            unmappedEntities.stream().filter(
+                    x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Treatment.getLabel()))
+                .collect(Collectors.toList());
+        totalUnmappedTreatment = treatmentEntities.size();
+        log.info("Unmapped treatments. Count: {}", unmappedEntities.size());
 
-    automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
+        automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
 
-    List<MappingEntity> diagnosisEntities =
-        unmappedEntities.stream().filter(
-                x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Diagnosis.getLabel()))
-            .collect(Collectors.toList());
-    totalUnmappedDiagnosis = diagnosisEntities.size();
-    log.info("Unmapped diagnosis. Count: {}", unmappedEntities.size());
+        List<MappingEntity> diagnosisEntities =
+            unmappedEntities.stream().filter(
+                    x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Diagnosis.getLabel()))
+                .collect(Collectors.toList());
+        totalUnmappedDiagnosis = diagnosisEntities.size();
+        log.info("Unmapped diagnosis. Count: {}", unmappedEntities.size());
 
-    log.info("Starts automatic assignation diagnosis");
-    automaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
-    log.info("Starts automatic assignation treatments");
-    automaticMappedTreatment= assignAutomaticMappingsByType(treatmentEntities);
+        log.info("Starts automatic assignation diagnosis");
+        automaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
+        log.info("Starts automatic assignation treatments");
+        automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
 
-    // Save in db
-    log.info("Saving into db");
-    mappingEntityService.savAll(diagnosisEntities);
-    mappingEntityService.savAll(treatmentEntities);
-    log.info("Saving into db finished");
+        // Save in db
+        log.info("Saving into db");
+        mappingEntityService.savAll(diagnosisEntities);
+        mappingEntityService.savAll(treatmentEntities);
+        log.info("Saving into db finished");
 
-    response.put("Treatment", automaticMappedTreatment + " from " + totalUnmappedTreatment);
-    response.put("Diagnosis", automaticMappedDiagnosis + " from " + totalUnmappedDiagnosis);
+        response.put("Treatment", automaticMappedTreatment + " from " + totalUnmappedTreatment);
+        response.put("Diagnosis", automaticMappedDiagnosis + " from " + totalUnmappedDiagnosis);
 
-    return new ProcessResponse(response);
-  }
+        return new ProcessResponse(response);
+    }
 
-  public int assignAutomaticMappingsByType(List<MappingEntity> mappingEntities) {
-    int automaticMappingsCount = 0;
-    for (MappingEntity unmapped : mappingEntities) {
-      Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(unmapped);
-      // Check if a suitable suggestion was found
+    public int assignAutomaticMappingsByType(List<MappingEntity> mappingEntities) {
+        int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
+
+        int automaticMappingsCount = 0;
+        for (MappingEntity unmapped : mappingEntities) {
+            Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(unmapped);
+            // Check if a suitable suggestion was found
+            if (optionalSuggestion.isPresent()) {
+                Suggestion suggestion = optionalSuggestion.get();
+                assignMapping(unmapped, suggestion, automaticDirectThreshold);
+                automaticMappingsCount++;
+                log.info("automatic mapped count: {}", automaticMappingsCount);
+            }
+        }
+        return automaticMappingsCount;
+    }
+
+    private void assignMapping(MappingEntity mappingEntity, Suggestion suggestion, int automaticDirectThreshold) {
+        String mappedTermUrl = suggestion.getSuggestedTermUrl();
+        String mappedTermLabel = suggestion.getSuggestedTermLabel();
+
+        String mappingType = MappingType.AUTOMATIC_REVIEW.getLabel();
+        LocalDateTime updateTime = LocalDateTime.now();
+        String sourceType = suggestion.getSourceType();
+
+        String status = Status.REVIEW.getLabel();
+        // If the relative score is "perfect", move directly to mapped, as it doesn't need to be reviewed
+        if (suggestion.getRelativeScore() >= automaticDirectThreshold) {
+            mappingType = MappingType.AUTOMATIC_MAPPED.getLabel();
+            status = Status.MAPPED.getLabel();
+        }
+
+        mappingEntity.setMappedTermUrl(mappedTermUrl);
+        mappingEntity.setMappedTermLabel(mappedTermLabel);
+        mappingEntity.setSource(sourceType);
+        mappingEntity.setMappingType(mappingType);
+        mappingEntity.setDateUpdated(updateTime);
+        mappingEntity.setStatus(status);
+    }
+
+  public void processSubsetEntities() {
+    int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
+    List<MappingEntity> entities = mappingEntityService.getAllByTypeName(EntityTypeName.Diagnosis.getLabel());
+    System.out.println("id|OriginTissue|TumorType|SampleDiagnosis|DataSource|Status|Current|Suggested" +
+        "|RuleOriginTissue|RuleTumorType|RuleSampleDiagnosis|RuleDataSource|Score|origMType|NewMType");
+
+    for (MappingEntity entity : entities) {
+      Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(entity);
+      String originalMappingType = entity.getMappingType();
+      String ruleOriginTissue = "", ruleTumorType = "", ruleSampleDiagnosis = "", ruleDataSource = "";
       if (optionalSuggestion.isPresent()) {
         Suggestion suggestion = optionalSuggestion.get();
-        assignMapping(unmapped, suggestion);
-        automaticMappingsCount++;
-        log.info("automatic mapped count: {}", automaticMappingsCount);
+        assignMapping(entity, optionalSuggestion.get(), automaticDirectThreshold);
+        if (suggestion.getSourceType().equalsIgnoreCase("Rule")) {
+          var e = suggestion.getMappingEntity();
+          if (e != null) {
+            ruleOriginTissue = e.getValuesAsMap().get("OriginTissue");
+            ruleTumorType = e.getValuesAsMap().get("TumorType");
+            ruleSampleDiagnosis = e.getValuesAsMap().get("SampleDiagnosis");
+            ruleDataSource = e.getValuesAsMap().get("DataSource");
+          }
+        }
       }
+      optionalSuggestion.ifPresent(suggestion -> {
+
+      });
+      System.out.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s%n",
+          entity.getId(),
+          entity.getValuesAsMap().get("OriginTissue"),
+          entity.getValuesAsMap().get("TumorType"),
+          entity.getValuesAsMap().get("SampleDiagnosis"),
+          entity.getValuesAsMap().get("DataSource"),
+          entity.getStatus(),
+          entity.getMappedTermLabel(),
+          optionalSuggestion.orElse(new Suggestion()).getSuggestedTermLabel(),
+          ruleOriginTissue,
+          ruleTumorType,
+          ruleSampleDiagnosis,
+          ruleDataSource,
+          optionalSuggestion.orElse(new Suggestion()).getRelativeScore(),
+          originalMappingType,
+          entity.getMappingType()
+      );
     }
-    return automaticMappingsCount;
-  }
-
-  private void assignMapping(MappingEntity mappingEntity, Suggestion suggestion) {
-    String mappedTermUrl = suggestion.getSuggestedTermUrl();
-    String mappedTermLabel = suggestion.getSuggestedTermLabel();
-    String mappingType = MappingType.AUTOMATIC.getLabel();
-    LocalDateTime updateTime = LocalDateTime.now();
-    String sourceType = suggestion.getSourceType();
-    String status = Status.REVIEW.getLabel();
-
-    mappingEntity.setMappedTermUrl(mappedTermUrl);
-    mappingEntity.setMappedTermLabel(mappedTermLabel);
-    mappingEntity.setSource(sourceType);
-    mappingEntity.setMappingType(mappingType);
-    mappingEntity.setDateUpdated(updateTime);
-    mappingEntity.setStatus(status);
   }
 }

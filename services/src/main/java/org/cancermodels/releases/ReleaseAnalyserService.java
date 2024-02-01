@@ -154,4 +154,10 @@ public class ReleaseAnalyserService {
         List<Release> releases = releaseService.getAllReleasesSortedByDate();
         return releaseSummaryService.getReleasesSummaries(releases);
     }
+
+    public void deleteRelease(long releaseId) {
+        Release release = releaseService.getReleaseByIdOrFail(releaseId);
+        deleteAllAssociatedReleaseData(release);
+        releaseService.delete(release);
+    }
 }
