@@ -180,6 +180,9 @@ public class UnmappedTermsDiscoverService {
         for(String drug : drugArray) {
 
           String drugValue = drug.toLowerCase();
+          // Make sure we don't get extra spaces because of the slip
+          drugValue = drugValue.trim();
+
           if (drugValue.equals("not collected") || drugValue.equals("not provided")) {
             drugValue = "unknown";
           }
