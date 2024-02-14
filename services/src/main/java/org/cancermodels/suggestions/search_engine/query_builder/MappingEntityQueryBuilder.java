@@ -42,7 +42,6 @@ public class MappingEntityQueryBuilder {
 
     // Build the section of the query that search similar rules
     Query ruleQuery = rulesQueryBuilder.buildRulesQuery(mappingEntity);
-    System.out.println("ruleQuery:::" + ruleQuery);
     // Build the section of the query that search similar ontologies
     Query ontologyQuery = ontologyQueryBuilder.buildOntologiesQuery(mappingEntity);
 
@@ -57,7 +56,6 @@ public class MappingEntityQueryBuilder {
         builder.add(ruleAndOntologyCombinedQuery, Occur.SHOULD).add(sourceTypeQuery, Occur.MUST_NOT).build();
 
     log.info("Suggestion query: {}", finalQuery.toString());
-    System.out.println("Suggestion query:::" + finalQuery);
 
     return finalQuery;
   }
