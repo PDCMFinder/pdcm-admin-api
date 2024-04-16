@@ -219,7 +219,7 @@ public class AutomaticMappingsService {
         mappingEntity.setStatus(status);
     }
 
-  public void processSubsetEntities() {
+  public void processSubsetDiagnosisEntities() {
     int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
     List<MappingEntity> entities = mappingEntityService.getAllByTypeName(EntityTypeName.Diagnosis.getLabel());
     System.out.println("id|OriginTissue|TumorType|SampleDiagnosis|DataSource|Status|Current|Suggested" +
@@ -264,4 +264,44 @@ public class AutomaticMappingsService {
       );
     }
   }
+
+    public void processSubsetTreatmentEntities() {
+        int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
+        List<MappingEntity> entities = mappingEntityService.getAllByTypeName(EntityTypeName.Treatment.getLabel());
+        System.out.println("id|TreatmentName|DataSource|Status|Current|Suggested" +
+            "|RuleTreatmentName|RuleDataSource|Score|origMType|NewMType");
+
+        for (MappingEntity entity : entities) {
+            Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(entity);
+            String originalMappingType = entity.getMappingType();
+            String ruleTreatmentName = "", ruleDataSource = "";
+            if (optionalSuggestion.isPresent()) {
+                Suggestion suggestion = optionalSuggestion.get();
+                assignMapping(entity, optionalSuggestion.get(), automaticDirectThreshold);
+                if (suggestion.getSourceType().equalsIgnoreCase("Rule")) {
+                    var e = suggestion.getMappingEntity();
+                    if (e != null) {
+                        ruleTreatmentName = e.getValuesAsMap().get("TreatmentName");
+                        ruleDataSource = e.getValuesAsMap().get("DataSource");
+                    }
+                }
+            }
+            optionalSuggestion.ifPresent(suggestion -> {
+
+            });
+            System.out.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s%n",
+                entity.getId(),
+                entity.getValuesAsMap().get("TreatmentName"),
+                entity.getValuesAsMap().get("DataSource"),
+                entity.getStatus(),
+                entity.getMappedTermLabel(),
+                optionalSuggestion.orElse(new Suggestion()).getSuggestedTermLabel(),
+                ruleTreatmentName,
+                ruleDataSource,
+                optionalSuggestion.orElse(new Suggestion()).getRelativeScore(),
+                originalMappingType,
+                entity.getMappingType()
+            );
+        }
+    }
 }

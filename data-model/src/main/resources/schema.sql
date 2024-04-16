@@ -165,7 +165,6 @@ CREATE TABLE admin_app.model_summary (
     patient_ethnicity TEXT,
     patient_ethnicity_assessment_method TEXT,
     patient_initial_diagnosis TEXT,
-    patient_treatment_status TEXT,
     patient_age_at_initial_diagnosis TEXT,
     patient_sample_id TEXT,
     patient_sample_collection_date TEXT,

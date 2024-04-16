@@ -59,7 +59,6 @@ public class ModelSummary {
   private String patientEthnicity;
   private String patientEthnicityAssessmentMethod;
   private String patientInitialDiagnosis;
-  private String patientTreatmentStatus;
   private String patientAgeAtInitialDiagnosis;
   private String patientSampleId;
   private String patientSampleCollectionDate;

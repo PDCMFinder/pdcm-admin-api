@@ -144,9 +144,14 @@ public class MappingController {
     return automaticMappingsService.assignAutomaticMappings();
   }
 
-  // Utility endpoint to analize the scores of the suggestions
-  @PutMapping("/processSubsetEntities")
-  public void processSubsetEntities(){
-     automaticMappingsService.processSubsetEntities();
+  // Utility endpoint to analyze the scores of the suggestions
+  @PutMapping("/processSubsetDiagnosisEntities")
+  public void processSubsetDiagnosisEntities(){
+     automaticMappingsService.processSubsetDiagnosisEntities();
+  }
+
+  @PutMapping("/processSubsetTreatmentEntities")
+  public void processSubsetTreatmentEntities(){
+    automaticMappingsService.processSubsetTreatmentEntities();
   }
 }
