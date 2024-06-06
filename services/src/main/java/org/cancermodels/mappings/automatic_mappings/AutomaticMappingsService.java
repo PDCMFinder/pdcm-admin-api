@@ -140,8 +140,8 @@ public class AutomaticMappingsService {
         Map<String, String> response = new HashMap<>();
         int totalUnmappedTreatment;
         int totalUnmappedDiagnosis;
-        int totalAutomaticMappedTreatments;
-        int totalAutomaticMappedDiagnosis;
+        int totalAutomaticMappedTreatments = 0;
+        int totalAutomaticMappedDiagnosis = 0;
 
         List<MappingEntity> unmappedEntities = mappingEntityService.getAllByStatus(Status.UNMAPPED.getLabel());
         log.info("Got all unmapped entities. Count: {}", unmappedEntities.size());
@@ -163,12 +163,16 @@ public class AutomaticMappingsService {
         log.info("Starts automatic assignation diagnosis");
         totalAutomaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
         log.info("Starts automatic assignation treatments");
-        totalAutomaticMappedTreatments = assignAutomaticMappingsByType(treatmentEntities);
+        // NOTE: Disabling automatic mappings of treatments as there are several false positive mappings
+        // in treatment names that require some changes in code. Maybe setting up a more strict threshold?
+        //totalAutomaticMappedTreatments = assignAutomaticMappingsByType(treatmentEntities);
 
         // Save in db
         log.info("Saving into db");
         mappingEntityService.savAll(diagnosisEntities);
-        mappingEntityService.savAll(treatmentEntities);
+        // NOTE: Disabling automatic mappings of treatments as there are several false positive mappings
+        // in treatment names that require some changes in code. Maybe setting up a more strict threshold?
+        //mappingEntityService.savAll(treatmentEntities);
         log.info("Saving into db finished");
 
         response.put("Treatment", totalAutomaticMappedTreatments + " from " + totalUnmappedTreatment);
