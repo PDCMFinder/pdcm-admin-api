@@ -140,8 +140,8 @@ public class AutomaticMappingsService {
         Map<String, String> response = new HashMap<>();
         int totalUnmappedTreatment;
         int totalUnmappedDiagnosis;
-        int automaticMappedTreatment;
-        int automaticMappedDiagnosis;
+        int totalAutomaticMappedTreatments;
+        int totalAutomaticMappedDiagnosis;
 
         List<MappingEntity> unmappedEntities = mappingEntityService.getAllByStatus(Status.UNMAPPED.getLabel());
         log.info("Got all unmapped entities. Count: {}", unmappedEntities.size());
@@ -153,8 +153,6 @@ public class AutomaticMappingsService {
         totalUnmappedTreatment = treatmentEntities.size();
         log.info("Unmapped treatments. Count: {}", unmappedEntities.size());
 
-        automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
-
         List<MappingEntity> diagnosisEntities =
             unmappedEntities.stream().filter(
                     x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Diagnosis.getLabel()))
@@ -163,9 +161,9 @@ public class AutomaticMappingsService {
         log.info("Unmapped diagnosis. Count: {}", unmappedEntities.size());
 
         log.info("Starts automatic assignation diagnosis");
-        automaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
+        totalAutomaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
         log.info("Starts automatic assignation treatments");
-        automaticMappedTreatment = assignAutomaticMappingsByType(treatmentEntities);
+        totalAutomaticMappedTreatments = assignAutomaticMappingsByType(treatmentEntities);
 
         // Save in db
         log.info("Saving into db");
@@ -173,8 +171,8 @@ public class AutomaticMappingsService {
         mappingEntityService.savAll(treatmentEntities);
         log.info("Saving into db finished");
 
-        response.put("Treatment", automaticMappedTreatment + " from " + totalUnmappedTreatment);
-        response.put("Diagnosis", automaticMappedDiagnosis + " from " + totalUnmappedDiagnosis);
+        response.put("Treatment", totalAutomaticMappedTreatments + " from " + totalUnmappedTreatment);
+        response.put("Diagnosis", totalAutomaticMappedDiagnosis + " from " + totalUnmappedDiagnosis);
 
         return new ProcessResponse(response);
     }
