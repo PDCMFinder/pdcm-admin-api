@@ -1,19 +1,10 @@
 package org.cancermodels.pdcm_admin.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import jakarta.persistence.*;
 
 /**
  * A reduced representation of a model as stored in the search_index table.
