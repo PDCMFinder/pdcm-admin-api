@@ -17,6 +17,7 @@ maven-build-prod:
   image: eclipse-temurin:22
   stage: build
   script:
+    - apt-get update && apt-get install -y maven
     - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:prod -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=prod
 
   only:
