@@ -5,7 +5,7 @@
   <parent>
     <artifactId>pdcm-admin-api</artifactId>
     <groupId>org.cancermodels</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -18,18 +18,14 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-webmvc -->
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-rest-webmvc</artifactId>
-      <version>3.7.1</version>
     </dependency>
-
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-hateoas</artifactId>
-      <version>2.6.4</version>
     </dependency>
 
     <dependency>
@@ -37,6 +33,19 @@
       <artifactId>services</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.18.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.12.0</version>
     </dependency>
 
   </dependencies>
@@ -62,6 +71,5 @@
 
     </plugins>
   </build>
-
 
 </project>

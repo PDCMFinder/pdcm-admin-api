@@ -1,7 +1,9 @@
 package org.cancermodels.pdcm_etl;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

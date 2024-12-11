@@ -1,7 +1,7 @@
 package org.cancermodels.pdcm_admin.persistance;
 
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**

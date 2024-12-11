@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javax.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mapping_rules.MappingRulesService;
