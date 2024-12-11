@@ -1,23 +1,15 @@
 package org.cancermodels.pdcm_etl;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.List;
-import java.util.Map;
 
 @Entity
-@TypeDefs({
-    @TypeDef(name = "json", typeClass = JsonType.class)
-})
+
 @Getter
 @Setter
 @Table(name ="search_index", schema = "pdcm_api")

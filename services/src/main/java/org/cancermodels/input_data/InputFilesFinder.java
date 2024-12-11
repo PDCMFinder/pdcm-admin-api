@@ -42,15 +42,17 @@ public class InputFilesFinder {
   @Value("${data_repo_gitlab_branch}")
   private String dataRepoGitlabBranch;
 
-  private final GitLabApi gitLabApi;
+  //private final GitLabApi gitLabApi=null;
+
+  private final GitLabApiInstantiator gitLabApiInstantiator;
 
   private final EntityTypeService entityTypeService;
 
   public InputFilesFinder(GitLabApiInstantiator gitLabApiInstantiator,
       EntityTypeService entityTypeService) {
     this.entityTypeService = entityTypeService;
+    this.gitLabApiInstantiator = gitLabApiInstantiator;
     initFilesFinderMap();
-    gitLabApi = gitLabApiInstantiator.getGitLabApiInstance();
   }
 
   private void initFilesFinderMap() {
@@ -73,16 +75,17 @@ public class InputFilesFinder {
    */
   public List<RepositoryFile> getListFilesToDownload() throws GitLabApiException, IOException {
     log.info("Finding input files...");
+    GitLabApi gitLabApi = gitLabApiInstantiator.getGitLabApiInstance();
     List<RepositoryFile> files = new ArrayList<>();
-    List<RepositoryFile> filesFromProviders = getListFilesToDownloadFromProviders();
-    List<RepositoryFile> filesFromMappingsFolder = getFilesFromMappingFolder();
+    List<RepositoryFile> filesFromProviders = getListFilesToDownloadFromProviders(gitLabApi);
+    List<RepositoryFile> filesFromMappingsFolder = getFilesFromMappingFolder(gitLabApi);
     files.addAll(filesFromProviders);
     files.addAll(filesFromMappingsFolder);
     return files;
 
   }
 
-  private List<RepositoryFile> getFilesFromMappingFolder() {
+  private List<RepositoryFile> getFilesFromMappingFolder(GitLabApi gitLabApi) {
     log.info("Finding mapping files...");
     List<RepositoryFile> mappingFiles = new ArrayList<>();
     for (EntityType entityType : entityTypeService.getAll()) {
@@ -102,7 +105,7 @@ public class InputFilesFinder {
 
   }
 
-  private List<RepositoryFile> getListFilesToDownloadFromProviders()
+  private List<RepositoryFile> getListFilesToDownloadFromProviders(GitLabApi gitLabApi)
       throws GitLabApiException, IOException {
     log.info("Calling api to get folders for project {} in path {} ref {}",
         GitLabApiConstants.PROJECT_ID, providersRootFolderPath, dataRepoGitlabBranch);
@@ -110,21 +113,21 @@ public class InputFilesFinder {
     List<TreeItem> providerFolders = gitLabApi.getRepositoryApi().getTree(
         GitLabApiConstants.PROJECT_ID, providersRootFolderPath, dataRepoGitlabBranch);
 
-    return processProviderFolders(providerFolders);
+    return processProviderFolders(providerFolders, gitLabApi);
   }
 
-  private List<RepositoryFile> processProviderFolders(List<TreeItem> providerFolders)
+  private List<RepositoryFile> processProviderFolders(List<TreeItem> providerFolders, GitLabApi gitLabApi)
       throws GitLabApiException {
     List<RepositoryFile> files = new ArrayList<>();
     for (TreeItem item : providerFolders) {
 
-      files.addAll(processProviderFolder(item));
+      files.addAll(processProviderFolder(item, gitLabApi));
     }
 
     return files;
   }
 
-  private List<RepositoryFile> processProviderFolder(TreeItem item)
+  private List<RepositoryFile> processProviderFolder(TreeItem item, GitLabApi gitLabApi)
       throws GitLabApiException {
     log.info("Processing {}", item.getPath());
     List<RepositoryFile> paths = new ArrayList<>();

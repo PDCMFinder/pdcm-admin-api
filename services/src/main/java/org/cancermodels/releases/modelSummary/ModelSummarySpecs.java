@@ -1,13 +1,11 @@
 package org.cancermodels.releases.modelSummary;
 
+import jakarta.persistence.criteria.Path;
 import org.cancermodels.filters.PredicateBuilder;
 import org.cancermodels.pdcm_admin.persistance.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +53,8 @@ public class ModelSummarySpecs {
         {
             List<Long> idsAsLongs = releaseIds.stream().map(Long::parseLong).collect(Collectors.toList());
             specification = (root, query, criteriaBuilder) -> {
-                Path<Release> releasePath = root.get(ModelSummary_.RELEASE);
+                
+                Path<Release> releasePath = root.get(ModelSummary_.release);
                 Path<Long> releaseIdPath = releasePath.get(Release_.id);
                 query.distinct(true);
                 return PredicateBuilder.addLongInPredicates(

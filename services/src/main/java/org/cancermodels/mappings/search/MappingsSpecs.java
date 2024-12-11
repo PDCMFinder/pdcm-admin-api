@@ -1,12 +1,10 @@
 package org.cancermodels.mappings.search;
 
-import java.util.*;
-import javax.persistence.criteria.ListJoin;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
+import java.util.*;
+
+import jakarta.persistence.criteria.*;
+import jakarta.persistence.metamodel.SingularAttribute;
 import org.cancermodels.filters.PredicateBuilder;
 import org.cancermodels.pdcm_admin.persistance.EntityType;
 import org.cancermodels.pdcm_admin.persistance.EntityType_;
@@ -31,16 +29,16 @@ public class MappingsSpecs {
    * @param status List of status to use in the filter
    * @return Specification with the predicate: MappingEntity_.status in (status)
    */
-  public static Specification<MappingEntity> withStatus(List<String> status)
-  {
+  public static Specification<MappingEntity> withStatus(List<String> status) {
     Specification<MappingEntity> specification = Specification.where(null);
-    if (status != null)
-    {
+    if (status != null) {
       specification = (Specification<MappingEntity>) (root, query, criteriaBuilder) -> {
-        Path<String> statusPath = root.get(MappingEntity_.status);
+        // Explicitly cast to SingularAttribute to resolve ambiguity
+        SingularAttribute<? super MappingEntity, String> statusAttribute = MappingEntity_.status;
+        Path<String> statusPath = root.get(statusAttribute);
+
         query.distinct(true);
-        return PredicateBuilder.addLowerInPredicates(
-            criteriaBuilder, statusPath, status);
+        return PredicateBuilder.addLowerInPredicates(criteriaBuilder, statusPath, status);
       };
     }
     return specification;
