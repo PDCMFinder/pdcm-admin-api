@@ -3,7 +3,7 @@ stages:
   - deploy
 
 maven-build-dev:
-  image: maven:3.6.3-openjdk-11
+  image: eclipse-temurin:22
   stage: build
   script:
     - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:dev -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=dev
@@ -13,7 +13,7 @@ maven-build-dev:
       - develop
 
 maven-build-prod:
-  image: maven:3.6.3-openjdk-11
+  image: eclipse-temurin:22
   stage: build
   script:
     - mvn clean install jib:build -Djib.to.image=docker.io/"$DOCKER_HUB_USER"/$DOCKER_HUB_REPO:prod -Djib.to.auth.username="$DOCKER_HUB_USER" -Djib.to.auth.password="$DOCKER_HUB_TOKEN" -Djib.to.tags=prod
