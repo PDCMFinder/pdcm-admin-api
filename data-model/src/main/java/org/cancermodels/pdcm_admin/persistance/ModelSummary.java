@@ -15,7 +15,8 @@ import jakarta.persistence.*;
 public class ModelSummary {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq_gen")
+  @SequenceGenerator(name = "hibernate_seq_gen", sequenceName = "hibernate_sequence", allocationSize = 1)
   @JsonIgnore
   private Integer id;
 
