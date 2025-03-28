@@ -29,7 +29,7 @@ public class MappingRulesController {
     this.mappingRulesService = mappingRulesService;
   }
 
-  @GetMapping(value="/mappingRules", produces="application/zip")
+  @GetMapping(value="/rules-zip", produces="application/zip")
   public void getZipOfMappingRules(HttpServletResponse response) throws IOException {
 
     //setting headers
@@ -57,8 +57,8 @@ public class MappingRulesController {
    * Because the json files contain only Mapped data, any mappings in other status
    * (Review, Unmapped, Request) will be lost.
    */
-  @PutMapping("/restoreMappedMappingEntitiesFromJsons")
-  public void getSimilar() throws IOException {
+  @PutMapping("/restore-from-jsons")
+  public void restoreMappedMappingEntitiesFromJsons() throws IOException {
     mappingRulesService.restoreMappedMappingEntitiesFromJsons();
   }
 
