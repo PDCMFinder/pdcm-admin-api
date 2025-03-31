@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin.types;
 
+import lombok.Getter;
+
+@Getter
 public enum MappingKeyName {
   DATASOURCE("DataSource"),
   SAMPLE_DIAGNOSIS("SampleDiagnosis"),
@@ -13,7 +16,4 @@ public enum MappingKeyName {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
 }

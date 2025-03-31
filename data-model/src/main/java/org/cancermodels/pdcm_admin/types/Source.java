@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin.types;
 
+import lombok.Getter;
+
+@Getter
 public enum Source {
   RULE("Rule"),
   ONTOLOGY("Ontology"),
@@ -11,7 +14,4 @@ public enum Source {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
 }
