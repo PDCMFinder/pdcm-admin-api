@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
-import org.cancermodels.suggestions.search_engine.OntologySearcherByText;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class OntologySearcherController {
 
-private final OntologySearcherByText ontologySearcherByText;
+//private final OntologySearcherByText ontologySearcherByText;
   private final SuggestionMapper suggestionMapper;
 
-  public OntologySearcherController(OntologySearcherByText ontologySearcherByText,
+  public OntologySearcherController(
+      //OntologySearcherByText ontologySearcherByText,
       SuggestionMapper suggestionMapper) {
-    this.ontologySearcherByText = ontologySearcherByText;
+    //this.ontologySearcherByText = ontologySearcherByText;
     this.suggestionMapper = suggestionMapper;
   }
 
@@ -33,7 +33,8 @@ private final OntologySearcherByText ontologySearcherByText;
       @RequestParam(value = "input") String input, @RequestParam(value = "entityTypeName") String entityTypeName) {
     log.info("Ontology search for: [{}]", input);
     List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
-    List<Suggestion> results = ontologySearcherByText.searchWithDefaultParameters(input, entityTypeName);
+    //List<Suggestion> results = ontologySearcherByText.searchWithDefaultParameters(input, entityTypeName);
+    List<Suggestion> results = new ArrayList<>();
     log.info("Found: {} suggestions", results.size());
     results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
     log.info("Returning: {} results", suggestionDTOS.size());

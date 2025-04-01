@@ -14,7 +14,6 @@ import org.cancermodels.general.MappingEntityBuilder;
 import org.cancermodels.general.SuggestionBuilder;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
-import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.cancermodels.pdcm_admin.types.Source;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class AutomaticMappingsFinderTest {
-
-  @Mock
-  private SuggestionsSearcher suggestionsSearcher;
 
   @Mock
   private SimilarityConfigurationReader similarityConfigurationReader;
@@ -50,7 +46,7 @@ class AutomaticMappingsFinderTest {
   @BeforeEach
   public void setup()
   {
-    instance = new AutomaticMappingsFinder(suggestionsSearcher, similarityConfigurationReader);
+    instance = new AutomaticMappingsFinder(similarityConfigurationReader);
   }
 
   @Test
@@ -61,7 +57,7 @@ class AutomaticMappingsFinderTest {
         .build();
     List<Suggestion> suggestions = new ArrayList<>();
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
         instance.findBestSuggestion(mappingEntity);
@@ -76,7 +72,7 @@ class AutomaticMappingsFinderTest {
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
         .build();
     List<Suggestion> suggestions = new ArrayList<>();
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
         instance.findBestSuggestion(mappingEntity);
@@ -99,7 +95,7 @@ class AutomaticMappingsFinderTest {
         .build();
     suggestions.add(badSuggestion);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
@@ -131,7 +127,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(badSuggestion1);
     suggestions.add(badSuggestion2);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
@@ -155,7 +151,7 @@ class AutomaticMappingsFinderTest {
 
     suggestions.add(suggestionEqualsToPerfectThreshold);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -178,7 +174,7 @@ class AutomaticMappingsFinderTest {
 
     suggestions.add(suggestionHigherThanPerfectThreshold);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -207,7 +203,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(suggestionBadSuggestion);
     suggestions.add(suggestionPerfectThreshold);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -236,7 +232,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(perfectSuggestion);
     suggestions.add(perfectSuggestionHigherRelativeScore);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -272,7 +268,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion2);
     suggestions.add(acceptableSuggestion3);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
@@ -310,7 +306,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion2);
     suggestions.add(acceptableSuggestion3);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -352,7 +348,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion3);
     suggestions.add(acceptableSuggestion4);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
@@ -384,7 +380,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion1);
     suggestions.add(acceptableSuggestion2);
 
-    when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);

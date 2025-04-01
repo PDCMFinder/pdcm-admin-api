@@ -1,6 +1,5 @@
 package org.cancermodels.mappings;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import org.cancermodels.pdcm_admin.types.MappingType;
 import org.cancermodels.pdcm_admin.persistance.EntityType;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
-import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,34 +15,23 @@ public class MappingEntityService {
 
   private final MappingEntityRepository mappingEntityRepository;
   private final EntityTypeService entityTypeService;
-  private final SuggestionManager suggestionManager;
   private final MappingEntityUpdater mappingEntityUpdater;
 
   public MappingEntityService(MappingEntityRepository mappingEntityRepository,
       EntityTypeService entityTypeService,
-      SuggestionManager suggestionManager,
       MappingEntityUpdater mappingEntityUpdater) {
     this.mappingEntityRepository = mappingEntityRepository;
     this.entityTypeService = entityTypeService;
-    this.suggestionManager = suggestionManager;
     this.mappingEntityUpdater = mappingEntityUpdater;
   }
 
   /**
    * Find a {@link MappingEntity} using its id.
-   * @param id Id of the mapping entity.
+   * @param id ID of the mapping entity.
    * @return Optional with the Mapping entity if found.
    */
   public Optional<MappingEntity> findById(int id) {
     return mappingEntityRepository.findById(id);
-  }
-
-  /**
-   * Get all existing {@link MappingEntity}
-   * @return
-   */
-  public List<MappingEntity> findAll() {
-    return mappingEntityRepository.findAll();
   }
 
   /**
@@ -72,19 +59,6 @@ public class MappingEntityService {
     } else {
       return Optional.empty();
     }
-  }
-
-  /**
-   * Sets the suggestions by rules and by ontologies for all the mapping entities in the system
-   */
-  public void setMappingSuggestions() throws IOException {
-    Map<String, List<MappingEntity>> mappingEntitiesMappedByType = getMappingEntitiesMappedByType();
-    for (String type : mappingEntitiesMappedByType.keySet()) {
-      // Process all mappings
-      List<MappingEntity> toProcess = mappingEntitiesMappedByType.get(type);
-      suggestionManager.calculateSuggestions(toProcess);
-    }
-
   }
 
   private Map<String, List<MappingEntity>> getMappingEntitiesMappedByType() {

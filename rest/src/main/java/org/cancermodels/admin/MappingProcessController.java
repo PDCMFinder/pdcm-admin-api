@@ -9,7 +9,6 @@ import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.exception_handling.ResourceNotFoundException;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.automatic_mappings.AutomaticMappingsService;
-import org.cancermodels.mappings.suggestions.SuggestionManager;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.process_report.ProcessResponse;
@@ -32,17 +31,17 @@ public class MappingProcessController {
 
     private final AutomaticMappingsService automaticMappingsService;
     private final MappingEntityService mappingEntityService;
-    private final SuggestionManager suggestionManager;
+    //private final SuggestionManager suggestionManager;
     private final SuggestionMapper suggestionMapper;
 
     public MappingProcessController(
         AutomaticMappingsService automaticMappingsService,
         MappingEntityService mappingEntityService,
-        SuggestionManager suggestionManager,
+        //SuggestionManager suggestionManager,
         SuggestionMapper suggestionMapper) {
         this.automaticMappingsService = automaticMappingsService;
         this.mappingEntityService = mappingEntityService;
-        this.suggestionManager = suggestionManager;
+        //this.suggestionManager = suggestionManager;
         this.suggestionMapper = suggestionMapper;
     }
 
@@ -98,9 +97,9 @@ public class MappingProcessController {
         MappingEntity mappingEntity = mappingEntityService.findById(id)
             .orElseThrow(ResourceNotFoundException::new);
 
-        if (mappingEntity.getSuggestions().isEmpty()) {
-            suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
-        }
+//        if (mappingEntity.getSuggestions().isEmpty()) {
+//            suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
+//        }
 
         List<Suggestion> suggestions = mappingEntity.getSuggestions();
         suggestions.forEach(suggestion -> suggestionDTOS.add(suggestionMapper.convertToDto(suggestion)));

@@ -1,10 +1,8 @@
 package org.cancermodels.admin.mappers;
 
 import org.cancermodels.admin.dtos.MappingEntitySuggestionDTO;
-import org.cancermodels.admin.dtos.OntologySuggestionDTO;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
-import org.cancermodels.pdcm_admin.persistance.OntologyTerm;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +15,7 @@ public class SuggestionMapper {
     suggestionDTO.setScore(suggestion.getScore());
     suggestionDTO.setRelativeScore(suggestion.getRelativeScore());
     suggestionDTO.setRule(convertMappingEntityToSuggestion(suggestion.getMappingEntity()));
-    suggestionDTO.setOntology(convertOntologyTermToSuggestion(suggestion.getOntologyTerm()));
+    //suggestionDTO.setOntology(convertOntologyTermToSuggestion(suggestion.getOntologyTerm()));
     suggestionDTO.setSuggestedTermUrl(suggestion.getSuggestedTermUrl());
     suggestionDTO.setSuggestedTermLabel(suggestion.getSuggestedTermLabel());
     return suggestionDTO;
@@ -32,19 +30,5 @@ public class SuggestionMapper {
     }
 
     return mappingEntitySuggestionDTO;
-  }
-
-  public OntologySuggestionDTO convertOntologyTermToSuggestion(OntologyTerm ontologyTerm) {
-    OntologySuggestionDTO ontologySuggestionDTO = null;
-
-    if (ontologyTerm != null) {
-      ontologySuggestionDTO = new OntologySuggestionDTO();
-      ontologySuggestionDTO.setNcit(ontologyTerm.getKey());
-      ontologySuggestionDTO.setUrl(ontologyTerm.getUrl());
-      ontologySuggestionDTO.setOntologyTermLabel(ontologyTerm.getLabel());
-      ontologySuggestionDTO.setSynonyms(ontologyTerm.getSynonyms());
-      ontologySuggestionDTO.setDescription(ontologyTerm.getDescription());
-    }
-    return ontologySuggestionDTO;
   }
 }

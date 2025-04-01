@@ -17,8 +17,6 @@ import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.process_report.ProcessResponse;
-import org.cancermodels.suggestions.indexers.Indexer;
-import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,19 +32,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/indexer")
 public class IndexerController {
-    private final Indexer indexer;
+    //private final Indexer indexer;
     private final MappingEntityService mappingEntityService;
-    private final SuggestionsSearcher suggestionsSearcher;
+    //private final SuggestionsSearcher suggestionsSearcher;
     private final SuggestionMapper suggestionMapper;
 
     public IndexerController(
-        Indexer indexer,
+        //Indexer indexer,
         MappingEntityService mappingEntityService,
-        SuggestionsSearcher suggestionsSearcher,
+        //SuggestionsSearcher suggestionsSearcher,
         SuggestionMapper suggestionMapper) {
-        this.indexer = indexer;
+        //this.indexer = indexer;
         this.mappingEntityService = mappingEntityService;
-        this.suggestionsSearcher = suggestionsSearcher;
+        //this.suggestionsSearcher = suggestionsSearcher;
         this.suggestionMapper = suggestionMapper;
     }
 
@@ -70,16 +68,17 @@ public class IndexerController {
     })
     @PutMapping("index")
     public ProcessResponse indexAll() throws IOException {
-        return indexer.index();
+        //return indexer.index();
+        return null;
     }
 
     @GetMapping("calculateSuggestions/{id}")
     List<SuggestionDTO> getMappingEntity(@PathVariable int id) throws IOException {
         List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
-        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
-            ResourceNotFoundException::new);
-        List<Suggestion> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
-        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
+//        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+//            ResourceNotFoundException::new);
+//        List<Suggestion> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
+//        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
         return suggestionDTOS;
     }
 }

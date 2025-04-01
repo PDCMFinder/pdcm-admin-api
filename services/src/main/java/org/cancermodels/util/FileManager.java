@@ -27,7 +27,7 @@ public class FileManager {
       }
       System.out.println("...");
     } catch (Exception e) {
-      LOG.error("Failed to load file " + path, e);
+        LOG.error("Failed to load file {}", path, e);
     }
     return sb.toString();
   }

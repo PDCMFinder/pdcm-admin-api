@@ -149,7 +149,7 @@ public class AutomaticMappingsService {
         List<MappingEntity> treatmentEntities =
             unmappedEntities.stream().filter(
                     x -> x.getEntityType().getName().equalsIgnoreCase(EntityTypeName.Treatment.getLabel()))
-                .collect(Collectors.toList());
+                .toList();
         totalUnmappedTreatment = treatmentEntities.size();
         log.info("Unmapped treatments. Count: {}", unmappedEntities.size());
 

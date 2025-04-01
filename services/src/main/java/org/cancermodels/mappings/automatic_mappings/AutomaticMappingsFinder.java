@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
-import org.cancermodels.suggestions.search_engine.SuggestionsSearcher;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,12 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AutomaticMappingsFinder {
 
-  private final SuggestionsSearcher suggestionsSearcher;
   private final SimilarityConfigurationReader similarityConfigurationReader;
 
-  public AutomaticMappingsFinder(
-      SuggestionsSearcher suggestionsSearcher, SimilarityConfigurationReader similarityConfigurationReader) {
-    this.suggestionsSearcher = suggestionsSearcher;
+  public AutomaticMappingsFinder(SimilarityConfigurationReader similarityConfigurationReader) {
     this.similarityConfigurationReader = similarityConfigurationReader;
   }
 
@@ -40,7 +36,9 @@ public class AutomaticMappingsFinder {
       MappingEntity mappingEntity) {
 
     Optional<Suggestion> answer;
-    List<Suggestion> suggestions = suggestionsSearcher.searchTopSuggestions(mappingEntity);
+//    List<Suggestion> suggestions = suggestionsSearcher.searchTopSuggestions(mappingEntity);
+    // TODO: Here comes the logic to call e2o to get the suggestions
+    List<Suggestion> suggestions = new ArrayList<>();
     List<Suggestion> processedSuggestions = filterOnlyAcceptableSuggestions(suggestions);
     processedSuggestions = sortDescByRelativeScore(processedSuggestions);
 
