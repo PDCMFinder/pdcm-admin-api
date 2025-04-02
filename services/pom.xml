@@ -69,6 +69,13 @@
       <version>3.1.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.github.pdcmfinder/entity-to-ontology -->
+    <dependency>
+      <groupId>io.github.pdcmfinder</groupId>
+      <artifactId>entity-to-ontology</artifactId>
+      <version>0.6</version>
+    </dependency>
+
   </dependencies>
 
   <build>

@@ -12,9 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
-import org.cancermodels.exception_handling.ResourceNotFoundException;
-import org.cancermodels.pdcm_admin.persistance.MappingEntity;
-import org.cancermodels.pdcm_admin.persistance.Suggestion;
+import org.cancermodels.mappings.IndexRequestHandler;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,16 +30,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/indexer")
 public class IndexerController {
-    //private final Indexer indexer;
+    private final IndexRequestHandler indexRequestHandler;
     private final MappingEntityService mappingEntityService;
     //private final SuggestionsSearcher suggestionsSearcher;
     private final SuggestionMapper suggestionMapper;
 
     public IndexerController(
         //Indexer indexer,
-        MappingEntityService mappingEntityService,
+        IndexRequestHandler indexRequestHandler, MappingEntityService mappingEntityService,
         //SuggestionsSearcher suggestionsSearcher,
         SuggestionMapper suggestionMapper) {
+        this.indexRequestHandler = indexRequestHandler;
         //this.indexer = indexer;
         this.mappingEntityService = mappingEntityService;
         //this.suggestionsSearcher = suggestionsSearcher;
@@ -68,8 +67,7 @@ public class IndexerController {
     })
     @PutMapping("index")
     public ProcessResponse indexAll() throws IOException {
-        //return indexer.index();
-        return null;
+        return indexRequestHandler.index();
     }
 
     @GetMapping("calculateSuggestions/{id}")

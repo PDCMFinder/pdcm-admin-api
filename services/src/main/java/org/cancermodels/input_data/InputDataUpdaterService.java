@@ -86,7 +86,7 @@ public class InputDataUpdaterService {
 
   private void writeFiles(List<RepositoryFile> files) throws IOException {
     for (RepositoryFile file : files) {
-      log.info("Writing file " + file.getFilePath());
+        log.info("Writing file {}", file.getFilePath());
       String path = dataDir + "/" + file.getFilePath();
       FileUtils.writeByteArrayToFile(new File(path), file.getDecodedContentAsBytes());
     }

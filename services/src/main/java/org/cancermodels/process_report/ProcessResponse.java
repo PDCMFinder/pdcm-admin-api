@@ -1,13 +1,10 @@
 package org.cancermodels.process_report;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 @Data
 public class ProcessResponse {
