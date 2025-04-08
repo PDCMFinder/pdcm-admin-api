@@ -38,7 +38,6 @@ public class RepositorySyncController {
         this.inputDataUpdaterService = inputDataDownloaderService;
     }
 
-
     /**
      * Synchronizes mapping rules and metadata from the repository.
      * <p>

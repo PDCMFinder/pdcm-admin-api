@@ -4,19 +4,20 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
 import org.cancermodels.exception_handling.ResourceNotFoundException;
 import org.cancermodels.mappings.MappingEntityService;
 import org.cancermodels.mappings.automatic_mappings.AutomaticMappingsService;
+import org.cancermodels.mappings.suggestions.SuggestionService;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,17 +32,17 @@ public class MappingProcessController {
 
     private final AutomaticMappingsService automaticMappingsService;
     private final MappingEntityService mappingEntityService;
-    //private final SuggestionManager suggestionManager;
+    private final SuggestionService suggestionService;
     private final SuggestionMapper suggestionMapper;
 
     public MappingProcessController(
         AutomaticMappingsService automaticMappingsService,
         MappingEntityService mappingEntityService,
-        //SuggestionManager suggestionManager,
+        SuggestionService suggestionService,
         SuggestionMapper suggestionMapper) {
         this.automaticMappingsService = automaticMappingsService;
         this.mappingEntityService = mappingEntityService;
-        //this.suggestionManager = suggestionManager;
+        this.suggestionService = suggestionService;
         this.suggestionMapper = suggestionMapper;
     }
 
@@ -62,7 +63,7 @@ public class MappingProcessController {
             + "Returns a response with the count of successfully mapped entities by type."
     )
     @PutMapping("/auto-assign-mappings")
-    public ProcessResponse assignAutomaticMappings() {
+    public ProcessResponse assignAutomaticMappings() throws MalformedMappingConfigurationException, MappingException {
         return automaticMappingsService.assignAutomaticMappings();
     }
 
@@ -77,7 +78,8 @@ public class MappingProcessController {
      *
      * @param id Internal ID of the mapping entity.
      * @return A sorted list of {@link SuggestionDTO} objects, representing the mapping suggestions.
-     * @throws IOException If an error occurs during suggestion retrieval.
+     * @throws MalformedMappingConfigurationException if there is an error in the mapping configuration file
+     * @throws MappingException if there is an error when mapping the entity
      */
     @Operation(
         summary = "Get mapping suggestions for an entity",
@@ -92,16 +94,12 @@ public class MappingProcessController {
         @ApiResponse(responseCode = "500", description = "Internal server error during processing")
     })
     @PostMapping("/{id}/suggestions")
-    public List<SuggestionDTO> getSuggestions(@PathVariable int id) throws IOException {
+    public List<SuggestionDTO> getSuggestions(@PathVariable int id)
+        throws MalformedMappingConfigurationException, MappingException {
         List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
         MappingEntity mappingEntity = mappingEntityService.findById(id)
             .orElseThrow(ResourceNotFoundException::new);
-
-//        if (mappingEntity.getSuggestions().isEmpty()) {
-//            suggestionManager.calculateSuggestions(Collections.singletonList(mappingEntity));
-//        }
-
-        List<Suggestion> suggestions = mappingEntity.getSuggestions();
+        List<Suggestion> suggestions = suggestionService.retrieveOrComputeMappingSuggestions(mappingEntity);
         suggestions.forEach(suggestion -> suggestionDTOS.add(suggestionMapper.convertToDto(suggestion)));
 
         suggestionDTOS.sort(Comparator.comparing(SuggestionDTO::getRelativeScore).reversed());

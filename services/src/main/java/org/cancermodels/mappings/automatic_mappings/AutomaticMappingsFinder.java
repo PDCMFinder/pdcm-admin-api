@@ -1,12 +1,12 @@
 package org.cancermodels.mappings.automatic_mappings;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
+import org.cancermodels.mappings.suggestions.SuggestionService;
 import org.cancermodels.pdcm_admin.persistance.MappingEntity;
 import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.springframework.stereotype.Component;
@@ -18,9 +18,12 @@ import org.springframework.stereotype.Component;
 public class AutomaticMappingsFinder {
 
   private final SimilarityConfigurationReader similarityConfigurationReader;
+  private final SuggestionService suggestionService;
 
-  public AutomaticMappingsFinder(SimilarityConfigurationReader similarityConfigurationReader) {
+  public AutomaticMappingsFinder(
+      SimilarityConfigurationReader similarityConfigurationReader, SuggestionService suggestionService) {
     this.similarityConfigurationReader = similarityConfigurationReader;
+      this.suggestionService = suggestionService;
   }
 
   /**
@@ -32,13 +35,10 @@ public class AutomaticMappingsFinder {
    * @return A {@link Suggestion} that represents a match that is so good in terms of similarity
    * to {@code mappingEntity} that it could be used to automatically do the mapping of the entity.
    */
-  public Optional<Suggestion> findBestSuggestion(
-      MappingEntity mappingEntity) {
+  public Optional<Suggestion> findBestSuggestion(MappingEntity mappingEntity) throws MalformedMappingConfigurationException, MappingException {
 
     Optional<Suggestion> answer;
-//    List<Suggestion> suggestions = suggestionsSearcher.searchTopSuggestions(mappingEntity);
-    // TODO: Here comes the logic to call e2o to get the suggestions
-    List<Suggestion> suggestions = new ArrayList<>();
+    List<Suggestion> suggestions = suggestionService.findSuggestions(mappingEntity);
     List<Suggestion> processedSuggestions = filterOnlyAcceptableSuggestions(suggestions);
     processedSuggestions = sortDescByRelativeScore(processedSuggestions);
 
@@ -77,10 +77,10 @@ public class AutomaticMappingsFinder {
     for (int i = 1; i < similarityConfigurationReader.getRequiredConsensusNumber(); i++) {
       consensus = consensus &&
           processedSuggestions.get(i).getSuggestedTermUrl()
-              .equals(processedSuggestions.get(0).getSuggestedTermUrl());
+              .equals(processedSuggestions.getFirst().getSuggestedTermUrl());
     }
     if (consensus) {
-      return Optional.of(processedSuggestions.get(0));
+      return Optional.of(processedSuggestions.getFirst());
     } else {
       return Optional.empty();
     }

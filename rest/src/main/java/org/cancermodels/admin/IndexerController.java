@@ -10,10 +10,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.admin.dtos.SuggestionDTO;
 import org.cancermodels.admin.mappers.SuggestionMapper;
+import org.cancermodels.exception_handling.ResourceNotFoundException;
 import org.cancermodels.mappings.IndexRequestHandler;
 import org.cancermodels.mappings.MappingEntityService;
+import org.cancermodels.mappings.suggestions.SuggestionService;
+import org.cancermodels.pdcm_admin.persistance.MappingEntity;
+import org.cancermodels.pdcm_admin.persistance.Suggestion;
 import org.cancermodels.process_report.ProcessResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,18 +38,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexerController {
     private final IndexRequestHandler indexRequestHandler;
     private final MappingEntityService mappingEntityService;
-    //private final SuggestionsSearcher suggestionsSearcher;
+    private final SuggestionService suggestionService;
     private final SuggestionMapper suggestionMapper;
 
     public IndexerController(
-        //Indexer indexer,
-        IndexRequestHandler indexRequestHandler, MappingEntityService mappingEntityService,
-        //SuggestionsSearcher suggestionsSearcher,
+        IndexRequestHandler indexRequestHandler, MappingEntityService mappingEntityService, SuggestionService suggestionService,
         SuggestionMapper suggestionMapper) {
         this.indexRequestHandler = indexRequestHandler;
-        //this.indexer = indexer;
         this.mappingEntityService = mappingEntityService;
-        //this.suggestionsSearcher = suggestionsSearcher;
+        this.suggestionService = suggestionService;
         this.suggestionMapper = suggestionMapper;
     }
 
@@ -71,12 +74,13 @@ public class IndexerController {
     }
 
     @GetMapping("calculateSuggestions/{id}")
-    List<SuggestionDTO> getMappingEntity(@PathVariable int id) throws IOException {
+    List<SuggestionDTO> getMappingEntity(@PathVariable int id)
+        throws MalformedMappingConfigurationException, MappingException {
         List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
-//        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
-//            ResourceNotFoundException::new);
-//        List<Suggestion> results = suggestionsSearcher.searchTopSuggestions(mappingEntity);
-//        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
+        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+            ResourceNotFoundException::new);
+        List<Suggestion> results = suggestionService.findSuggestions(mappingEntity);
+        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
         return suggestionDTOS;
     }
 }

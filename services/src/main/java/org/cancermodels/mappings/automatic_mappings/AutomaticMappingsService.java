@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.mappings.MappingEntityService;
@@ -55,7 +57,8 @@ public class AutomaticMappingsService {
      * This is another scenario to check, as it indicates that a probably successful mapping was
      * done in the past, but it cannot be replicated with the current logic.
      */
-    public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities() {
+    public Map<String, Integer> evaluateAutomaticMappingsInMappedEntities()
+        throws MalformedMappingConfigurationException, MappingException {
         Map<String, Integer> report = new HashMap<>();
         report.put("matching", 0);
         report.put("not_matching", 0);
@@ -135,7 +138,7 @@ public class AutomaticMappingsService {
      *
      * @return {@link ProcessResponse} object with the count of elements that were mapped by type
      */
-    public ProcessResponse assignAutomaticMappings() {
+    public ProcessResponse assignAutomaticMappings() throws MalformedMappingConfigurationException, MappingException {
         log.info("Init assign Automatic Mappings process");
         Map<String, String> response = new HashMap<>();
         int totalUnmappedTreatment;
@@ -181,7 +184,7 @@ public class AutomaticMappingsService {
         return new ProcessResponse(response);
     }
 
-    public int assignAutomaticMappingsByType(List<MappingEntity> mappingEntities) {
+    public int assignAutomaticMappingsByType(List<MappingEntity> mappingEntities) throws MalformedMappingConfigurationException, MappingException {
         int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
 
         int automaticMappingsCount = 0;
@@ -221,89 +224,4 @@ public class AutomaticMappingsService {
         mappingEntity.setStatus(status);
     }
 
-  public void processSubsetDiagnosisEntities() {
-    int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
-    List<MappingEntity> entities = mappingEntityService.getAllByTypeName(EntityTypeName.Diagnosis.getLabel());
-    System.out.println("id|OriginTissue|TumorType|SampleDiagnosis|DataSource|Status|Current|Suggested" +
-        "|RuleOriginTissue|RuleTumorType|RuleSampleDiagnosis|RuleDataSource|Score|origMType|NewMType");
-
-    for (MappingEntity entity : entities) {
-      Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(entity);
-      String originalMappingType = entity.getMappingType();
-      String ruleOriginTissue = "", ruleTumorType = "", ruleSampleDiagnosis = "", ruleDataSource = "";
-      if (optionalSuggestion.isPresent()) {
-        Suggestion suggestion = optionalSuggestion.get();
-        assignMapping(entity, optionalSuggestion.get(), automaticDirectThreshold);
-        if (suggestion.getSourceType().equalsIgnoreCase("Rule")) {
-          var e = suggestion.getMappingEntity();
-          if (e != null) {
-            ruleOriginTissue = e.getValuesAsMap().get("OriginTissue");
-            ruleTumorType = e.getValuesAsMap().get("TumorType");
-            ruleSampleDiagnosis = e.getValuesAsMap().get("SampleDiagnosis");
-            ruleDataSource = e.getValuesAsMap().get("DataSource");
-          }
-        }
-      }
-      optionalSuggestion.ifPresent(suggestion -> {
-
-      });
-      System.out.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s%n",
-          entity.getId(),
-          entity.getValuesAsMap().get("OriginTissue"),
-          entity.getValuesAsMap().get("TumorType"),
-          entity.getValuesAsMap().get("SampleDiagnosis"),
-          entity.getValuesAsMap().get("DataSource"),
-          entity.getStatus(),
-          entity.getMappedTermLabel(),
-          optionalSuggestion.orElse(new Suggestion()).getSuggestedTermLabel(),
-          ruleOriginTissue,
-          ruleTumorType,
-          ruleSampleDiagnosis,
-          ruleDataSource,
-          optionalSuggestion.orElse(new Suggestion()).getRelativeScore(),
-          originalMappingType,
-          entity.getMappingType()
-      );
-    }
-  }
-
-    public void processSubsetTreatmentEntities() {
-        int automaticDirectThreshold = similarityConfigurationReader.getAutomaticDirectThreshold();
-        List<MappingEntity> entities = mappingEntityService.getAllByTypeName(EntityTypeName.Treatment.getLabel());
-        System.out.println("id|TreatmentName|DataSource|Status|Current|Suggested" +
-            "|RuleTreatmentName|RuleDataSource|Score|origMType|NewMType");
-
-        for (MappingEntity entity : entities) {
-            Optional<Suggestion> optionalSuggestion = automaticMappingsFinder.findBestSuggestion(entity);
-            String originalMappingType = entity.getMappingType();
-            String ruleTreatmentName = "", ruleDataSource = "";
-            if (optionalSuggestion.isPresent()) {
-                Suggestion suggestion = optionalSuggestion.get();
-                assignMapping(entity, optionalSuggestion.get(), automaticDirectThreshold);
-                if (suggestion.getSourceType().equalsIgnoreCase("Rule")) {
-                    var e = suggestion.getMappingEntity();
-                    if (e != null) {
-                        ruleTreatmentName = e.getValuesAsMap().get("TreatmentName");
-                        ruleDataSource = e.getValuesAsMap().get("DataSource");
-                    }
-                }
-            }
-            optionalSuggestion.ifPresent(suggestion -> {
-
-            });
-            System.out.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s%n",
-                entity.getId(),
-                entity.getValuesAsMap().get("TreatmentName"),
-                entity.getValuesAsMap().get("DataSource"),
-                entity.getStatus(),
-                entity.getMappedTermLabel(),
-                optionalSuggestion.orElse(new Suggestion()).getSuggestedTermLabel(),
-                ruleTreatmentName,
-                ruleDataSource,
-                optionalSuggestion.orElse(new Suggestion()).getRelativeScore(),
-                originalMappingType,
-                entity.getMappingType()
-            );
-        }
-    }
 }

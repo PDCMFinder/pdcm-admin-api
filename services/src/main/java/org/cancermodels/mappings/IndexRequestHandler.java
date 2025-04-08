@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -83,6 +82,5 @@ public class IndexRequestHandler {
             log.error("Failed to replace parameters index configuration file", e);
             throw new RuntimeException(e);
         }
-
     }
 }

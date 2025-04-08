@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
+import org.cancermodels.mappings.suggestions.SuggestionService;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.general.MappingEntityBuilder;
 import org.cancermodels.general.SuggestionBuilder;
@@ -26,6 +29,10 @@ class AutomaticMappingsFinderTest {
 
   @Mock
   private SimilarityConfigurationReader similarityConfigurationReader;
+
+  @Mock
+  private SuggestionService suggestionService;
+
 
   private AutomaticMappingsFinder instance;
 
@@ -46,42 +53,26 @@ class AutomaticMappingsFinderTest {
   @BeforeEach
   public void setup()
   {
-    instance = new AutomaticMappingsFinder(similarityConfigurationReader);
+    instance = new AutomaticMappingsFinder(similarityConfigurationReader, suggestionService);
   }
 
   @Test
-  void findBestSuggestion_ListSuggestionIsNull_Empty() {
+  void findBestSuggestion_ListSuggestionIsEmpty_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
         .build();
     List<Suggestion> suggestions = new ArrayList<>();
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
-    Optional<Suggestion> suggestionSuitableAutomaticMapping =
-        instance.findBestSuggestion(mappingEntity);
-
-    assertEquals(Optional.empty(), suggestionSuitableAutomaticMapping);
-  }
-
-  @Test
-  void findBestSuggestion_ListSuggestionIsEmpty_Empty() {
-    MappingEntity mappingEntity = mappingEntityBuilder
-        .setEntityType(EntityTypeName.Treatment)
-        .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
-        .build();
-    List<Suggestion> suggestions = new ArrayList<>();
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
-
-    Optional<Suggestion> suggestionSuitableAutomaticMapping =
-        instance.findBestSuggestion(mappingEntity);
+    Optional<Suggestion> suggestionSuitableAutomaticMapping = instance.findBestSuggestion(mappingEntity);
 
     assertEquals(Optional.empty(), suggestionSuitableAutomaticMapping);
   }
 
   @Test
-  void findBestSuggestion_SingleSuggestionIsBad_Empty() {
+  void findBestSuggestion_SingleSuggestionIsBad_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -95,7 +86,7 @@ class AutomaticMappingsFinderTest {
         .build();
     suggestions.add(badSuggestion);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
@@ -105,7 +96,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_AllSuggestionsAreBad_Empty() {
+  void findBestSuggestion_AllSuggestionsAreBad_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -127,7 +118,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(badSuggestion1);
     suggestions.add(badSuggestion2);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
 
     Optional<Suggestion> suggestionSuitableAutomaticMapping =
@@ -137,7 +128,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SinglePerfectSuggestion_PerfectSuggestion() {
+  void findBestSuggestion_SinglePerfectSuggestion_PerfectSuggestion() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -151,7 +142,7 @@ class AutomaticMappingsFinderTest {
 
     suggestions.add(suggestionEqualsToPerfectThreshold);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -160,7 +151,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SingleHigherThanPerfectSuggestion_PerfectSuggestion() {
+  void findBestSuggestion_SingleHigherThanPerfectSuggestion_PerfectSuggestion() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -174,7 +165,7 @@ class AutomaticMappingsFinderTest {
 
     suggestions.add(suggestionHigherThanPerfectThreshold);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -183,7 +174,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_BadSuggestionPlusPerfectSuggestion_PerfectSuggestion() {
+  void findBestSuggestion_BadSuggestionPlusPerfectSuggestion_PerfectSuggestion() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -203,7 +194,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(suggestionBadSuggestion);
     suggestions.add(suggestionPerfectThreshold);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -212,7 +203,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SeveralPerfectSuggestions_HighestRelativeScoreAmongPerfectSuggestions() {
+  void findBestSuggestion_SeveralPerfectSuggestions_HighestRelativeScoreAmongPerfectSuggestions() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -232,7 +223,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(perfectSuggestion);
     suggestions.add(perfectSuggestionHigherRelativeScore);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -241,7 +232,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SeveralAcceptableSuggestionsNoConsensus_Empty() {
+  void findBestSuggestion_SeveralAcceptableSuggestionsNoConsensus_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -268,7 +259,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion2);
     suggestions.add(acceptableSuggestion3);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
@@ -279,7 +270,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SeveralAcceptableSuggestionsConsensus_AnyAcceptableWithConsensus() {
+  void findBestSuggestion_SeveralAcceptableSuggestionsConsensus_AnyAcceptableWithConsensus() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -306,7 +297,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion2);
     suggestions.add(acceptableSuggestion3);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
 
     Optional<Suggestion> answer = instance.findBestSuggestion(mappingEntity);
 
@@ -315,7 +306,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_SeveralAcceptableSuggestionsConsensusButOneHighScoreNoConsensus_Empty() {
+  void findBestSuggestion_SeveralAcceptableSuggestionsConsensusButOneHighScoreNoConsensus_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -348,7 +339,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion3);
     suggestions.add(acceptableSuggestion4);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);
@@ -359,7 +350,7 @@ class AutomaticMappingsFinderTest {
   }
 
   @Test
-  void findBestSuggestion_NotEnoughConsensus_Empty() {
+  void findBestSuggestion_NotEnoughConsensus_Empty() throws MalformedMappingConfigurationException, MappingException {
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
         .setValues(MappingEntityBuilder.createTreatmentValues("TRACE", "Aspirin"))
@@ -380,7 +371,7 @@ class AutomaticMappingsFinderTest {
     suggestions.add(acceptableSuggestion1);
     suggestions.add(acceptableSuggestion2);
 
-    //when(suggestionsSearcher.searchTopSuggestions(mappingEntity)).thenReturn(suggestions);
+    when(suggestionService.findSuggestions(mappingEntity)).thenReturn(suggestions);
     when(similarityConfigurationReader.getCandidateThreshold()).thenReturn(candidateThreshold);
     when(similarityConfigurationReader.getAutomaticWithRevisionThreshold()).thenReturn(automaticWithRevisionThreshold);
     when(similarityConfigurationReader.getRequiredConsensusNumber()).thenReturn(requiredConsensusNumber);

@@ -37,6 +37,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
   }
 
+  @ExceptionHandler(ResourceNotFoundException.class)
+  protected ResponseEntity<Object> handleResourceNotFoundException(
+      ResourceNotFoundException ex, WebRequest request) {
+    String error = "Resource not found";
+    return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, error, ex));
+  }
+
+
   private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());
   }
