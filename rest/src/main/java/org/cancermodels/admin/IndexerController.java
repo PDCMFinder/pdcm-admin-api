@@ -72,15 +72,4 @@ public class IndexerController {
     public ProcessResponse indexAll() throws IOException {
         return indexRequestHandler.index();
     }
-
-    @GetMapping("calculateSuggestions/{id}")
-    List<SuggestionDTO> getMappingEntity(@PathVariable int id)
-        throws MalformedMappingConfigurationException, MappingException {
-        List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
-        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
-            ResourceNotFoundException::new);
-        List<Suggestion> results = suggestionService.findSuggestions(mappingEntity);
-        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
-        return suggestionDTOS;
-    }
 }

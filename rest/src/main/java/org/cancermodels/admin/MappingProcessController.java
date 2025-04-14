@@ -105,4 +105,22 @@ public class MappingProcessController {
         suggestionDTOS.sort(Comparator.comparing(SuggestionDTO::getRelativeScore).reversed());
         return suggestionDTOS;
     }
+
+    /**
+     * Calculates the suggestions for a mapping entity. It does not store results in the db
+     * @param id ID of the mapping entity
+     * @return list of suggestions
+     * @throws MalformedMappingConfigurationException if there is an error in the mapping configuration file
+     * @throws MappingException if there is an error when mapping the entity
+     */
+    @GetMapping("calculateSuggestions/{id}")
+    List<SuggestionDTO> getMappingEntity(@PathVariable int id)
+        throws MalformedMappingConfigurationException, MappingException {
+        List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
+        MappingEntity mappingEntity = mappingEntityService.findById(id).orElseThrow(
+            ResourceNotFoundException::new);
+        List<Suggestion> results = suggestionService.findSuggestions(mappingEntity);
+        results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
+        return suggestionDTOS;
+    }
 }

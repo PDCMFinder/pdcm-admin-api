@@ -1,4 +1,4 @@
-package org.cancermodels.admin.mappers;
+package org.cancermodels.admin;
 
 import org.cancermodels.mappings.reports.MappingSummaryByTypeAndProvider;
 import org.cancermodels.mappings.reports.ReportsService;

@@ -31,4 +31,10 @@ public class Suggestion {
   @JoinColumn(name = "suggested_mapping_entity_id")
   private MappingEntity mappingEntity;
 
+  @ManyToOne(fetch= FetchType.LAZY)
+  @Exclude
+  @EqualsAndHashCode.Include
+  @JoinColumn(name = "suggested_ontology_term_id")
+  private OntologyTerm ontologyTerm;
+
 }

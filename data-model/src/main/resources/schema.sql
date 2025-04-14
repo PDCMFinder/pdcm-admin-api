@@ -55,6 +55,27 @@ ALTER TABLE admin_app.mapping_value
 ALTER TABLE admin_app.mapping_value
 ADD CONSTRAINT uc_mapping_value UNIQUE (mapping_entity_id, key_id);
 
+CREATE TABLE admin_app.ontology_term (
+    id INTEGER NOT NULL,
+    key TEXT,
+    description TEXT,
+    label TEXT,
+    type TEXT,
+    url TEXT
+);
+
+ALTER TABLE admin_app.ontology_term ADD CONSTRAINT pk_ontology_term PRIMARY KEY (id);
+
+CREATE TABLE admin_app.ontology_term_synonyms (
+    ontology_term_id INTEGER NOT NULL,
+    synonyms TEXT
+);
+
+ALTER TABLE admin_app.ontology_term_synonyms
+    ADD CONSTRAINT fk_ontology_term_synonyms_ontology_term
+    FOREIGN KEY (ontology_term_id)
+    REFERENCES admin_app.ontology_term (id);
+
 CREATE TABLE admin_app.suggestion (
     id INTEGER NOT NULL,
     relative_score NUMERIC NOT NULL,
@@ -63,6 +84,7 @@ CREATE TABLE admin_app.suggestion (
     suggested_term_label TEXT,
     suggested_term_url TEXT,
     suggested_mapping_entity_id INTEGER,
+    suggested_ontology_term_id INTEGER,
     mapping_entity_id  INTEGER NOT NULL
 );
 
@@ -72,6 +94,11 @@ ALTER TABLE admin_app.suggestion
     ADD CONSTRAINT fk_suggestion_mapping_entity_01
     FOREIGN KEY (suggested_mapping_entity_id)
     REFERENCES admin_app.mapping_entity (id);
+
+ALTER TABLE admin_app.suggestion
+    ADD CONSTRAINT fk_suggestion_ontology_term
+        FOREIGN KEY (suggested_ontology_term_id)
+            REFERENCES admin_app.ontology_term (id);
 
 ALTER TABLE admin_app.suggestion
     ADD CONSTRAINT fk_suggestion_mapping_entity_02

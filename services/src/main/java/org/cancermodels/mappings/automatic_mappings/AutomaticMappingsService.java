@@ -166,16 +166,14 @@ public class AutomaticMappingsService {
         log.info("Starts automatic assignation diagnosis");
         totalAutomaticMappedDiagnosis = assignAutomaticMappingsByType(diagnosisEntities);
         log.info("Starts automatic assignation treatments");
-        // NOTE: Disabling automatic mappings of treatments as there are several false positive mappings
-        // in treatment names that require some changes in code. Maybe setting up a more strict threshold?
-        //totalAutomaticMappedTreatments = assignAutomaticMappingsByType(treatmentEntities);
+        totalAutomaticMappedTreatments = assignAutomaticMappingsByType(treatmentEntities);
 
         // Save in db
         log.info("Saving into db");
         mappingEntityService.savAll(diagnosisEntities);
         // NOTE: Disabling automatic mappings of treatments as there are several false positive mappings
         // in treatment names that require some changes in code. Maybe setting up a more strict threshold?
-        //mappingEntityService.savAll(treatmentEntities);
+        mappingEntityService.savAll(treatmentEntities);
         log.info("Saving into db finished");
 
         response.put("Treatment", totalAutomaticMappedTreatments + " from " + totalUnmappedTreatment);

@@ -6,16 +6,11 @@ import org.cancer_models.entity2ontology.map.model.MappingRequest;
 import org.cancer_models.entity2ontology.map.model.MappingResponse;
 import org.cancer_models.entity2ontology.map.model.SourceEntity;
 import org.cancer_models.entity2ontology.map.service.MappingRequestService;
-import org.cancermodels.pdcm_admin.persistance.MappingEntity;
-import org.cancermodels.pdcm_admin.persistance.MappingEntityRepository;
-import org.cancermodels.pdcm_admin.persistance.Suggestion;
-import org.cancermodels.pdcm_admin.persistance.SuggestionRepository;
-import org.cancermodels.pdcm_admin.types.Source;
+import org.cancermodels.pdcm_admin.persistance.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +21,7 @@ import java.util.stream.Collectors;
 public class SuggestionService {
 
     private final SuggestionRepository suggestionRepository;
+
     @Value("${lucene_index_dir}")
     private String luceneIndexDir;
 
@@ -36,14 +32,17 @@ public class SuggestionService {
 
     private final MappingRequestService mappingRequestService;
     private final MappingEntityRepository mappingEntityRepository;
+    private final E2oSuggestionMapper e2oSuggestionMapper;
 
     public SuggestionService(
         MappingRequestService mappingRequestService,
         MappingEntityRepository mappingEntityRepository,
-        SuggestionRepository suggestionRepository) {
+        SuggestionRepository suggestionRepository,
+        E2oSuggestionMapper e2oSuggestionMapper) {
         this.mappingRequestService = mappingRequestService;
         this.mappingEntityRepository = mappingEntityRepository;
         this.suggestionRepository = suggestionRepository;
+        this.e2oSuggestionMapper = e2oSuggestionMapper;
     }
 
     /**
@@ -69,7 +68,7 @@ public class SuggestionService {
 
         return e2oSuggestions.stream()
             .filter(x -> !x.getTargetEntity().id().equals(mappingEntity.getMappingKey()))
-            .map(this::e2oSuggestionToSuggestion).collect(Collectors.toList());
+            .map(e2oSuggestionMapper::e2oSuggestionToSuggestion).collect(Collectors.toList());
     }
 
     /**
@@ -132,20 +131,4 @@ public class SuggestionService {
         return sourceEntity;
     }
 
-    private Suggestion e2oSuggestionToSuggestion(org.cancer_models.entity2ontology.map.model.Suggestion e2oSuggestion) {
-        Suggestion suggestion = new Suggestion();
-        suggestion.setSourceType(e2oSuggestion.getTargetEntity().targetType().getValue());
-        suggestion.setScore(e2oSuggestion.getRawScore());
-        suggestion.setRelativeScore(e2oSuggestion.getScore());
-        suggestion.setSuggestedTermUrl(e2oSuggestion.getTermUrl());
-        suggestion.setSuggestedTermLabel(e2oSuggestion.getTermLabel());
-
-        // If the suggestion represents a rule, we need to attach the mapping entity it represents
-        if (e2oSuggestion.getTargetEntity().targetType().getValue().equalsIgnoreCase(Source.RULE.getLabel())) {
-            String mappingEntityKey = e2oSuggestion.getTargetEntity().id();
-            Optional<MappingEntity> optSuggestedMappingEntity = mappingEntityRepository.findByMappingKey(mappingEntityKey);
-            optSuggestedMappingEntity.ifPresent(suggestion::setMappingEntity);
-        }
-        return suggestion;
-    }
 }
