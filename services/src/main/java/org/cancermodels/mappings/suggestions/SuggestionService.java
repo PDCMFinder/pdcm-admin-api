@@ -7,9 +7,11 @@ import org.cancer_models.entity2ontology.map.model.MappingResponse;
 import org.cancer_models.entity2ontology.map.model.SourceEntity;
 import org.cancer_models.entity2ontology.map.service.MappingRequestService;
 import org.cancermodels.pdcm_admin.persistance.*;
+import org.cancermodels.util.FileManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ public class SuggestionService {
     @Value("${number_of_suggested_mappings}")
     private String numberOfSuggestedMappings;
 
-    private static final String MAPPING_CONFIG_FILE = "conf/pdcmMappingConfiguration.json";
+    private static final String MAPPING_CONFIG_FILE = "pdcmMappingConfiguration.json";
 
     private final MappingRequestService mappingRequestService;
     private final MappingEntityRepository mappingEntityRepository;
@@ -55,10 +57,18 @@ public class SuggestionService {
     public List<Suggestion> findSuggestions(MappingEntity mappingEntity)
         throws MalformedMappingConfigurationException, MappingException {
 
+        // This assures we have the correct path even in environments like kubernetes
+        String mappingConfFilePath = null;
+        try {
+            mappingConfFilePath = FileManager.getTmpPathForResource(MAPPING_CONFIG_FILE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         MappingRequest mappingRequest = new MappingRequest(
             Integer.parseInt(numberOfSuggestedMappings),
             luceneIndexDir,
-            MAPPING_CONFIG_FILE,
+            mappingConfFilePath,
             List.of(mappingEntityToSourceEntity(mappingEntity))
         );
         MappingResponse response = mappingRequestService.processMappingRequest(mappingRequest);
