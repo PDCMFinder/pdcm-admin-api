@@ -6,6 +6,7 @@ import org.cancer_models.entity2ontology.index.service.IndexingRequestService;
 import org.cancermodels.pdcm_admin.types.ProcessReportModules;
 import org.cancermodels.process_report.ProcessReportService;
 import org.cancermodels.process_report.ProcessResponse;
+import org.cancermodels.util.FileManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +30,7 @@ public class IndexRequestHandler {
     @Value("${mapping_path}")
     private String mappingDirName;
 
-    private static final String INDEX_REQUEST_CONFIG_TEMPLATE_FILE = "conf/indexingRequestTemplate.json";
-
-    private static final String INDEX_REQUEST_CONFIG_FILE = "conf/indexingRequest.json";
+    private static final String INDEX_REQUEST_CONFIG_TEMPLATE_FILE = "indexingRequestTemplate.json";
 
     private final IndexingRequestService indexingRequestService;
     private final ProcessReportService processReportService;
@@ -42,8 +41,8 @@ public class IndexRequestHandler {
     }
 
     public ProcessResponse index() throws IOException {
-        writeIndexingRequestFile();
-        IndexingResponse response = indexingRequestService.processRequest(INDEX_REQUEST_CONFIG_FILE);
+        String indexRequestConfFilePath = writeIndexingRequestFile();
+        IndexingResponse response = indexingRequestService.processRequest(indexRequestConfFilePath);
         ProcessResponse processResponse = formatProcessResponse(response);
         processReportService.register(ProcessReportModules.INDEXER, "Index created", response.end().toString());
         return processResponse;
@@ -58,11 +57,15 @@ public class IndexRequestHandler {
         return new ProcessResponse(result);
     }
 
-    private void writeIndexingRequestFile() {
-        Path templatePath = Paths.get(IndexRequestHandler.INDEX_REQUEST_CONFIG_TEMPLATE_FILE);
-        Path configFilePath = Paths.get(IndexRequestHandler.INDEX_REQUEST_CONFIG_FILE);
-        String mappingDirPath = dataDir + java.io.File.separator + mappingDirName;
+    private String writeIndexingRequestFile() {
+        Path configFilePath;
         try {
+            String templatePathStr = FileManager.getTmpPathForResource(INDEX_REQUEST_CONFIG_TEMPLATE_FILE);
+
+            Path templatePath = Paths.get(templatePathStr);
+            configFilePath = Files.createTempFile("indexRequest", "json");
+            String mappingDirPath = dataDir + java.io.File.separator + mappingDirName;
+
             String content = new String(Files.readAllBytes(templatePath));
             // Set the folder where the index will be created
             content = content.replace("INDEX_PATH", luceneIndexDir);
@@ -77,10 +80,10 @@ public class IndexRequestHandler {
                 }
             }
             Files.write(configFilePath, content.getBytes());
-        }
-        catch (IOException e) {
-            log.error("Failed to replace parameters index configuration file", e);
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return configFilePath.toAbsolutePath().toString();
     }
 }
