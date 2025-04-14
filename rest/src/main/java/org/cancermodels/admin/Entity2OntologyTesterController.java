@@ -8,9 +8,11 @@ import org.cancer_models.entity2ontology.map.model.MappingResponse;
 import org.cancer_models.entity2ontology.map.model.SourceEntity;
 import org.cancer_models.entity2ontology.map.model.Suggestion;
 import org.cancer_models.entity2ontology.map.service.MappingRequestService;
+import org.cancermodels.util.FileManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class Entity2OntologyTesterController {
 
     private static final int numberOfSuggestedMappings = 10;
 
-    private static final String MAPPING_CONFIG_FILE = "conf/pdcmMappingConfiguration.json";
+    private static final String MAPPING_CONFIG_FILE = "pdcmMappingConfiguration.json";
 
     private final MappingRequestService mappingRequestService;
 
@@ -45,7 +47,7 @@ public class Entity2OntologyTesterController {
      */
     @GetMapping("test-treatment")
     List<Suggestion> getSuggestionsForTreatment(@RequestBody Map<String, String> data)
-        throws MalformedMappingConfigurationException, MappingException {
+        throws MalformedMappingConfigurationException, MappingException, IOException {
         SourceEntity sourceEntity = new SourceEntity();
         sourceEntity.setId("treatment-entry");
         sourceEntity.setType("treatment");
@@ -62,7 +64,7 @@ public class Entity2OntologyTesterController {
      */
     @GetMapping("test-diagnosis")
     List<Suggestion> getSuggestionsForDiagnosis(@RequestBody Map<String, String> data)
-        throws MalformedMappingConfigurationException, MappingException {
+        throws MalformedMappingConfigurationException, MappingException, IOException {
         SourceEntity sourceEntity = new SourceEntity();
         sourceEntity.setId("diagnosis-entry");
         sourceEntity.setType("diagnosis");
@@ -71,11 +73,13 @@ public class Entity2OntologyTesterController {
     }
 
     private List<Suggestion> searchForSuggestions(SourceEntity sourceEntity)
-        throws MalformedMappingConfigurationException, MappingException {
+        throws MalformedMappingConfigurationException, MappingException, IOException {
+        // This assures we have the correct path even in environments like kubernetes
+        String mappingConfFilePath = FileManager.getTmpPathForResource(MAPPING_CONFIG_FILE);
         MappingRequest mappingRequest = new MappingRequest(
             numberOfSuggestedMappings,
             luceneIndexDir,
-            MAPPING_CONFIG_FILE,
+            mappingConfFilePath,
             List.of(sourceEntity)
         );
         MappingResponse response = mappingRequestService.processMappingRequest(mappingRequest);
