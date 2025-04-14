@@ -39,7 +39,7 @@ public class OntologySearcherController {
   public List<SuggestionDTO> searchWithDefaultParameters(
       @RequestParam(value = "input") String input,
       @RequestParam(value = "entityTypeName") String entityTypeName)
-      throws MalformedMappingConfigurationException, MappingException, IOException {
+      throws MappingException, IOException {
     List<SuggestionDTO> suggestionDTOS = new ArrayList<>();
     List<Suggestion> results = ontologySuggestionsService.findOntologySuggestions(input, entityTypeName);
     results.forEach(x -> suggestionDTOS.add(suggestionMapper.convertToDto(x)));
