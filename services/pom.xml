@@ -46,35 +46,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <version>9.2.0</version>
-    </dependency>
-
-<!--    Trying to fix error: An SPI class of type org.apache.lucene.codecs.Codec with name 'Lucene87' does not exist.
-        You need to add the corresponding JAR file supporting this SPI to your classpath.  The current classpath supports
-        the following names: [Lucene92]-->
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-backward-codecs</artifactId>
-      <version>9.2.0</version>
-    </dependency>
-
-    <!--    To parse search queries-->
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-queryparser</artifactId>
-      <version>9.2.0</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-analyzers-common -->
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-analyzers-common</artifactId>
-      <version>8.11.2</version>
-    </dependency>
-
-    <dependency>
       <groupId>tech.tablesaw</groupId>
       <artifactId>tablesaw-core</artifactId>
       <version>0.43.1</version>
@@ -96,6 +67,13 @@
       <groupId>jakarta.persistence</groupId>
       <artifactId>jakarta.persistence-api</artifactId>
       <version>3.1.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/io.github.pdcmfinder/entity-to-ontology -->
+    <dependency>
+      <groupId>io.github.pdcmfinder</groupId>
+      <artifactId>entity-to-ontology</artifactId>
+      <version>0.7</version>
     </dependency>
 
   </dependencies>

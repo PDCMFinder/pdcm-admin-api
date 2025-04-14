@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication(scanBasePackages = "org.cancermodels")
+@SpringBootApplication(scanBasePackages = {"org.cancermodels", "org.cancer_models.entity2ontology"})
 @EntityScan("org.cancermodels.pdcm_admin")
 
 public class AdminApplication {

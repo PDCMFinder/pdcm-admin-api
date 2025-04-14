@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin.types;
 
+import lombok.Getter;
+
+@Getter
 public enum ProcessReportModules {
   INPUT_DATA("Input data"),
   ONTOLOGIES("Ontologies"),
@@ -11,11 +14,7 @@ public enum ProcessReportModules {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
-
-  public static ProcessReportModules getByName(String name) {
+    public static ProcessReportModules getByName(String name) {
     for (ProcessReportModules element : ProcessReportModules.values()) {
       if (element.getLabel().equalsIgnoreCase(name)) {
         return element;

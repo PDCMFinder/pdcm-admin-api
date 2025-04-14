@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
+import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancermodels.mappings.suggestions.SimilarityConfigurationReader;
 import org.cancermodels.pdcm_admin.EntityTypeName;
 import org.cancermodels.general.MappingEntityBuilder;
@@ -46,7 +48,7 @@ class AutomaticMappingsServiceTest {
   }
 
   @Test
-  void evaluateAutomaticMappingsInMappedEntities_OneEntitySuccessful_MapWithOneSuccessfulEntry() {
+  void evaluateAutomaticMappingsInMappedEntities_OneEntitySuccessful_MapWithOneSuccessfulEntry() throws MalformedMappingConfigurationException, MappingException {
 
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
@@ -72,7 +74,7 @@ class AutomaticMappingsServiceTest {
   }
 
   @Test
-  void evaluateAutomaticMappingsInMappedEntities_OneEntityNotMatching_MapWithOneSuccessfulEntry() {
+  void evaluateAutomaticMappingsInMappedEntities_OneEntityNotMatching_MapWithOneSuccessfulEntry() throws MalformedMappingConfigurationException, MappingException {
 
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
@@ -98,7 +100,7 @@ class AutomaticMappingsServiceTest {
   }
 
   @Test
-  void evaluateAutomaticMappingsInMappedEntities_OneEntityNotSuggestion_MapWithOneSuccessfulEntry() {
+  void evaluateAutomaticMappingsInMappedEntities_OneEntityNotSuggestion_MapWithOneSuccessfulEntry() throws MalformedMappingConfigurationException, MappingException {
 
     MappingEntity mappingEntity = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)
@@ -122,7 +124,7 @@ class AutomaticMappingsServiceTest {
   }
 
   @Test
-  void evaluateAutomaticMappingsInMappedEntities_OneEachOne_MapWith1CounterForEachEntry() {
+  void evaluateAutomaticMappingsInMappedEntities_OneEachOne_MapWith1CounterForEachEntry() throws MalformedMappingConfigurationException, MappingException {
 
     MappingEntity mappingEntity1 = mappingEntityBuilder
         .setEntityType(EntityTypeName.Treatment)

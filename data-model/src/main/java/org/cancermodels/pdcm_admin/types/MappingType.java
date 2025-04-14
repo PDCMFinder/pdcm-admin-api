@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin.types;
 
+import lombok.Getter;
+
+@Getter
 public enum MappingType {
   MANUAL("Manual"),
   AUTOMATIC_REVIEW("Automatic-Review"),
@@ -11,7 +14,4 @@ public enum MappingType {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
 }

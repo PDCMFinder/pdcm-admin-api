@@ -2,7 +2,6 @@ package org.cancermodels.exception_handling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cancermodels.input_data.exceptions.InputFileDownloadException;
-import org.cancermodels.suggestions.exceptions.QueryException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -38,12 +37,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
   }
 
-  @ExceptionHandler(QueryException.class)
-  protected ResponseEntity<Object> handleIllegalArgumentException(
-      QueryException ex, WebRequest request) {
-    String error = "Query could not be executed";
-    return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+  @ExceptionHandler(ResourceNotFoundException.class)
+  protected ResponseEntity<Object> handleResourceNotFoundException(
+      ResourceNotFoundException ex, WebRequest request) {
+    String error = "Resource not found";
+    return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, error, ex));
   }
+
 
   private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());

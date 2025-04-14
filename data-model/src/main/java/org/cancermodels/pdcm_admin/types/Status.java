@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin.types;
 
+import lombok.Getter;
+
+@Getter
 public enum Status {
   UNMAPPED("Unmapped"),
   MAPPED("Mapped"),
@@ -21,7 +24,4 @@ public enum Status {
     throw new IllegalArgumentException("Status " + name + " does not exist");
   }
 
-  public String getLabel() {
-    return label;
-  }
 }

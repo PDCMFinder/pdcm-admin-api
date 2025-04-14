@@ -1,0 +1,65 @@
+{
+  "indexPath": "INDEX_PATH",
+  "ruleLocations": [
+    {
+      "filePath": "MAPPING_PATH/treatment_mappings.json",
+      "name": "treatment",
+      "fieldsConversion":
+      {
+        "id": "mappingKey",
+        "entityType": "entityType",
+        "data": "mappingValues",
+        "label": "mappedTermLabel",
+        "url": "mappedTermUrl"
+      },
+      "ignore": false
+    },
+    {
+      "filePath": "MAPPING_PATH/diagnosis_mappings.json",
+      "name": "diagnosis",
+      "fieldsConversion":
+      {
+        "id": "mappingKey",
+        "entityType": "entityType",
+        "data": "mappingValues",
+        "label": "mappedTermLabel",
+        "url": "mappedTermUrl"
+      },
+      "ignore": false
+    }
+  ],
+  "ontologyLocations": [
+    {
+      "ontoId": "ncit",
+      "name": "diagnosis",
+      "branches": [
+        "NCIT_C9305",
+        "NCIT_C3262",
+        "NCIT_C35814"
+      ]
+    },
+    {
+      "ontoId": "ncit",
+      "name": "treatment",
+      "branches": [
+        "NCIT_C1932",
+        "NCIT_C1505",
+        "NCIT_C1913",
+        "NCIT_C45678",
+        "NCIT_C1909",
+        "NCIT_C1899",
+        "NCIT_C15431",
+        "NCIT_C49236",
+        "NCIT_C15206",
+        "NCIT_C26548"
+      ]
+    },{
+      "ontoId": "ncit",
+      "name": "regimen",
+      "branches": [
+        "NCIT_C12218",
+        "NCIT_C11197"
+      ]
+    }
+  ]
+}
