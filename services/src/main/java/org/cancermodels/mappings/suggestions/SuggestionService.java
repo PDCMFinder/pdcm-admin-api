@@ -1,9 +1,11 @@
 package org.cancermodels.mappings.suggestions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.cancer_models.entity2ontology.exceptions.MalformedMappingConfigurationException;
 import org.cancer_models.entity2ontology.exceptions.MappingException;
 import org.cancer_models.entity2ontology.map.model.MappingRequest;
 import org.cancer_models.entity2ontology.map.model.MappingResponse;
+import org.cancer_models.entity2ontology.map.model.MappingResponseEntry;
 import org.cancer_models.entity2ontology.map.model.SourceEntity;
 import org.cancer_models.entity2ontology.map.service.MappingRequestService;
 import org.cancermodels.pdcm_admin.persistance.*;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
  * The purpose of the service is to return a list of suggestions for a given {@link MappingEntity}
  */
 @Component
+@Slf4j
 public class SuggestionService {
 
     private final SuggestionRepository suggestionRepository;
@@ -73,10 +76,33 @@ public class SuggestionService {
         );
         MappingResponse response = mappingRequestService.processMappingRequest(mappingRequest);
 
-        List<org.cancer_models.entity2ontology.map.model.Suggestion> e2oSuggestions
-            = response.getMappingsResults().getFirst().getSuggestions();
+        return extractSuggestionsFromResponse(mappingEntity, response);
+    }
 
-        return e2oSuggestions.stream()
+    /**
+     * Extracts a list of suggestions from a mapping response.
+     * <p>
+     * The mapping response should contain a list of {@code MappingResponseEntry} with one and only one
+     * element, which corresponds to the entity as a key, and the list of suggestions as a value.
+     * </p>
+     * @param mappingEntity The {@code MappingEntity} for which the suggestions were calculated.
+     * @param mappingResponse The {@code MappingResponse} with the response to process.
+     * @return A list of suggestions
+     */
+    private List<Suggestion> extractSuggestionsFromResponse(MappingEntity mappingEntity, MappingResponse mappingResponse)
+        throws MappingException {
+        List<MappingResponseEntry> responseEntries = mappingResponse.getMappingsResults();
+
+        String initialMessage = "Error when extracting suggestions from e2o call";
+
+        if (responseEntries.size() != 1) {
+            log.error(initialMessage);
+            log.error("There should be exactly one suggestion in the response");
+            log.error("Mapping entity: {}", mappingEntity);
+            throw new MappingException(initialMessage);
+        }
+
+        return responseEntries.getFirst().getSuggestions().stream()
             .filter(x -> !x.getTargetEntity().id().equals(mappingEntity.getMappingKey()))
             .map(e2oSuggestionMapper::e2oSuggestionToSuggestion).collect(Collectors.toList());
     }
