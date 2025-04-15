@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,16 +91,15 @@ public class SuggestionService {
      * @return A list of suggestions
      */
     private List<Suggestion> extractSuggestionsFromResponse(MappingEntity mappingEntity, MappingResponse mappingResponse)
-        throws MappingException {
+    {
         List<MappingResponseEntry> responseEntries = mappingResponse.getMappingsResults();
 
-        String initialMessage = "Error when extracting suggestions from e2o call";
-
         if (responseEntries.size() != 1) {
-            log.error(initialMessage);
-            log.error("There should be exactly one suggestion in the response");
+            log.error("Error when extracting suggestions from e2o call. " +
+                "There should be exactly one suggestion in the response");
             log.error("Mapping entity: {}", mappingEntity);
-            throw new MappingException(initialMessage);
+            // Returning empty to avoid stopping all the process because of an atypical case
+            return new ArrayList<>();
         }
 
         return responseEntries.getFirst().getSuggestions().stream()
