@@ -1,11 +1,15 @@
 package org.cancermodels.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -27,7 +31,7 @@ public class FileManager {
       }
       System.out.println("...");
     } catch (Exception e) {
-      LOG.error("Failed to load file " + path, e);
+        LOG.error("Failed to load file {}", path, e);
     }
     return sb.toString();
   }
@@ -55,5 +59,34 @@ public class FileManager {
 
     });
     return files;
+  }
+
+  /**
+   * Reads a resource file and creates a copy of it as a temp file, returning this path.
+   * This is a solution to the issue of not finding a file when using relative paths in deployments
+   * like kubernetes
+   * @param resourcePath Path to the resource file
+   * @return the path of the copy of the resource file as a temp file
+   */
+  public static String getTmpPathForResource(String resourcePath) throws IOException {
+    String fileName = resourcePath.substring(
+        resourcePath.lastIndexOf('/') + 1,
+        resourcePath.lastIndexOf('.'));
+    String ext = resourcePath.substring(resourcePath.lastIndexOf('.') + 1);
+    LOG.info("Get tmp path for resource {} with ext {}", fileName, ext);
+    try (InputStream is = FileManager.class.getClassLoader().getResourceAsStream(resourcePath)) {
+      if (is == null) {
+        throw new FileNotFoundException("Resource not found: " + resourcePath);
+      }
+
+      // Create a temp file
+      Path tempFile = Files.createTempFile(fileName, ext);
+      tempFile.toFile().deleteOnExit(); // optional: clean up on JVM exit
+
+      // Copy content from resource to temp file
+      Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
+
+      return tempFile.toAbsolutePath().toString(); // return usable path
+    }
   }
 }

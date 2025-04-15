@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.cancermodels.pdcm_admin.EntityTypeName;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Class to manage all endpoints related to the JSON files containing the mapping rules
  */
+@Tag(name = "Mapping Rules", description = "Operations related to the mapping rules")
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/mappings/rules/")
@@ -29,7 +35,22 @@ public class MappingRulesController {
     this.mappingRulesService = mappingRulesService;
   }
 
-  @GetMapping(value="/mappingRules", produces="application/zip")
+  /**
+   * Generates and returns a ZIP file containing all mapping rules.
+   *
+   * @param response the HTTP response used to write the ZIP file
+   * @throws IOException if an I/O error occurs during writing the ZIP file
+   */
+  @Operation(
+      summary = "Download mapping rules as ZIP",
+      description = "Returns a ZIP archive containing all available mapping rules.",
+      tags = { "Mapping Rules" }
+  )
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "ZIP file successfully downloaded"),
+      @ApiResponse(responseCode = "500", description = "Internal server error while generating ZIP")
+  })
+  @GetMapping(value="/rules-zip", produces="application/zip")
   public void getZipOfMappingRules(HttpServletResponse response) throws IOException {
 
     //setting headers
@@ -53,12 +74,24 @@ public class MappingRulesController {
   }
 
   /**
-   * Deletes all the mapping entities and reload the data from the json files with the mapping rules.
-   * Because the json files contain only Mapped data, any mappings in other status
-   * (Review, Unmapped, Request) will be lost.
+   * Deletes all current mapping entities and reloads only mapped data
+   * from predefined JSON files. Any mappings in other statuses
+   * (Review, Unmapped, Request) will be lost permanently.
+   *
+   * @throws IOException if an error occurs while reading the JSON files
    */
-  @PutMapping("/restoreMappedMappingEntitiesFromJsons")
-  public void getSimilar() throws IOException {
+  @Operation(
+      summary = "Restore mapping data from JSON files",
+      description = "Deletes all mapping entities and restores only mapped data from JSON files. "
+          + "Mappings in 'Review', 'Unmapped', or 'Request' states will be lost.",
+      tags = { "Mapping Rules" }
+  )
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Mapping data successfully restored from JSON"),
+      @ApiResponse(responseCode = "500", description = "Error while restoring data from JSON")
+  })
+  @PutMapping("/restore-from-jsons")
+  public void restoreMappedMappingEntitiesFromJsons() throws IOException {
     mappingRulesService.restoreMappedMappingEntitiesFromJsons();
   }
 

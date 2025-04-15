@@ -31,7 +31,6 @@ public class Suggestion {
   @JoinColumn(name = "suggested_mapping_entity_id")
   private MappingEntity mappingEntity;
 
-  // OntologyTerm does not have a list of suggestions so cascade type must be controlled here
   @ManyToOne(fetch= FetchType.LAZY)
   @Exclude
   @EqualsAndHashCode.Include

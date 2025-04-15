@@ -1,5 +1,8 @@
 package org.cancermodels.pdcm_admin;
 
+import lombok.Getter;
+
+@Getter
 public enum EntityTypeName {
   Treatment("Treatment"),
   Diagnosis("Diagnosis");
@@ -10,7 +13,4 @@ public enum EntityTypeName {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
 }

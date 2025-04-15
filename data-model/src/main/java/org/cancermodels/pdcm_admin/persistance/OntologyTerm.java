@@ -1,8 +1,6 @@
 package org.cancermodels.pdcm_admin.persistance;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,8 +54,5 @@ public class OntologyTerm {
     @Basic(fetch = FetchType.LAZY)
     @JsonIgnore
     private String description;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "ontologyTerm")
-    private List<Suggestion> referencingSuggestions = new ArrayList<>();
 
 }

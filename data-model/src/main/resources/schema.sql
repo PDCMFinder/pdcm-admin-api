@@ -22,23 +22,6 @@ ALTER TABLE admin_app.mapping_key
 ALTER TABLE admin_app.mapping_key
 ADD CONSTRAINT uc_mapping_key UNIQUE (entity_type_id, key);
 
-CREATE TABLE admin_app.key_search_configuration (
-    id INTEGER NOT NULL,
-    main_field TEXT,
-    search_on_ontology BOOLEAN,
-    multi_field_query BOOLEAN,
-    weight NUMERIC,
-    key_id INTEGER NOT NULL
-);
-
-ALTER TABLE admin_app.key_search_configuration ADD CONSTRAINT pk_key_search_configuration PRIMARY KEY (id);
-
-ALTER TABLE admin_app.key_search_configuration
-    ADD CONSTRAINT fk_key_search_configuration_mapping_key
-    FOREIGN KEY (key_id)
-    REFERENCES admin_app.mapping_key (id);
-
-
 CREATE TABLE admin_app.mapping_entity (
     id INTEGER NOT NULL,
     mapping_key TEXT NOT NULL,
@@ -71,7 +54,6 @@ ALTER TABLE admin_app.mapping_value
 
 ALTER TABLE admin_app.mapping_value
 ADD CONSTRAINT uc_mapping_value UNIQUE (mapping_entity_id, key_id);
-
 
 CREATE TABLE admin_app.ontology_term (
     id INTEGER NOT NULL,
@@ -115,8 +97,8 @@ ALTER TABLE admin_app.suggestion
 
 ALTER TABLE admin_app.suggestion
     ADD CONSTRAINT fk_suggestion_ontology_term
-    FOREIGN KEY (suggested_ontology_term_id)
-    REFERENCES admin_app.ontology_term (id);
+        FOREIGN KEY (suggested_ontology_term_id)
+            REFERENCES admin_app.ontology_term (id);
 
 ALTER TABLE admin_app.suggestion
     ADD CONSTRAINT fk_suggestion_mapping_entity_02
@@ -132,64 +114,6 @@ CREATE TABLE admin_app.process_report (
 );
 
 ALTER TABLE admin_app.process_report ADD CONSTRAINT pk_process_report PRIMARY KEY (id);
-
-CREATE TABLE admin_app.release (
-    id INTEGER NOT NULL,
-    name TEXT,
-    date TIMESTAMP
-);
-
-ALTER TABLE admin_app.release ADD CONSTRAINT pk_release PRIMARY KEY (id);
-
-CREATE TABLE admin_app.model_summary (
-    id INTEGER NOT NULL,
-    external_model_id TEXT NOT NULL,
-    data_source TEXT,
-    project_name TEXT,
-    provider_name TEXT,
-    model_type TEXT,
-    histology TEXT,
-    cancer_system TEXT,
-    dataset_available TEXT,
-    license_name TEXT,
-    primary_site TEXT,
-    collection_site TEXT,
-    tumour_type TEXT,
-    cancer_grade TEXT,
-    cancer_grading_system TEXT,
-    cancer_stage TEXT,
-    cancer_staging_system TEXT,
-    patient_age TEXT,
-    patient_sex TEXT,
-    patient_history TEXT,
-    patient_ethnicity TEXT,
-    patient_ethnicity_assessment_method TEXT,
-    patient_initial_diagnosis TEXT,
-    patient_age_at_initial_diagnosis TEXT,
-    patient_sample_id TEXT,
-    patient_sample_collection_date TEXT,
-    patient_sample_collection_event TEXT,
-    patient_sample_months_since_collection_1 TEXT,
-    patient_sample_virology_status TEXT,
-    patient_sample_sharable TEXT,
-    patient_sample_treated_at_collection TEXT,
-    patient_sample_treated_prior_to_collection TEXT,
-    pdx_model_publications TEXT,
-    quality_assurance TEXT,
-    xenograft_model_specimens TEXT,
-    treatment_list TEXT,
-    model_treatment_list TEXT,
-    scores TEXT,
-    paediatric BOOLEAN,
-    release_id INTEGER NOT NULL
-);
-
-ALTER TABLE admin_app.model_summary ADD CONSTRAINT pk_model_summary PRIMARY KEY (id);
-
-ALTER TABLE admin_app.model_summary
-    ADD CONSTRAINT fk_model_summary_release
-        FOREIGN KEY (release_id)
-            REFERENCES admin_app.release (id);
 
 -- Views
 CREATE VIEW admin_app.diagnosis_data_vw AS (
@@ -219,25 +143,6 @@ CREATE VIEW admin_app.treatment_data_vw AS (
      FROM admin_app.MAPPING_ENTITY me
      WHERE entity_type_id = 2
 );
-
-CREATE TABLE admin_app.release_metric
-(
-    id         INTEGER NOT NULL,
-    release_id INTEGER NOT NULL,
-    key        TEXT    NOT NULL,
-    value      TEXT    NOT NULL
-);
-
-ALTER TABLE admin_app.release_metric
-    ADD CONSTRAINT pk_release_counts PRIMARY KEY (id);
-
-ALTER TABLE admin_app.release_metric
-    ADD UNIQUE (release_id, key);
-
-ALTER TABLE admin_app.release_metric
-    ADD CONSTRAINT fk_release_counts_release
-        FOREIGN KEY (release_id)
-            REFERENCES admin_app.release (id);
 
 -- Permissions
 GRANT ALL

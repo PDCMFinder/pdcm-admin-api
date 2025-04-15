@@ -1,0 +1,40 @@
+{
+  "name": "pdcm configuration",
+  "configurations": [
+    {
+      "entityType": "diagnosis",
+      "fields": [
+        {
+          "name": "SampleDiagnosis",
+          "weight": 1
+        },
+        {
+          "name": "OriginTissue",
+          "weight": 0.5
+        },
+        {
+          "name": "TumorType",
+          "weight": 0.5
+        }
+      ],
+      "ontologyTemplates": [
+        "${TumorType} ${SampleDiagnosis} in the ${OriginTissue}",
+        "${TumorType} ${OriginTissue} ${SampleDiagnosis}",
+        "${TumorType} ${SampleDiagnosis}",
+        "${OriginTissue} ${SampleDiagnosis}"
+      ]
+    },
+    {
+      "entityType": "treatment",
+      "fields": [
+        {
+          "name": "TreatmentName",
+          "weight": 1
+        }
+      ],
+      "ontologyTemplates": [
+        "${TreatmentName}"
+      ]
+    }
+  ]
+}
