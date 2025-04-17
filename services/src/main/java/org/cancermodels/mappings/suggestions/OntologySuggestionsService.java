@@ -73,6 +73,8 @@ public class OntologySuggestionsService {
             data.put("TreatmentName", input);
         } else {
             data.put("SampleDiagnosis", input);
+            data.put("TumorType", "-");
+            data.put("OriginTissue", "-");
         }
         sourceEntity.setData(data);
         return sourceEntity;
